@@ -21,19 +21,19 @@ GalaxyCountComputer::GalaxyCountComputer(MultiType_Z_LF & mlf, Filter& filt_LF, 
     Ell_sed_mapping_(GALCNTNBSED), Sp_sed_mapping_(GALCNTNBSED), SB_sed_mapping_(GALCNTNBSED)
 {
   cout << "GalaxyCountComputer()/Info Reading 6 galaxy SEDs from PATH= "<<sedpathmgr.path_<<" ..."<<endl;
-  string sedfileEl = sedpathmgr.BuildFileName("flat.txt");
-  string sedfileSp1 = sedpathmgr.BuildFileName("flat.txt");
-  string sedfileSp2 = sedpathmgr.BuildFileName("flat.txt");
-  string sedfileSp3 = sedpathmgr.BuildFileName("flat.txt");
-  string sedfileSB1 = sedpathmgr.BuildFileName("flat.txt");
-  string sedfileSB2 = sedpathmgr.BuildFileName("flat.txt");
-  /*
+  //string sedfileEl = sedpathmgr.BuildFileName("flat.txt");
+  //string sedfileSp1 = sedpathmgr.BuildFileName("flat.txt");
+  //string sedfileSp2 = sedpathmgr.BuildFileName("flat.txt");
+  //string sedfileSp3 = sedpathmgr.BuildFileName("flat.txt");
+  //string sedfileSB1 = sedpathmgr.BuildFileName("flat.txt");
+  //string sedfileSB2 = sedpathmgr.BuildFileName("flat.txt");
+  
   string sedfileEl = sedpathmgr.BuildFileName("function_El_cww_fix2_extend_smooth.txt");
   string sedfileSp1 = sedpathmgr.BuildFileName("function_Scd_cww_fix2_extend_smooth.txt");
   string sedfileSp2 = sedpathmgr.BuildFileName("function_Sbc_cww_fix2_extend_smooth.txt");
   string sedfileSp3 = sedpathmgr.BuildFileName("function_Im_cww_fix2_extend_smooth.txt");
   string sedfileSB1 = sedpathmgr.BuildFileName("function_SB2_kin_fix2_extend_smooth.txt");
-  string sedfileSB2 = sedpathmgr.BuildFileName("function_SB3_kin_fix2_extend_smooth.txt");*/
+  string sedfileSB2 = sedpathmgr.BuildFileName("function_SB3_kin_fix2_extend_smooth.txt");
   //cout<<"* Reading SED file for Ellipticals: " << sedfileEl <<endl;
   SED sedEl(sedfileEl,lambdaSEDmin*1e-9, lambdaSEDmax*1e-9);
   sedGals_.push_back(sedEl);
