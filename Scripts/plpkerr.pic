@@ -1,0 +1,57 @@
+####################### 
+##  Script piapp pour tracer les courbes P(k) avec les erreurs associees 
+setaxesatt 'font=helvetica,bold,20 fixedfontsize minorticks'
+
+# ./Objs/terrpk -k 100,0.005,0.255 -grid 200,200,100,8,8,8 -p 250 simlss.txt toto.ppf
+delobjs *
+openppf toto.ppf
+rename toto nt
+print nt
+zone 1 2
+
+nt2d nt k pk - pkerr - - 'marker=fcircle,7 red logx logy notit'
+settitle '200x200x100 cells of 8^3 Mpc , 250 gals/cell ' ' ' 'font=helvetica,bold,18' 
+nt2d nt k rap_pk - rap_pk_err - - 'marker=fcircle,7 red logx logy notit'
+settitle '100 k-bins, delta-k=0.0025 Mpc^-1 ' ' ' 'font=helvetica,bold,18' 
+w2ps
+
+# ./Objs/terrpk -k 100,0.005,0.255 -grid 200,200,100,8,8,8 -p 10 simlss.txt toto2.ppf
+delobjs *
+openppf toto2.ppf
+rename toto2 nt
+print nt
+zone 1 2
+
+nt2d nt k pk - pkerr - - 'marker=fcircle,7 red logx logy notit'
+settitle '200x200x100 cells of 8^3 Mpc , 10 gals/cell ' ' ' 'font=helvetica,bold,18' 
+nt2d nt k rap_pk - rap_pk_err - - 'marker=fcircle,7 red logx logy notit'
+settitle '100 k-bins, delta-k=0.0025 Mpc^-1 ' ' ' 'font=helvetica,bold,18' 
+w2ps
+
+
+# ./Objs/terrpk -k 100,0.005,0.255 -grid 200,200,100,8,8,8 -p 0.1 simlss.txt toto3.ppf
+delobjs *
+openppf toto3.ppf
+rename toto3 nt
+print nt
+zone 1 2
+
+nt2d nt k pk - pkerr - - 'marker=fcircle,7 red logx logy notit'
+settitle '200x200x100 cells of 8^3 Mpc , 0.1 gals/cell ' ' ' 'font=helvetica,bold,18' 
+nt2d nt k rap_pk - rap_pk_err - - 'marker=fcircle,7 red logx logy notit'
+settitle '100 k-bins, delta-k=0.0025 Mpc^-1 ' ' ' 'font=helvetica,bold,18' 
+w2ps
+
+# ./Objs/terrpk -k 100,0.005,0.255 -grid 500,500,150,8,8,8 -p 0.1 simlss.txt toto4.ppf
+delobjs *
+openppf toto4.ppf
+rename toto4 nt
+print nt
+zone 1 2
+
+nt2d nt k pk - pkerr - - 'marker=fcircle,7 red logx logy notit'
+settitle '500x500x150 cells of 8^3 Mpc , 0.1 gals/cell ' ' ' 'font=helvetica,bold,18' 
+nt2d nt k rap_pk - rap_pk_err - - 'marker=fcircle,7 red logx logy notit'
+settitle '100 k-bins, delta-k=0.0025 Mpc^-1 ' ' ' 'font=helvetica,bold,18' 
+w2ps
+

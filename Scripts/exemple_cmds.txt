@@ -1,0 +1,143 @@
+##  Calcul de P(k) avec smearing en z 
+./Objs/tpkln -grid 400,400,200,6,6,6 -k 120,0.005,0.605 -s 50. -N 10 simlss.txt pksig50.ppf
+##  Calcul de P(k) avec suppression des d rho/rho < -1
+./Objs/tpkln -grid 400,400,200,6,6,6 -k 120,0.005,0.605 -neg -N 10 simlss.txt pkneg.ppf
+##  Calcul de P(k) avec suppression des d rho/rho < -1 et  smearing en z 
+./Objs/tpkln -grid 400,400,200,6,6,6 -k 120,0.005,0.605 -neg -s 50. -N 10 simlss.txt pknegsig50.ppf
+    
+spiapp -term
+setaxesatt 'font=helvetica,bold,18 fixedfontsize minorticks'
+foreach f (  Apknos_neg  Apknos_s20  Apknos_s50 Apknos_neg_s20  Apknos_neg_s50  )
+  echo '----- Plotting P(k) from file ' $f     
+  openppf ${f}.ppf
+  rename dtpk dtpk_${f}
+  set dt dtpk_${f}  
+  print $dt 1
+  newwin   
+  nt2d $dt k inpk - - - - 'black line=solid,2 cpts logx logy nsta notit'
+  settitle " Pk- with projection from file  $f " ' ' 'font=helvetica,bold,18 black' 
+  nt2d $dt k genpk - sig_genpk - - 'same navyblue marker=box,5 nsta'
+  nt2d $dt k recpk - sig_recpk - - 'same red marker=fcircle,7 nsta'
+end
+ 
+#####  Calcul de P(k) avec reprojection dans 2eme grille 
+##  Projection  grille a grille: -neg : suppression d rho/rho < -1 , -ngal 0.5 < 1 pour ne pas passer par les galaxies ...
+Objs/tpkprj -in 401,401,180,6,6,6 -out 301,301,150 -ic 3000,0.,0. -oc 3000,0.,0. -k 120,0.005,0.605 -neg -N 10 -ngal 0.5 simlss.txt pkprj0.ppf
+##  Projection avec passage par les galaxies: on specifie -neg : suppression d rho/rho < -1 , -ngal 5  
+Objs/tpkprj -in 401,401,180,6,6,6 -out 301,301,150 -ic 3000,0.,0. -oc 3000,0.,0. -k 120,0.005,0.605 -neg -N 10 -ngal 10 simlss.txt pkprjgal0.ppf
+##  Projection  grille a grille avec decalage en angle : suppression d rho/rho < -1 , -ngal 5  passage par les galaxies
+Objs/tpkprj -in 401,401,180,6,6,6 -out 301,301,150 -ic 3000,90.,0. -oc 2950,87.,7. -k 120,0.005,0.605 -neg -N 5 -ngal 0.5 simlss.txt pkprj_dtp5.ppf
+##  Projection avec passage par les galaxies et decalage en angle: -ngal 5  
+Objs/tpkprj -in 401,401,180,6,6,6 -out 301,301,150 -ic 3000,0.,0. -oc 2950,85.,5. -k 120,0.005,0.605 -neg -N 5 -ngal 5 simlss.txt pkprjgal_dtp5.ppf
+##  Projection avec passage par les galaxies et decalage en angle et smearing radiale:
+Objs/tpkprj -in 401,401,180,6,6,6 -out 301,301,150 -ic 3000,0.,0. -oc 2950,85.,5. -k 120,0.005,0.605 -neg -N 5 -ngal 5 -s 25. simlss.txt pkprjgal_dtp5_s25.ppf
+
+spiapp -term
+setaxesatt 'font=helvetica,bold,18 fixedfontsize minorticks'
+defscript dof
+  set mycf $1 
+  echo '----- Plotting P(k) from file ' $f     
+  openppf ${mycf}.ppf
+  set dt dtpk_${mycf}  
+  del $dt 
+  rename dtpk $dt 
+  print $dt 1
+  newwin   
+  nt2d $dt k inpk - - - - 'black line=solid,2 cpts logx logy nsta notit'
+  settitle " Pk- with projection from file  $mycf " ' ' 'font=helvetica,bold,18 black' 
+  nt2d $dt k recpkin - sig_recpkin - - 'same navyblue marker=box,5 nsta'
+  nt2d $dt k prjpk - sig_prjpk - - 'same red marker=fcircle,7 nsta'
+endscript 
+# foreach f ( pkprjgal_G2f  pkprjgal_G3f  )
+# foreach f ( casA   casAR  casAd  casARd  )
+# foreach f ( pkprjB0  pkprjgalB0 pkprjgalB0poiss pkprjB0_s10 pkprjB0_s20  pknosprjB0_s10 pknosprjB0_s20 pknosprjB0_s50 )
+foreach f ( SLG2 SLG2_R10deg SLG2_s20 SLG2_R10deg_s20 )
+  dof $f 
+end
+
+######################
+##  Fusion NTuple with without Oscillation 
+./Objs/mergedtpknosc pkprjSLG2.ppf pknosprjSLG2.ppf 12.4e9 pkSLG2.ppf
+./Objs/mergedtpknosc pkprj_4Gb_s50.ppf pknosprj_4Gb_s50.ppf 8.2e9 pk4Gb_s50.ppf
+
+setaxesatt 'font=helvetica,bold,18 fixedfontsize minorticks'
+defscript dof
+  set mycf $1 
+  echo '----- Plotting P(k) from file ' $f     
+  set dt ${mycf}  
+  del $dt
+  openppf ${mycf}.ppf
+#  print $dt 1
+  newwin   1 2 
+  nt2d $dt k inpk - - - - 'black line=solid,2 cpts logx logy nsta notit'
+  settitle " Pk- with projection from file  $mycf " ' ' 'font=helvetica,bold,18 black' 
+  nt2d $dt k recpkin - sig_recpkin - - 'same navyblue marker=box,5 nsta'
+  nt2d $dt k prjpk - sig_prjpk - - 'same red marker=fcircle,7 nsta'
+  
+  nt2d $dt k inpk - - - - 'black line=solid,2 cpts logx logy nsta notit'
+  settitle " Pk-NoOsc with projection from file  $mycf " ' ' 'font=helvetica,bold,18 black' 
+  nt2d $dt k recpkin_nos - sig_recpkin - - 'same navyblue marker=box,5 nsta'
+  nt2d $dt k prjpk_nos - sig_prjpk_nos - - 'same red marker=fcircle,7 nsta'
+  w2ps
+endscript 
+foreach f ( SLG2 SLG2_R10deg SLG2_s20 SLG2_R10deg_s20 )
+  dof $f 
+end
+
+setaxesatt 'font=helvetica,bold,18 fixedfontsize minorticks'
+defscript dofratio
+  set mycf $1 
+  echo '----- Plotting P(k) from file ' $f     
+  set dt ${mycf}  
+  del $dt
+  openppf ${mycf}.ppf
+#  print $dt 1
+  newwin
+  nt2d $dt k rapp_inpk - - - - 'black line=solid,1 cpts logx liny nsta notit xylimits=0.015,0.6,0.9,1.1'
+  plot2d $dt k rapp_inpk+err_rapp_inpk 1 'black line=dashed,1 cpts logx liny same nsta'
+  plot2d $dt k rapp_inpk-err_rapp_inpk 1 'black line=dashed,1 cpts logx liny same nsta'
+  nt2d $dt k rapp_prjpk - sig_rapp_prjpk - - 'same red line=solid,1 cpts marker=fcircle,9 nsta notit'
+  settitle " P(k)/P(k)-NoOsc with projection from file  $mycf " ' ' 'font=helvetica,bold,18 black' 
+  w2ps
+endscript 
+# foreach f ( SLG2 SLG2_R10deg SLG2_s20 SLG2_R10deg_s20 )
+# foreach f (  pkSLG2 pkSLG2_R10deg pkSLG2_s50 pkSLG2_R10deg_s50 )
+# foreach f ( pk4Gb pk4Gb_s50 )
+foreach f ( pkSSG pkSSG_s50 )
+
+  dofratio $f 
+end
+
+setaxesatt 'font=helvetica,bold,18 fixedfontsize minorticks'
+defscript dofratiosn
+  set mycf $1
+  set shotnoise $2
+  echo '----- Plotting P(k) from file ' $f     
+  set dt ${mycf}  
+#   del $dt
+#  openppf ${mycf}.ppf
+#  print $dt 1
+  newwin
+  nt2d $dt k rapp_inpk - - - - 'black line=solid,1 cpts logx liny nsta notit xylimits=0.015,0.6,0.9,1.1'
+  plot2d $dt k rapp_inpk+err_rapp_inpk 1 'black line=dashed,1 cpts logx liny same nsta'
+  plot2d $dt k rapp_inpk-err_rapp_inpk 1 'black line=dashed,1 cpts logx liny same nsta'
+  plot2de $dt k (prjpk-${shotnoise})/(prjpk_nos-${shotnoise}) 0 sig_rapp_prjpk 1  'same red line=solid,1  cpts marker=fcircle,9 nsta notit'
+  settitle " Rapport (P(k)-ShotNoise) with projection from file  $mycf " ' ' 'font=helvetica,bold,18 black' 
+  w2ps
+endscript 
+
+delobjs *
+snoise = 5000
+# foreach f ( pkSSG pkSSG_s50 )
+foreach f ( pk4Gb pk4Gb_s50 )
+  dofratio $f 
+  dofratiosn $f $snoise 
+end
+
+
+####################################################################
+./Objs/jgrid2pk -i 300,300,300,5,5,5 -o 200,200,200,7.5,7.5,7.5 -redshift 0.5,0.05 Pk_z_1_0_smoothed.txt toto.txt toto.ppf
+
+./Objs/pk2cl Pk_z_1_0_smoothed.txt clout.ppf
+
+./Objs/clcut -N 300 clin.txt tin.ppf

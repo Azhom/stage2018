@@ -1,0 +1,13 @@
+#############################################################################
+#  LF's schechter parameters LF_Params = phistar mstar alpha -
+#  From Zucca et al paper arxiv:0909.4674v1 -
+#  This table contains values for spectroscopic classified galaxis with fixed alphas
+#  Three class contains: 1. E-S0, 2. Early spirals, 3+4. Late Spirals + Star Bursts/Irregulars
+#  This file has been prepared by F. Habibi, Dec first 2017 ,  with fitted LF-parameter-all 
+#   LF_Params = [ phistar mstar alpha ]
+#  zmin zmax LF_Params_Ell LF_Params_Spiral LF_Params_StarBurst LF_Params_All 
+#############################################################################
+0.10     0.35   0.00324     -20.52      -0.30   0.00126     -20.95      -0.86   0.00205     -20.69  -1.47   0.00645 -20.73  -1.03
+0.35     0.55   0.00232     -20.67      -0.30   0.00092     -20.98      -0.86   0.00206     -20.81  -1.47   0.00490 -20.91  -1.03
+0.55     0.75   0.00186     -20.95      -0.30   0.00102     -21.26      -0.86   0.00276     -21.11  -1.47   0.00557 -21.14  -1.03
+0.75     1.00   0.00192     -21.08      -0.30   0.00130     -21.21      -0.86   0.00361     -21.18  -1.47   0.00715 -21.17  -1.03

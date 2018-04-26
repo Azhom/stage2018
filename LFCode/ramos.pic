@@ -1,0 +1,37 @@
+setaxesatt 'font=helvetica,bold,20 fixedfontsize minorticks'
+delobjs *
+rename galcount dahlen
+# openppf dahlenall.ppf
+openppf ramosall.ppf
+nt2d galcount z nGal - - - - 'line=solid,2 cpts nsta black'
+nt2d galcount z nAll - - - - 'line=dashed,2 cpts nsta same navyblue'
+nt2d galcount z nEll - - - - 'line=solid,1 cpts nsta same red'
+nt2d galcount z nSp - - - - 'line=solid,1 cpts nsta same green'
+nt2d galcount z nSB - - - - 'line=solid,1 cpts nsta same blue' 
+# settitle 'Dahlen/useAll (B)  -25<M<-15  Ell:red, Spiral:Green, StarBurst:Blue' ' (IntegNb.Gal) Total=Sum black , Total=All dashed' 'font=helvetica,bold,18 black'
+settitle 'Ramos/useAll (i)  -25<M<-15  Ell:red, Spiral:Green, StarBurst:Blue' ' (IntegNb.Gal) Total=Sum black , Total=All dashed' 'font=helvetica,bold,18 black' 
+
+w2ps
+
+newh1d hAll -25 -17 80
+newh1d hEll -25 -17 80
+newh1d hSp -25 -17 80
+newh1d hSB -25 -17 80
+projh1d hAll galaxies mag 1
+projh1d hEll galaxies mag 1 fabs(type-1)<0.01
+projh1d hSp galaxies mag 1 fabs(type-2)<0.01
+projh1d hSB galaxies mag 1 fabs(type-3)<0.01                                                                                                                                  
+disp hAll 'logy black nsta'
+disp hSB 'same blue nsta'
+disp hSp 'same green nsta'
+disp hEll 'same red nsta'
+settitle 'Galaxy mag B distribution Ell:red, Spiral:Green, StarBurst:Blue black:all' 'Dahlen/useAll Absolute magnitude (B)' 'font=helvetica,bold,18 black'
+settitle 'Galaxy mag i distribution Ell:red, Spiral:Green, StarBurst:Blue black:all' 'Ramos/useAll Absolute magnitude (B)' 'font=helvetica,bold,18 black'
+
+
+rename hAll hAllD
+rename hSB hSBD
+rename hSp hSpD
+rename hEll hEllD
+
+w2ps

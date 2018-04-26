@@ -1,0 +1,12 @@
+#############################################################################
+#  LF's schechter parameters LF_Params = phistar mstar alpha -
+#  From Zucca et al paper arxiv:0909.4674v1 -
+#  This table contains values for morphological classified galaxis with variant alphas
+#  This file has been prepared by F. Habibi, Dec first 2017 ,  with fitted LF-parameter-all 
+#   LF_Params = [ phistar mstar alpha ]
+#  zmin zmax LF_Params_Ell LF_Params_Spiral LF_Params_StarBurst LF_Params_All 
+#############################################################################
+0.10     0.35   0.00281     -20.90      -0.72   0.00359     -20.46      -1.14   0.00020     -21.14  -1.57   0.00562 -20.85  -1.09
+0.35     0.55   0.00254     -20.63      -0.38   0.00368     -20.51      -0.97   0.00061     -20.51  -1.01   0.00640 -20.67  -0.82
+0.55     0.75   0.00207     -20.81      -0.02   0.00292     -21.08      -1.21   0.00148     -20.66  -0.90   0.00659 -20.98  -0.85
+0.75     1.00   0.00116     -21.69      -1.29   0.00158     -21.59      -1.78   0.00204     -21.15  -1.32   0.00432 -21.57  -1.59

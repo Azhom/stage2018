@@ -1,0 +1,16 @@
+delobjs *
+openppf toto.ppf
+objaoper pkin col 0 c0
+objaoper pkin col 1 c1
+vecplot c0 c1 'logx logy'
+disp hpki 'same blue'
+disp hpk 'same red'
+disp hpkz 'same green'
+disp hpkphoz 'same'
+
+
+newwin
+plot2d hpkphoz x val 1 'cpts marker=fcircle,7 logy logx red'
+
+newwin
+disp hcntmodphoz 'logx logy'

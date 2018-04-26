@@ -1,0 +1,19 @@
+#############################################################################
+#  LF's schechter parameters LF_Params = phistar mstar alpha -
+#  From Dahlen et al paper   ApJ, 631:126-144, 2005
+#  This file has been prepared by F. Habibi, September 18th 2017
+#   Updated Feb 2018 by R. Ansari 
+#   Parameters for All galaxies from Table 5 , and from table 3 for Elliptical, Spiral, StarBurst
+#   WARNING: This file should be used with useall flag set to true in MultiType_Z_LF constructor
+#  mstar values are in B-band for H0=70 km/s/Mpc (h_70=1), m(h_70) = mstar - 5log10(h_70)
+#   LF_Params = [ phistar mstar alpha ]
+#  zmin zmax LF_Params_Ell LF_Params_Spiral LF_Params_StarBurst LF_Params_All 
+#############################################################################
+0.10    0.50      0.0013     -21.16	-0.74	0.00212     -21.00	-1.35	0.00426     -18.72	-1.02	0.00379     -21.43	-1.28
+0.50    0.75     0.00167    -21.01	-0.39	0.00234     -21.29	-1.14	0.00278     -19.51	-1.04	0.00379     -21.43	-1.28
+0.75    0.90     0.00062    -21.44	-0.72	0.0022      -21.15	-0.87	0.00177     -20.32	-1.30	0.00379     -21.43	-1.28
+0.90    1.12     0.00062    -21.44	-0.72	0.0022      -21.15	-0.87	0.00177     -20.32	-1.30	0.00356     -21.45	-1.28
+1.12    1.37     0.00062    -21.44	-0.72	0.0022      -21.15	-0.87	0.00177     -20.32	-1.30	0.00286     -21.48	-1.28
+1.37    1.59     0.00062    -21.44	-0.72	0.0022      -21.15	-0.87	0.00177     -20.32	-1.30	0.00215     -21.60	-1.28
+1.59    1.80     0.00062    -21.44	-0.72	0.0022      -21.15	-0.87	0.00177     -20.32	-1.30	0.00211     -21.48	-1.28
+1.80    2.00     0.00062    -21.44	-0.72	0.0022      -21.15	-0.87	0.00177     -20.32	-1.30	0.00255     -21.48	-1.28

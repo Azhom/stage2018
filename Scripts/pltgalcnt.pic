@@ -1,0 +1,34 @@
+#######################################################################
+#### Script piapp pour l'analyse des NTuples du programme tngal.cc 
+#######################################################################
+setaxesatt 'font=helvetica,bold,18 minorticks fixedfontsize'
+# 1- On ouvre le fichier PPF 
+openppf galcnt.ppf 
+ls
+##  ngalmag est le NTuple qui donne le nombre de galaxies en fct de la magnitudeLimit
+print ngalmag 
+nt2d ngalmag maglim nAll - - - - 'marker=fbox,9 cpts nsta notit'
+nt2d ngalmag maglim nEll - - - - 'marker=circle,7 cpts same red nsta'
+nt2d ngalmag maglim nSp - - - - 'marker=circle,7 cpts same blue nsta'
+nt2d ngalmag maglim nSB - - - - 'marker=circle,7 cpts same blueviolet nsta'
+setaxelabels ' MagLimit - i-Band' ' galaxy/arcmin^2' 'font=helvetica,bolditalic,18'
+settitle 'Galaxy density Count (LF-Dahlen, Black:all, Red:Ell, Blue:Spiral, Violet=SB' ' ' 'font=helvetica,bold,18 black'
+# w2ps
+##  ngalfz  est le NTuple qui donne le nombre de galaxies en fct du redshift pour magLimit donne (defaut=25.3) 
+print ngalfz 
+nt2d ngalfz z nAll - - - - 'marker=fbox,9 black cpts nsta notit'
+nt2d ngalfz z nAll - - - - 'marker=fbox,7 black cpts nsta notit'
+nt2d ngalfz z nEll - - - - 'marker=circle,7 red same cpts nsta notit'
+nt2d ngalfz z nSp - - - - 'marker=circle,7  same blue cpts nsta notit'
+nt2d ngalfz z nSB - - - - 'marker=circle,7  same blueviolet cpts nsta notit'
+setaxelabels ' Redshift (z)' ' galaxy/arcmin^2/dz=0.05' 'font=helvetica,bolditalic,16'
+settitle 'Galaxy density Count (LF-Dahlen, Black:all, Red:Ell, Blue:Spiral, Violet=SB' ' MagLimit=25.3' 'font=helvetica,bold,18 black'
+w2ps
+nt2d ngalfz z nAllV - - - - 'marker=fbox,7 black cpts nsta notit'
+nt2d ngalfz z nEllV - - - - 'marker=circle,7 red same cpts nsta notit'
+nt2d ngalfz z nSpV - - - - 'marker=circle,7  same blue cpts nsta notit'
+nt2d ngalfz z nSBV - - - - 'marker=circle,7  same blueviolet cpts nsta notit'
+setaxelabels ' Redshift (z)' ' galaxy/Mpc^3' 'font=helvetica,bolditalic,16'
+settitle 'Galaxy density Count (LF-Dahlen, Black:all, Red:Ell, Blue:Spiral, Violet=SB' ' MagLimit=25.3' 'font=helvetica,bold,18 black'
+# w2ps
+# exitpiapp 

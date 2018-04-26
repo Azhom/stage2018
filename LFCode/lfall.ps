@@ -1,0 +1,4778 @@
+%!PS-Adobe-2.0
+%%Title: w2ps.ps
+%%Creator: PI-PSFile (N.R. 07/08/99)
+%%CreationDate: Tue Sep 19 11:53:03 2017
+%%Pages: (atend)
+%%EndComments
+
+/$PIDict 50 dict def
+$PIDict begin $PIDict /mtrx matrix put /Landscape 0 def /Portrait 1 def
+% Couleurs et fontes courantes
+/C-4  {ur    ug    ub    setrgbcolor} bind def % PI_ColorFromMap
+/C0   {0.0   0.0   0.0   setrgbcolor} bind def % PI_Black
+/C1   {1.000 1.000 1.000 setrgbcolor} bind def % PI_White
+/C2   {0.824 0.824 0.824 setrgbcolor} bind def % PI_Grey
+/C3   {1.000 0.0   0.0   setrgbcolor} bind def % PI_Red
+/C4   {0.0   0.0   1.000 setrgbcolor} bind def % PI_Blue
+/C5   {0.0   1.000 0.0   setrgbcolor} bind def % PI_Green
+/C6   {1.000 1.000 0.0   setrgbcolor} bind def % PI_Yellow
+/C7   {1.000 0.0   1.000 setrgbcolor} bind def % PI_Magenta
+/C-1  {}                              bind def % PI_NotDefColor
+/C8   {0.0   1.000 1.000 setrgbcolor} bind def % PI_Cyan
+/C9   {0.250 0.875 0.813 setrgbcolor} bind def % PI_Turquoise
+/C10  {0.0   0.0   0.500 setrgbcolor} bind def % PI_NavyBlue
+/C11  {1.000 0.644 0.0   setrgbcolor} bind def % PI_Orange
+/C12  {0.625 0.320 0.176 setrgbcolor} bind def % PI_SiennaRed
+/C13  {0.625 0.125 0.937 setrgbcolor} bind def % PI_Purple
+/C14  {0.195 0.800 0.195 setrgbcolor} bind def % PI_LimeGreen
+/C15  {1.000 0.840 0.0   setrgbcolor} bind def % PI_Gold
+/C16  {0.933 0.510 0.933 setrgbcolor} bind def % PI_Violet
+/C17  {0.816 0.125 0.565 setrgbcolor} bind def % PI_VioletRed
+/C18  {0.541 0.167 0.886 setrgbcolor} bind def % PI_BlueViolet
+/C19  {0.580 0.000 0.827 setrgbcolor} bind def % PI_DarkViolet
+/C20  {0.530 0.805 0.920 setrgbcolor} bind def % PI_SkyBlue
+/C21  {0.255 0.410 0.880 setrgbcolor} bind def % PI_RoyalBlue
+/C22  {0.135 0.545 0.135 setrgbcolor} bind def % PI_ForestGreen
+/C23  {1.000 0.270 0.000 setrgbcolor} bind def % PI_OrangeRed
+/C24  {0.647 0.165 0.165 setrgbcolor} bind def % PI_Brown
+/C25  {0.600 0.750 1.000 setrgbcolor} bind def % PI_HighlightBlue
+/F1   {/Courier   findfont} bind def           % PI_RomanFont
+/F2   {/Courier-Bold    findfont} bind def     % PI_BoldFont
+/F4   {/Courier-Italic  findfont} bind def     % PI_ItalicFont
+/F-1  {}                        bind def       % PI_NotDefFontAtt
+/FS {scalefont setfont} bind def
+%/FS2  {8  scalefont setfont} bind def          % PI_SmallSizeFont
+%/FS3  {12 scalefont setfont} bind def          % PI_NormalSizeFont
+%/FS4  {16 scalefont setfont} bind def          % PI_LargeSizeFont
+/FS-1 {}                     bind def          % PI_NotDefFontSize
+/L1   {1    slw} bind def                      % PI_NormalLine
+/L2   {0.5  slw} bind def                      % PI_ThinLine
+/L3   {3    slw} bind def                      % PI_ThickLine
+/L0   {}         bind def                      % PI_NotDefLineAtt
+% Conversion
+/cm   {28.3 mul}   bind def  % cm --> points
+/Ux   {$Cvrtx mul} bind def  % Unites utilisateur /x --> points
+/Uy   {$Cvrty mul} bind def  % Unites utilisateur /y --> points
+% Pages et Blocs
+/newref  {% Dx Dy Tx Ty X0 Y0 newref
+translate 3 -1 roll cm div 28.3 mul /$Cvrty exch def
+exch cm div 28.3 mul /$Cvrtx exch def} bind def
+/NewPage {% Dx Dy orientation NewPage
+/$PageEnteredState save def 1 -1 scale Portrait eq {w cm h cm 0 h cm neg
+newref} { -90 rotate h cm w cm 0 0 newref} ifelse} bind def
+/EndPage { % EndPage
+$PageEnteredState restore} bind def
+/NewBloc { % Dx Dy Tx Ty X0 Y0 NewBloc
+/$BlocEnteredState save def newref} bind def
+/EndBloc { % EndBloc
+$BlocEnteredState restore} bind def
+% Trace
+/n  {newpath} bind def    /c  {closepath} bind def
+/gs {gsave}  bind def     /gr {grestore} bind def
+/m  {moveto} bind def     /l  {lineto} bind def
+/s  {stroke} bind def     /f  {fill}   bind def
+/sc {scale}  bind def     /S  {gs 1 -1 sc show gr} bind def 
+/slw {setlinewidth} bind def
+/sljoin {setlinejoin} bind def
+/slcap {setlinecap} bind def
+/slsolid {[] 0 setdash} bind def % Solid-Line 
+/sldash {[6 6] 0 setdash} bind def % Dashed-Line 
+/sldott {[2 6] 0 setdash} bind def % Dotted-Line 
+/sldashdott {[2 2 4 6] 0 setdash} bind def % Dash-Dotted-Line 
+/ff {findfont} bind def   /sf {setfont} bind def /scf {scalefont} bind def
+/rl {rlineto} bind def    /tr {translate} bind def
+/rmv {rmoveto} bind def 
+% Trace de chaine avec justification diverse 
+% ------------------------------------------------- 
+% hxshstr  stack: TheString 
+% hx (x=r,c,l) Horizontal-X Right,Center,Left - Vertical: BaseLine 
+% ------------------------------------------------- 
+/hlshstr   % Horizontal-left Vertical-BaseLine justified 
+{ gs 1 -1 sc show gr } bind def 
+/hcshstr   % Horizontal-Center Vertical-BaseLine justified 
+{ dup stringwidth pop 2 div neg  % get minus(string length/2)  
+  0 rmoveto gs 1 -1 sc show gr } bind def 
+/hrshstr   % Horizontal-Right Vertical-BaseLine justified 
+{ dup stringwidth pop neg  % get minus(string width)  
+  0 rmoveto gs 1 -1 sc show gr } bind def 
+% ------------------------------------------------- 
+% hxvyshstr  stack: TheString 
+% hx (x=r,c,l) Horizontal-X Right,Center,Left 
+% vy (y=t,c,b) Vertical-Y Top,Center,Bottom 
+% Ces procs (hxvyshstr) utilisent la variable curfntsz que l'on definit par defaut 
+% hxshstr  stack: TheString 
+% hx (x=r,c,l) Horizontal-X Right,Center,Left - Vertical: BaseLine 
+% ------------------------------------------------- 
+/curfntsz 10 def 
+/hlvbshstr   % Horizontal-left Vertical-Bottom justified 
+{ gs 1 -1 sc show gr } bind def 
+/hcvbshstr   % Horizontal-Center Vertical-Bottom justified 
+{ dup stringwidth pop 2 div neg  % get minus(string length/2)  
+  0 rmoveto gs 1 -1 sc show gr } bind def 
+/hrvbshstr   % Horizontal-Right Vertical-Bottom justified 
+{ dup stringwidth pop neg  % get minus(string width)  
+  0 rmoveto gs 1 -1 sc show gr } bind def 
+/hlvcshstr   % Horizontal-left Vertical-Center justified 
+{ 0 curfntsz 2 div   % get (string height)/2  
+  rmoveto gs 1 -1 sc show gr } bind def 
+/hcvcshstr   % Horizontal-Center Vertical-Center justified 
+{ dup stringwidth pop 2 div neg curfntsz 2 div  % s_wy/2 -s_wx/2  
+  rmoveto gs 1 -1 sc show gr } bind def 
+/hrvcshstr   % Horizontal-Right Vertical-Center justified 
+{ dup stringwidth pop neg curfntsz  % s_wy/2 -s_wx  
+  rmoveto gs 1 -1 sc show gr } bind def 
+/hlvtshstr   % Horizontal-left Vertical-Top justified 
+{ 0 curfntsz   % get s_wy  
+  rmoveto gs 1 -1 sc show gr } bind def 
+/hcvtshstr   % Horizontal-Center Vertical-Top justified 
+{ dup stringwidth pop 2 div neg curfntsz  % s_wy -s_wx/2  
+  rmoveto gs 1 -1 sc show gr } bind def 
+/hrvtshstr   % Horizontal-Right Vertical-Top justified 
+{ dup stringwidth pop neg curfntsz  % s_wy -s_wx  
+  rmoveto gs 1 -1 sc show gr } bind def 
+% Tx Ty X0 Y0 box
+/box {tr 0 3 1 roll neg exch 0 0 3 index neg 0 0 m rl rl rl c} bind def
+% R X0 Y0 circle
+/circle {tr dup 0 m 0 0 3 -1 roll 0 380 arc} bind def
+% DrawEllipse pompee sur transfig
+/ellipse {/endangle exch def /startangle exch def /yrad exch def
+/xrad exch def /y exch def /x exch def /savematrix mtrx currentmatrix def
+x y tr xrad yrad sc 0 0 1 startangle endangle arc
+closepath savematrix setmatrix } def
+% pipsarc Arc 
+/pipsarc {/endangle exch def /startangle exch def /yrad exch def
+/xrad exch def /y exch def /x exch def /savematrix mtrx currentmatrix def
+x y tr xrad yrad sc 0 0 1 startangle endangle arc
+savematrix setmatrix } def
+% pipsfarc Arc plein 
+/pipsfarc {/endangle exch def /startangle exch def /yrad exch def
+/xrad exch def /y exch def /x exch def /savematrix mtrx currentmatrix def
+x y tr 0 0 moveto xrad yrad sc 0 0 1 startangle endangle arc 0 0  lineto
+closepath savematrix setmatrix } def
+% Gestion des images
+% ColorImage, pompee sur xv (qui les avait pompees sur xgrab)
+/colorimage where   % do we know about 'colorimage'?
+  { pop }           % yes: pop off the 'dict' returned
+  {                 % no:  define one
+    /colortogray {  % define an RGB->I function
+      /rgbdata exch store    % call input 'rgbdata'
+      rgbdata length 3 idiv
+      /npixls exch store
+      /rgbindx 0 store
+      0 1 npixls 1 sub {
+        grays exch
+        rgbdata rgbindx       get 20 mul    % Red
+        rgbdata rgbindx 1 add get 32 mul    % Green
+        rgbdata rgbindx 2 add get 12 mul    % Blue
+        add add 64 idiv      % I = .5G + .31R + .18B
+        put
+        /rgbindx rgbindx 3 add store
+      } for
+      grays 0 npixls getinterval
+    } bind def
+    /mergeprocs { % def
+      dup length 3 -1 roll dup length dup 5 1 roll 3 -1 roll add
+      array cvx dup 3 -1 roll 0 exch putinterval dup 4 2 roll
+      putinterval } bind def
+    /colorimage {
+      pop pop     % remove 'false 3' operands
+      {colortogray} mergeprocs image} bind def
+  } ifelse          % end of 'false' case
+% GetRGB
+/GetRGB { % ImageStr --> RGBStr
+  /ImageData exch store
+  % Pour chaque element de ImageData,
+  % On va chercher les valeurs RGB correspondantes
+  0 1 Taille 1 sub {
+    /i      exch store  % On met a jour l'indice de parcours
+    ImageData i get     % Recupere la Indice e val dans la chaine ImData
+    ColorMap exch get   % On recupere la valeur RGB Correspondante
+    aload pop           % On met tout ca dans la pile
+    % Maintenant, on va mettre tout ca dans la chaine RGBStr
+    RGBStr i 3 mul 2 add 3 -1 roll put
+    RGBStr i 3 mul 1 add 3 -1 roll put
+    RGBStr i 3 mul       3 -1 roll put
+    } for
+  RGBStr 0 Taille 3 mul getinterval % On renvoie la chaine RGB
+} bind def
+end
+% Definition de la fonte $PIMarkers
+/$PIMarkers 26 dict def
+$PIMarkers begin
+/FontType 3 def
+/FontMatrix [0.001 0 0 0.001 -0.375 -0.375] def
+/FontBBox   [0 0 1000 1000] def
+/Encoding 256 array def
+0 1 255 {Encoding exch /.notdef put} for
+Encoding  0 /PIDot       put % PI_DotMarker
+Encoding  1 /PIPlus      put % PI_PlusMarker
+Encoding  2 /PICross     put % PI_CrossMarker
+Encoding  3 /PICircle    put % PI_CircleMarker
+Encoding  4 /PIFCircle   put % PI_FCircleMarker
+Encoding  5 /PIBox       put % PI_BoxMarker
+Encoding  6 /PIFBox      put % PI_FBoxMarker
+Encoding  7 /PITriangle  put % PI_TriangleMarker
+Encoding  8 /PIFTriangle put % PI_FTriangleMarker
+Encoding  9 /PIStar      put % PI_StarMarker
+Encoding  10 /PIFStar     put % PI_FStarMarker
+/CharProcs 26 dict def
+$PIDict begin
+CharProcs begin
+/.notdef     {} def
+/PIDot       {100 375 375 circle f} bind def
+/PIPlus      {0 375 m 750 375 l 375 0 m 375 750 l s} bind def
+/PICross     {0 0 m 750 750 l 750 0 m 0 750 l s} bind def
+/PICircle    {375 375 375 circle s} bind def
+/PIFCircle   {375 375 375 circle f} bind def
+/PIBox       {0 0 m 750 0 l 750 750 l 0 750 l c s} bind def
+/PIFBox      {0 0 m 750 0 l 750 750 l 0 750 l c f} bind def
+/PITriangle  {0 750 m 375 0 l 750 750 l c s} bind def
+/PIFTriangle {0 750 m 375 0 l 750 750 l c f} bind def
+/PIStar      {731 260 m 459 260 l 375 0 l 291 260 l 19 260 l 239 419 l 155 678 l 375 518 l 595 678 l 511 419 l c s} def
+/PIFStar     {731 260 m 459 260 l 375 0 l 291 260 l 19 260 l 239 419 l 155 678 l 375 518 l 595 678 l 511 419 l c f} def
+end %$PIDict
+end %$CharProcs
+/BuildChar {
+1000 0      % Largeur 
+0 0 750 750 % Bounding Box
+setcachedevice 
+exch begin
+Encoding exch get
+CharProcs exch get
+end 75 slw exec} def
+end
+/PIMarkers $PIMarkers definefont pop
+save
+$PIDict begin /PIMarkers ff 14 scf sf
+/FState save def
+%%EndProlog
+
+%%Page: 1 1
+/PState save def 1 -1 scale
+801.00 859.00 17.00 cm 18.23 cm 2.00 cm -23.97 cm newref
+/Courier ff 5.94257 FS /curfntsz 5.94257 def 
+%>BeginBloc 1
+801.00 430.00 801.00 Ux 430.00 Uy 0.00 Ux 0.00 Uy NewBloc
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 801.00 Ux 0 rl 0 430.00 Uy rl -801.000000 Ux 0 rl closepath clip newpath
+/Courier ff 5.94257 FS /curfntsz 5.94257 def 
+1.18851 slw 0.594257 slw C0 n 104.00 Ux 382.00 Uy m 744.00 Ux 382.00 Uy l s
+C0 n 744.00 Ux 382.00 Uy m 744.00 Ux 38.00 Uy l s
+C0 n 744.00 Ux 38.00 Uy m 104.00 Ux 38.00 Uy l s
+C0 n 104.00 Ux 38.00 Uy m 104.00 Ux 382.00 Uy l s
+0.594257 slw sldott C0 n 118.80 Ux 382.00 Uy m 118.80 Ux 38.00 Uy l s
+C0 n 242.11 Ux 382.00 Uy m 242.11 Ux 38.00 Uy l s
+C0 n 365.43 Ux 382.00 Uy m 365.43 Ux 38.00 Uy l s
+C0 n 488.74 Ux 382.00 Uy m 488.74 Ux 38.00 Uy l s
+C0 n 612.05 Ux 382.00 Uy m 612.05 Ux 38.00 Uy l s
+C0 n 735.37 Ux 382.00 Uy m 735.37 Ux 38.00 Uy l s
+C0 n 104.00 Ux 382.00 Uy m 744.00 Ux 382.00 Uy l s
+C0 n 104.00 Ux 347.93 Uy m 744.00 Ux 347.93 Uy l s
+C0 n 104.00 Ux 323.76 Uy m 744.00 Ux 323.76 Uy l s
+C0 n 104.00 Ux 265.53 Uy m 744.00 Ux 265.53 Uy l s
+C0 n 104.00 Ux 231.46 Uy m 744.00 Ux 231.46 Uy l s
+C0 n 104.00 Ux 188.54 Uy m 744.00 Ux 188.54 Uy l s
+C0 n 104.00 Ux 154.47 Uy m 744.00 Ux 154.47 Uy l s
+C0 n 104.00 Ux 130.30 Uy m 744.00 Ux 130.30 Uy l s
+C0 n 104.00 Ux 72.07 Uy m 744.00 Ux 72.07 Uy l s
+C0 n 104.00 Ux 38.00 Uy m 744.00 Ux 38.00 Uy l s
+0.594257 slw slsolid C0 n 118.80 Ux 382.00 Uy m 118.80 Ux 376.50 Uy l s
+C0 n 242.11 Ux 382.00 Uy m 242.11 Ux 376.50 Uy l s
+C0 n 365.43 Ux 382.00 Uy m 365.43 Ux 376.50 Uy l s
+C0 n 488.74 Ux 382.00 Uy m 488.74 Ux 376.50 Uy l s
+C0 n 612.05 Ux 382.00 Uy m 612.05 Ux 376.50 Uy l s
+C0 n 735.37 Ux 382.00 Uy m 735.37 Ux 376.50 Uy l s
+C0 n 118.80 Ux 43.50 Uy m 118.80 Ux 38.00 Uy l s
+C0 n 242.11 Ux 43.50 Uy m 242.11 Ux 38.00 Uy l s
+C0 n 365.43 Ux 43.50 Uy m 365.43 Ux 38.00 Uy l s
+C0 n 488.74 Ux 43.50 Uy m 488.74 Ux 38.00 Uy l s
+C0 n 612.05 Ux 43.50 Uy m 612.05 Ux 38.00 Uy l s
+C0 n 735.37 Ux 43.50 Uy m 735.37 Ux 38.00 Uy l s
+C0 n 104.00 Ux 382.00 Uy m 114.24 Ux 382.00 Uy l s
+C0 n 104.00 Ux 347.93 Uy m 114.24 Ux 347.93 Uy l s
+C0 n 104.00 Ux 323.76 Uy m 114.24 Ux 323.76 Uy l s
+C0 n 104.00 Ux 265.53 Uy m 114.24 Ux 265.53 Uy l s
+C0 n 104.00 Ux 231.46 Uy m 114.24 Ux 231.46 Uy l s
+C0 n 104.00 Ux 188.54 Uy m 114.24 Ux 188.54 Uy l s
+C0 n 104.00 Ux 154.47 Uy m 114.24 Ux 154.47 Uy l s
+C0 n 104.00 Ux 130.30 Uy m 114.24 Ux 130.30 Uy l s
+C0 n 104.00 Ux 72.07 Uy m 114.24 Ux 72.07 Uy l s
+C0 n 104.00 Ux 38.00 Uy m 114.24 Ux 38.00 Uy l s
+C0 n 733.76 Ux 382.00 Uy m 744.00 Ux 382.00 Uy l s
+C0 n 733.76 Ux 347.93 Uy m 744.00 Ux 347.93 Uy l s
+C0 n 733.76 Ux 323.76 Uy m 744.00 Ux 323.76 Uy l s
+C0 n 733.76 Ux 265.53 Uy m 744.00 Ux 265.53 Uy l s
+C0 n 733.76 Ux 231.46 Uy m 744.00 Ux 231.46 Uy l s
+C0 n 733.76 Ux 188.54 Uy m 744.00 Ux 188.54 Uy l s
+C0 n 733.76 Ux 154.47 Uy m 744.00 Ux 154.47 Uy l s
+C0 n 733.76 Ux 130.30 Uy m 744.00 Ux 130.30 Uy l s
+C0 n 733.76 Ux 72.07 Uy m 744.00 Ux 72.07 Uy l s
+C0 n 733.76 Ux 38.00 Uy m 744.00 Ux 38.00 Uy l s
+C0 n 118.80 Ux 382.00 Uy m 118.80 Ux 378.56 Uy l s
+C0 n 143.46 Ux 382.00 Uy m 143.46 Ux 378.56 Uy l s
+C0 n 168.12 Ux 382.00 Uy m 168.12 Ux 378.56 Uy l s
+C0 n 192.79 Ux 382.00 Uy m 192.79 Ux 378.56 Uy l s
+C0 n 217.45 Ux 382.00 Uy m 217.45 Ux 378.56 Uy l s
+C0 n 242.11 Ux 382.00 Uy m 242.11 Ux 378.56 Uy l s
+C0 n 266.77 Ux 382.00 Uy m 266.77 Ux 378.56 Uy l s
+C0 n 291.44 Ux 382.00 Uy m 291.44 Ux 378.56 Uy l s
+C0 n 316.10 Ux 382.00 Uy m 316.10 Ux 378.56 Uy l s
+C0 n 340.76 Ux 382.00 Uy m 340.76 Ux 378.56 Uy l s
+C0 n 365.43 Ux 382.00 Uy m 365.43 Ux 378.56 Uy l s
+C0 n 390.09 Ux 382.00 Uy m 390.09 Ux 378.56 Uy l s
+C0 n 414.75 Ux 382.00 Uy m 414.75 Ux 378.56 Uy l s
+C0 n 439.41 Ux 382.00 Uy m 439.41 Ux 378.56 Uy l s
+C0 n 464.08 Ux 382.00 Uy m 464.08 Ux 378.56 Uy l s
+C0 n 488.74 Ux 382.00 Uy m 488.74 Ux 378.56 Uy l s
+C0 n 513.40 Ux 382.00 Uy m 513.40 Ux 378.56 Uy l s
+C0 n 538.07 Ux 382.00 Uy m 538.07 Ux 378.56 Uy l s
+C0 n 562.73 Ux 382.00 Uy m 562.73 Ux 378.56 Uy l s
+C0 n 587.39 Ux 382.00 Uy m 587.39 Ux 378.56 Uy l s
+C0 n 612.05 Ux 382.00 Uy m 612.05 Ux 378.56 Uy l s
+C0 n 636.72 Ux 382.00 Uy m 636.72 Ux 378.56 Uy l s
+C0 n 661.38 Ux 382.00 Uy m 661.38 Ux 378.56 Uy l s
+C0 n 686.04 Ux 382.00 Uy m 686.04 Ux 378.56 Uy l s
+C0 n 710.71 Ux 382.00 Uy m 710.71 Ux 378.56 Uy l s
+C0 n 735.37 Ux 382.00 Uy m 735.37 Ux 378.56 Uy l s
+C0 n 118.80 Ux 41.44 Uy m 118.80 Ux 38.00 Uy l s
+C0 n 143.46 Ux 41.44 Uy m 143.46 Ux 38.00 Uy l s
+C0 n 168.12 Ux 41.44 Uy m 168.12 Ux 38.00 Uy l s
+C0 n 192.79 Ux 41.44 Uy m 192.79 Ux 38.00 Uy l s
+C0 n 217.45 Ux 41.44 Uy m 217.45 Ux 38.00 Uy l s
+C0 n 242.11 Ux 41.44 Uy m 242.11 Ux 38.00 Uy l s
+C0 n 266.77 Ux 41.44 Uy m 266.77 Ux 38.00 Uy l s
+C0 n 291.44 Ux 41.44 Uy m 291.44 Ux 38.00 Uy l s
+C0 n 316.10 Ux 41.44 Uy m 316.10 Ux 38.00 Uy l s
+C0 n 340.76 Ux 41.44 Uy m 340.76 Ux 38.00 Uy l s
+C0 n 365.43 Ux 41.44 Uy m 365.43 Ux 38.00 Uy l s
+C0 n 390.09 Ux 41.44 Uy m 390.09 Ux 38.00 Uy l s
+C0 n 414.75 Ux 41.44 Uy m 414.75 Ux 38.00 Uy l s
+C0 n 439.41 Ux 41.44 Uy m 439.41 Ux 38.00 Uy l s
+C0 n 464.08 Ux 41.44 Uy m 464.08 Ux 38.00 Uy l s
+C0 n 488.74 Ux 41.44 Uy m 488.74 Ux 38.00 Uy l s
+C0 n 513.40 Ux 41.44 Uy m 513.40 Ux 38.00 Uy l s
+C0 n 538.07 Ux 41.44 Uy m 538.07 Ux 38.00 Uy l s
+C0 n 562.73 Ux 41.44 Uy m 562.73 Ux 38.00 Uy l s
+C0 n 587.39 Ux 41.44 Uy m 587.39 Ux 38.00 Uy l s
+C0 n 612.05 Ux 41.44 Uy m 612.05 Ux 38.00 Uy l s
+C0 n 636.72 Ux 41.44 Uy m 636.72 Ux 38.00 Uy l s
+C0 n 661.38 Ux 41.44 Uy m 661.38 Ux 38.00 Uy l s
+C0 n 686.04 Ux 41.44 Uy m 686.04 Ux 38.00 Uy l s
+C0 n 710.71 Ux 41.44 Uy m 710.71 Ux 38.00 Uy l s
+C0 n 735.37 Ux 41.44 Uy m 735.37 Ux 38.00 Uy l s
+C0 n 104.00 Ux 382.00 Uy m 110.40 Ux 382.00 Uy l s
+C0 n 104.00 Ux 373.99 Uy m 110.40 Ux 373.99 Uy l s
+C0 n 104.00 Ux 366.68 Uy m 110.40 Ux 366.68 Uy l s
+C0 n 104.00 Ux 359.96 Uy m 110.40 Ux 359.96 Uy l s
+C0 n 104.00 Ux 353.73 Uy m 110.40 Ux 353.73 Uy l s
+C0 n 104.00 Ux 347.93 Uy m 110.40 Ux 347.93 Uy l s
+C0 n 104.00 Ux 342.51 Uy m 110.40 Ux 342.51 Uy l s
+C0 n 104.00 Ux 337.42 Uy m 110.40 Ux 337.42 Uy l s
+C0 n 104.00 Ux 332.62 Uy m 110.40 Ux 332.62 Uy l s
+C0 n 104.00 Ux 328.07 Uy m 110.40 Ux 328.07 Uy l s
+C0 n 104.00 Ux 323.76 Uy m 110.40 Ux 323.76 Uy l s
+C0 n 104.00 Ux 308.44 Uy m 110.40 Ux 308.44 Uy l s
+C0 n 104.00 Ux 295.49 Uy m 110.40 Ux 295.49 Uy l s
+C0 n 104.00 Ux 284.27 Uy m 110.40 Ux 284.27 Uy l s
+C0 n 104.00 Ux 274.38 Uy m 110.40 Ux 274.38 Uy l s
+C0 n 104.00 Ux 265.53 Uy m 110.40 Ux 265.53 Uy l s
+C0 n 104.00 Ux 257.52 Uy m 110.40 Ux 257.52 Uy l s
+C0 n 104.00 Ux 250.21 Uy m 110.40 Ux 250.21 Uy l s
+C0 n 104.00 Ux 243.48 Uy m 110.40 Ux 243.48 Uy l s
+C0 n 104.00 Ux 237.26 Uy m 110.40 Ux 237.26 Uy l s
+C0 n 104.00 Ux 231.46 Uy m 110.40 Ux 231.46 Uy l s
+C0 n 104.00 Ux 220.94 Uy m 110.40 Ux 220.94 Uy l s
+C0 n 104.00 Ux 211.60 Uy m 110.40 Ux 211.60 Uy l s
+C0 n 104.00 Ux 203.19 Uy m 110.40 Ux 203.19 Uy l s
+C0 n 104.00 Ux 195.55 Uy m 110.40 Ux 195.55 Uy l s
+C0 n 104.00 Ux 188.54 Uy m 110.40 Ux 188.54 Uy l s
+C0 n 104.00 Ux 180.53 Uy m 110.40 Ux 180.53 Uy l s
+C0 n 104.00 Ux 173.22 Uy m 110.40 Ux 173.22 Uy l s
+C0 n 104.00 Ux 166.50 Uy m 110.40 Ux 166.50 Uy l s
+C0 n 104.00 Ux 160.27 Uy m 110.40 Ux 160.27 Uy l s
+C0 n 104.00 Ux 154.47 Uy m 110.40 Ux 154.47 Uy l s
+C0 n 104.00 Ux 149.05 Uy m 110.40 Ux 149.05 Uy l s
+C0 n 104.00 Ux 143.96 Uy m 110.40 Ux 143.96 Uy l s
+C0 n 104.00 Ux 139.16 Uy m 110.40 Ux 139.16 Uy l s
+C0 n 104.00 Ux 134.61 Uy m 110.40 Ux 134.61 Uy l s
+C0 n 104.00 Ux 130.30 Uy m 110.40 Ux 130.30 Uy l s
+C0 n 104.00 Ux 114.99 Uy m 110.40 Ux 114.99 Uy l s
+C0 n 104.00 Ux 102.03 Uy m 110.40 Ux 102.03 Uy l s
+C0 n 104.00 Ux 90.81 Uy m 110.40 Ux 90.81 Uy l s
+C0 n 104.00 Ux 80.92 Uy m 110.40 Ux 80.92 Uy l s
+C0 n 104.00 Ux 72.07 Uy m 110.40 Ux 72.07 Uy l s
+C0 n 104.00 Ux 64.06 Uy m 110.40 Ux 64.06 Uy l s
+C0 n 104.00 Ux 56.75 Uy m 110.40 Ux 56.75 Uy l s
+C0 n 104.00 Ux 50.02 Uy m 110.40 Ux 50.02 Uy l s
+C0 n 104.00 Ux 43.80 Uy m 110.40 Ux 43.80 Uy l s
+C0 n 104.00 Ux 38.00 Uy m 110.40 Ux 38.00 Uy l s
+C0 n 737.60 Ux 382.00 Uy m 744.00 Ux 382.00 Uy l s
+C0 n 737.60 Ux 373.99 Uy m 744.00 Ux 373.99 Uy l s
+C0 n 737.60 Ux 366.68 Uy m 744.00 Ux 366.68 Uy l s
+C0 n 737.60 Ux 359.96 Uy m 744.00 Ux 359.96 Uy l s
+C0 n 737.60 Ux 353.73 Uy m 744.00 Ux 353.73 Uy l s
+C0 n 737.60 Ux 347.93 Uy m 744.00 Ux 347.93 Uy l s
+C0 n 737.60 Ux 342.51 Uy m 744.00 Ux 342.51 Uy l s
+C0 n 737.60 Ux 337.42 Uy m 744.00 Ux 337.42 Uy l s
+C0 n 737.60 Ux 332.62 Uy m 744.00 Ux 332.62 Uy l s
+C0 n 737.60 Ux 328.07 Uy m 744.00 Ux 328.07 Uy l s
+C0 n 737.60 Ux 323.76 Uy m 744.00 Ux 323.76 Uy l s
+C0 n 737.60 Ux 308.44 Uy m 744.00 Ux 308.44 Uy l s
+C0 n 737.60 Ux 295.49 Uy m 744.00 Ux 295.49 Uy l s
+C0 n 737.60 Ux 284.27 Uy m 744.00 Ux 284.27 Uy l s
+C0 n 737.60 Ux 274.38 Uy m 744.00 Ux 274.38 Uy l s
+C0 n 737.60 Ux 265.53 Uy m 744.00 Ux 265.53 Uy l s
+C0 n 737.60 Ux 257.52 Uy m 744.00 Ux 257.52 Uy l s
+C0 n 737.60 Ux 250.21 Uy m 744.00 Ux 250.21 Uy l s
+C0 n 737.60 Ux 243.48 Uy m 744.00 Ux 243.48 Uy l s
+C0 n 737.60 Ux 237.26 Uy m 744.00 Ux 237.26 Uy l s
+C0 n 737.60 Ux 231.46 Uy m 744.00 Ux 231.46 Uy l s
+C0 n 737.60 Ux 220.94 Uy m 744.00 Ux 220.94 Uy l s
+C0 n 737.60 Ux 211.60 Uy m 744.00 Ux 211.60 Uy l s
+C0 n 737.60 Ux 203.19 Uy m 744.00 Ux 203.19 Uy l s
+C0 n 737.60 Ux 195.55 Uy m 744.00 Ux 195.55 Uy l s
+C0 n 737.60 Ux 188.54 Uy m 744.00 Ux 188.54 Uy l s
+C0 n 737.60 Ux 180.53 Uy m 744.00 Ux 180.53 Uy l s
+C0 n 737.60 Ux 173.22 Uy m 744.00 Ux 173.22 Uy l s
+C0 n 737.60 Ux 166.50 Uy m 744.00 Ux 166.50 Uy l s
+C0 n 737.60 Ux 160.27 Uy m 744.00 Ux 160.27 Uy l s
+C0 n 737.60 Ux 154.47 Uy m 744.00 Ux 154.47 Uy l s
+C0 n 737.60 Ux 149.05 Uy m 744.00 Ux 149.05 Uy l s
+C0 n 737.60 Ux 143.96 Uy m 744.00 Ux 143.96 Uy l s
+C0 n 737.60 Ux 139.16 Uy m 744.00 Ux 139.16 Uy l s
+C0 n 737.60 Ux 134.61 Uy m 744.00 Ux 134.61 Uy l s
+C0 n 737.60 Ux 130.30 Uy m 744.00 Ux 130.30 Uy l s
+C0 n 737.60 Ux 114.99 Uy m 744.00 Ux 114.99 Uy l s
+C0 n 737.60 Ux 102.03 Uy m 744.00 Ux 102.03 Uy l s
+C0 n 737.60 Ux 90.81 Uy m 744.00 Ux 90.81 Uy l s
+C0 n 737.60 Ux 80.92 Uy m 744.00 Ux 80.92 Uy l s
+C0 n 737.60 Ux 72.07 Uy m 744.00 Ux 72.07 Uy l s
+C0 n 737.60 Ux 64.06 Uy m 744.00 Ux 64.06 Uy l s
+C0 n 737.60 Ux 56.75 Uy m 744.00 Ux 56.75 Uy l s
+C0 n 737.60 Ux 50.02 Uy m 744.00 Ux 50.02 Uy l s
+C0 n 737.60 Ux 43.80 Uy m 744.00 Ux 43.80 Uy l s
+C0 n 737.60 Ux 38.00 Uy m 744.00 Ux 38.00 Uy l s
+/Helvetica-Bold  ff 11.8851 FS /curfntsz 11.8851 def 
+gs 118.80 Ux 403.50 Uy m (0) hcshstr gr
+gs 118.80 Ux 403.50 Uy m (0) hcvbshstr gr
+gs 242.11 Ux 403.50 Uy m (1) hcshstr gr
+gs 242.11 Ux 403.50 Uy m (1) hcvbshstr gr
+gs 365.43 Ux 403.50 Uy m (2) hcshstr gr
+gs 365.43 Ux 403.50 Uy m (2) hcvbshstr gr
+gs 488.74 Ux 403.50 Uy m (3) hcshstr gr
+gs 488.74 Ux 403.50 Uy m (3) hcvbshstr gr
+gs 612.05 Ux 403.50 Uy m (4) hcshstr gr
+gs 612.05 Ux 403.50 Uy m (4) hcvbshstr gr
+gs 735.37 Ux 403.50 Uy m (5) hcshstr gr
+gs 735.37 Ux 403.50 Uy m (5) hcvbshstr gr
+gs 93.76 Ux 387.00 Uy m (1) hrshstr gr
+gs 93.76 Ux 387.00 Uy m (1) hrvbshstr gr
+gs 93.76 Ux 352.93 Uy m (1.5) hrshstr gr
+gs 93.76 Ux 352.93 Uy m (1.5) hrvbshstr gr
+gs 93.76 Ux 328.76 Uy m (2) hrshstr gr
+gs 93.76 Ux 328.76 Uy m (2) hrvbshstr gr
+gs 93.76 Ux 270.53 Uy m (4) hrshstr gr
+gs 93.76 Ux 270.53 Uy m (4) hrvbshstr gr
+gs 93.76 Ux 236.46 Uy m (6) hrshstr gr
+gs 93.76 Ux 236.46 Uy m (6) hrvbshstr gr
+gs 93.76 Ux 193.54 Uy m (10) hrshstr gr
+gs 93.76 Ux 193.54 Uy m (10) hrvbshstr gr
+gs 93.76 Ux 159.47 Uy m (15) hrshstr gr
+gs 93.76 Ux 159.47 Uy m (15) hrvbshstr gr
+gs 93.76 Ux 135.30 Uy m (20) hrshstr gr
+gs 93.76 Ux 135.30 Uy m (20) hrvbshstr gr
+gs 93.76 Ux 77.07 Uy m (40) hrshstr gr
+gs 93.76 Ux 77.07 Uy m (40) hrvbshstr gr
+gs 93.76 Ux 43.00 Uy m (60) hrshstr gr
+gs 93.76 Ux 43.00 Uy m (60) hrvbshstr gr
+gs 80.00 Ux 27.75 Uy m (x 10) hrshstr gr
+gs 80.00 Ux 27.75 Uy m (x 10) hrvbshstr gr
+/Helvetica-Bold  ff 7.13109 FS /curfntsz 7.13109 def 
+gs 82.00 Ux 18.00 Uy m (-3) hlshstr gr
+/Helvetica-Bold  ff 10.6966 FS /curfntsz 10.6966 def 
+gs 424.00 Ux 19.24 Uy m (Dahlen/useAll \(B\)  -25<M<-15  Ell:red, Spiral:Green, StarBurst:Blue) hcshstr gr
+gs 424.00 Ux 19.24 Uy m (Dahlen/useAll \(B\)  -25<M<-15  Ell:red, Spiral:Green, StarBurst:Blue) hcvbshstr gr
+gs 424.00 Ux 423.80 Uy m ( \(IntegNb.Gal\) Total=Sum black , Total=All dashed) hcshstr gr
+gs 424.00 Ux 423.80 Uy m ( \(IntegNb.Gal\) Total=Sum black , Total=All dashed) hcvbshstr gr
+% SetClipRectangle: Define clip region 
+ newpath 104.00 Ux 38.00 Uy m 640.00 Ux 0 rl 0 344.00 Uy rl -640.00 Ux 0 rl closepath clip newpath
+C0 /PIMarkers ff 1 scf sf
+118.80 Ux 49.13 Uy m (\0) show
+C0 124.96 Ux 49.13 Uy m (\0) show
+C0 131.13 Ux 49.13 Uy m (\0) show
+C0 137.29 Ux 49.13 Uy m (\0) show
+C0 143.46 Ux 49.13 Uy m (\0) show
+C0 149.63 Ux 49.13 Uy m (\0) show
+C0 155.79 Ux 49.13 Uy m (\0) show
+C0 161.96 Ux 53.20 Uy m (\0) show
+C0 168.12 Ux 57.48 Uy m (\0) show
+C0 174.29 Ux 61.99 Uy m (\0) show
+C0 180.45 Ux 66.76 Uy m (\0) show
+C0 186.62 Ux 71.81 Uy m (\0) show
+C0 192.79 Ux 77.19 Uy m (\0) show
+C0 198.95 Ux 81.45 Uy m (\0) show
+C0 205.12 Ux 84.39 Uy m (\0) show
+C0 211.28 Ux 87.44 Uy m (\0) show
+C0 217.45 Ux 90.61 Uy m (\0) show
+C0 223.61 Ux 93.90 Uy m (\0) show
+C0 229.78 Ux 95.59 Uy m (\0) show
+C0 235.95 Ux 95.59 Uy m (\0) show
+C0 242.11 Ux 95.59 Uy m (\0) show
+C0 248.28 Ux 95.82 Uy m (\0) show
+C0 254.44 Ux 96.04 Uy m (\0) show
+C0 260.61 Ux 96.26 Uy m (\0) show
+C0 266.77 Ux 96.48 Uy m (\0) show
+C0 272.94 Ux 96.71 Uy m (\0) show
+C0 279.11 Ux 96.93 Uy m (\0) show
+C0 285.27 Ux 97.16 Uy m (\0) show
+C0 291.44 Ux 97.38 Uy m (\0) show
+1.18851 slw C0 118.80 Ux 49.13 Uy m
+124.96 Ux 49.13 Uy l
+131.13 Ux 49.13 Uy l
+137.29 Ux 49.13 Uy l
+143.46 Ux 49.13 Uy l
+149.63 Ux 49.13 Uy l
+155.79 Ux 49.13 Uy l
+161.96 Ux 53.20 Uy l
+168.12 Ux 57.48 Uy l
+174.29 Ux 61.99 Uy l
+180.45 Ux 66.76 Uy l
+186.62 Ux 71.81 Uy l
+192.79 Ux 77.19 Uy l
+198.95 Ux 81.45 Uy l
+205.12 Ux 84.39 Uy l
+211.28 Ux 87.44 Uy l
+217.45 Ux 90.61 Uy l
+223.61 Ux 93.90 Uy l
+229.78 Ux 95.59 Uy l
+235.95 Ux 95.59 Uy l
+242.11 Ux 95.59 Uy l
+248.28 Ux 95.82 Uy l
+254.44 Ux 96.04 Uy l
+260.61 Ux 96.26 Uy l
+266.77 Ux 96.48 Uy l
+272.94 Ux 96.71 Uy l
+279.11 Ux 96.93 Uy l
+285.27 Ux 97.16 Uy l
+291.44 Ux 97.38 Uy l
+297.60 Ux 97.61 Uy l
+ s
+C0 297.60 Ux 97.61 Uy m (\0) show
+C0 303.77 Ux 97.84 Uy m (\0) show
+C0 309.93 Ux 98.06 Uy m (\0) show
+C0 316.10 Ux 98.29 Uy m (\0) show
+C0 322.27 Ux 98.52 Uy m (\0) show
+C0 328.43 Ux 98.75 Uy m (\0) show
+C0 334.60 Ux 98.98 Uy m (\0) show
+C0 340.76 Ux 99.21 Uy m (\0) show
+C0 346.93 Ux 99.44 Uy m (\0) show
+C0 353.09 Ux 99.67 Uy m (\0) show
+C0 359.26 Ux 99.90 Uy m (\0) show
+C0 365.43 Ux 100.14 Uy m (\0) show
+C0 371.59 Ux 100.37 Uy m (\0) show
+C0 377.76 Ux 100.61 Uy m (\0) show
+C0 383.92 Ux 100.84 Uy m (\0) show
+C0 390.09 Ux 101.08 Uy m (\0) show
+C0 396.25 Ux 101.31 Uy m (\0) show
+C0 402.42 Ux 101.55 Uy m (\0) show
+C0 408.59 Ux 101.79 Uy m (\0) show
+C0 414.75 Ux 102.03 Uy m (\0) show
+C0 420.92 Ux 102.26 Uy m (\0) show
+C0 427.08 Ux 102.50 Uy m (\0) show
+C0 433.25 Ux 102.74 Uy m (\0) show
+C0 439.41 Ux 102.99 Uy m (\0) show
+C0 445.58 Ux 103.23 Uy m (\0) show
+C0 451.75 Ux 103.47 Uy m (\0) show
+C0 457.91 Ux 103.71 Uy m (\0) show
+C0 464.08 Ux 103.96 Uy m (\0) show
+C0 470.24 Ux 104.20 Uy m (\0) show
+C0 297.60 Ux 97.61 Uy m
+303.77 Ux 97.84 Uy l
+309.93 Ux 98.06 Uy l
+316.10 Ux 98.29 Uy l
+322.27 Ux 98.52 Uy l
+328.43 Ux 98.75 Uy l
+334.60 Ux 98.98 Uy l
+340.76 Ux 99.21 Uy l
+346.93 Ux 99.44 Uy l
+353.09 Ux 99.67 Uy l
+359.26 Ux 99.90 Uy l
+365.43 Ux 100.14 Uy l
+371.59 Ux 100.37 Uy l
+377.76 Ux 100.61 Uy l
+383.92 Ux 100.84 Uy l
+390.09 Ux 101.08 Uy l
+396.25 Ux 101.31 Uy l
+402.42 Ux 101.55 Uy l
+408.59 Ux 101.79 Uy l
+414.75 Ux 102.03 Uy l
+420.92 Ux 102.26 Uy l
+427.08 Ux 102.50 Uy l
+433.25 Ux 102.74 Uy l
+439.41 Ux 102.99 Uy l
+445.58 Ux 103.23 Uy l
+451.75 Ux 103.47 Uy l
+457.91 Ux 103.71 Uy l
+464.08 Ux 103.96 Uy l
+470.24 Ux 104.20 Uy l
+476.41 Ux 104.45 Uy l
+ s
+C0 476.41 Ux 104.45 Uy m (\0) show
+C0 482.57 Ux 104.69 Uy m (\0) show
+C0 488.74 Ux 104.94 Uy m (\0) show
+C0 494.91 Ux 105.19 Uy m (\0) show
+C0 501.07 Ux 105.44 Uy m (\0) show
+C0 507.24 Ux 105.68 Uy m (\0) show
+C0 513.40 Ux 105.93 Uy m (\0) show
+C0 519.57 Ux 106.18 Uy m (\0) show
+C0 525.73 Ux 106.44 Uy m (\0) show
+C0 531.90 Ux 106.69 Uy m (\0) show
+C0 538.07 Ux 106.94 Uy m (\0) show
+C0 544.23 Ux 107.19 Uy m (\0) show
+C0 550.40 Ux 107.45 Uy m (\0) show
+C0 556.56 Ux 107.70 Uy m (\0) show
+C0 562.73 Ux 107.96 Uy m (\0) show
+C0 568.89 Ux 108.22 Uy m (\0) show
+C0 575.06 Ux 108.47 Uy m (\0) show
+C0 581.23 Ux 108.73 Uy m (\0) show
+C0 587.39 Ux 108.99 Uy m (\0) show
+C0 593.56 Ux 109.25 Uy m (\0) show
+C0 599.72 Ux 109.51 Uy m (\0) show
+C0 605.89 Ux 109.77 Uy m (\0) show
+C0 612.05 Ux 110.03 Uy m (\0) show
+C0 618.22 Ux 110.30 Uy m (\0) show
+C0 624.39 Ux 110.56 Uy m (\0) show
+C0 630.55 Ux 110.82 Uy m (\0) show
+C0 636.72 Ux 111.09 Uy m (\0) show
+C0 642.88 Ux 111.36 Uy m (\0) show
+C0 649.05 Ux 111.62 Uy m (\0) show
+C0 476.41 Ux 104.45 Uy m
+482.57 Ux 104.69 Uy l
+488.74 Ux 104.94 Uy l
+494.91 Ux 105.19 Uy l
+501.07 Ux 105.44 Uy l
+507.24 Ux 105.68 Uy l
+513.40 Ux 105.93 Uy l
+519.57 Ux 106.18 Uy l
+525.73 Ux 106.44 Uy l
+531.90 Ux 106.69 Uy l
+538.07 Ux 106.94 Uy l
+544.23 Ux 107.19 Uy l
+550.40 Ux 107.45 Uy l
+556.56 Ux 107.70 Uy l
+562.73 Ux 107.96 Uy l
+568.89 Ux 108.22 Uy l
+575.06 Ux 108.47 Uy l
+581.23 Ux 108.73 Uy l
+587.39 Ux 108.99 Uy l
+593.56 Ux 109.25 Uy l
+599.72 Ux 109.51 Uy l
+605.89 Ux 109.77 Uy l
+612.05 Ux 110.03 Uy l
+618.22 Ux 110.30 Uy l
+624.39 Ux 110.56 Uy l
+630.55 Ux 110.82 Uy l
+636.72 Ux 111.09 Uy l
+642.88 Ux 111.36 Uy l
+649.05 Ux 111.62 Uy l
+655.21 Ux 111.89 Uy l
+ s
+C0 655.21 Ux 111.89 Uy m (\0) show
+C0 661.38 Ux 112.16 Uy m (\0) show
+C0 667.55 Ux 112.43 Uy m (\0) show
+C0 673.71 Ux 112.70 Uy m (\0) show
+C0 679.88 Ux 112.97 Uy m (\0) show
+C0 686.04 Ux 113.24 Uy m (\0) show
+C0 692.21 Ux 113.52 Uy m (\0) show
+C0 698.37 Ux 113.79 Uy m (\0) show
+C0 704.54 Ux 114.07 Uy m (\0) show
+C0 710.71 Ux 114.34 Uy m (\0) show
+C0 716.87 Ux 114.62 Uy m (\0) show
+C0 723.04 Ux 114.90 Uy m (\0) show
+C0 729.20 Ux 115.18 Uy m (\0) show
+C0 655.21 Ux 111.89 Uy m
+661.38 Ux 112.16 Uy l
+667.55 Ux 112.43 Uy l
+673.71 Ux 112.70 Uy l
+679.88 Ux 112.97 Uy l
+686.04 Ux 113.24 Uy l
+692.21 Ux 113.52 Uy l
+698.37 Ux 113.79 Uy l
+704.54 Ux 114.07 Uy l
+710.71 Ux 114.34 Uy l
+716.87 Ux 114.62 Uy l
+723.04 Ux 114.90 Uy l
+729.20 Ux 115.18 Uy l
+ s
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 801.00 Ux 0 rl 0 430.00 Uy rl -801.000000 Ux 0 rl closepath clip 
+% SetClipRectangle: Define clip region 
+ newpath 104.00 Ux 38.00 Uy m 640.00 Ux 0 rl 0 344.00 Uy rl -640.00 Ux 0 rl closepath clip newpath
+C10 118.80 Ux 49.13 Uy m (\0) show
+C10 124.96 Ux 49.13 Uy m (\0) show
+C10 131.13 Ux 49.13 Uy m (\0) show
+C10 137.29 Ux 49.13 Uy m (\0) show
+C10 143.46 Ux 49.13 Uy m (\0) show
+C10 149.63 Ux 49.13 Uy m (\0) show
+C10 155.79 Ux 49.13 Uy m (\0) show
+C10 161.96 Ux 53.20 Uy m (\0) show
+C10 168.12 Ux 57.48 Uy m (\0) show
+C10 174.29 Ux 61.99 Uy m (\0) show
+C10 180.45 Ux 66.76 Uy m (\0) show
+C10 186.62 Ux 71.81 Uy m (\0) show
+C10 192.79 Ux 77.19 Uy m (\0) show
+C10 198.95 Ux 81.45 Uy m (\0) show
+C10 205.12 Ux 84.39 Uy m (\0) show
+C10 211.28 Ux 87.44 Uy m (\0) show
+C10 217.45 Ux 90.61 Uy m (\0) show
+C10 223.61 Ux 93.90 Uy m (\0) show
+C10 229.78 Ux 95.59 Uy m (\0) show
+C10 235.95 Ux 95.59 Uy m (\0) show
+C10 242.11 Ux 95.59 Uy m (\0) show
+C10 248.28 Ux 95.82 Uy m (\0) show
+C10 254.44 Ux 96.04 Uy m (\0) show
+C10 260.61 Ux 96.26 Uy m (\0) show
+C10 266.77 Ux 96.48 Uy m (\0) show
+C10 272.94 Ux 96.71 Uy m (\0) show
+C10 279.11 Ux 96.93 Uy m (\0) show
+C10 285.27 Ux 97.16 Uy m (\0) show
+C10 291.44 Ux 97.38 Uy m (\0) show
+1.18851 slw sldash C10 118.80 Ux 49.13 Uy m
+124.96 Ux 49.13 Uy l
+131.13 Ux 49.13 Uy l
+137.29 Ux 49.13 Uy l
+143.46 Ux 49.13 Uy l
+149.63 Ux 49.13 Uy l
+155.79 Ux 49.13 Uy l
+161.96 Ux 53.20 Uy l
+168.12 Ux 57.48 Uy l
+174.29 Ux 61.99 Uy l
+180.45 Ux 66.76 Uy l
+186.62 Ux 71.81 Uy l
+192.79 Ux 77.19 Uy l
+198.95 Ux 81.45 Uy l
+205.12 Ux 84.39 Uy l
+211.28 Ux 87.44 Uy l
+217.45 Ux 90.61 Uy l
+223.61 Ux 93.90 Uy l
+229.78 Ux 95.59 Uy l
+235.95 Ux 95.59 Uy l
+242.11 Ux 95.59 Uy l
+248.28 Ux 95.82 Uy l
+254.44 Ux 96.04 Uy l
+260.61 Ux 96.26 Uy l
+266.77 Ux 96.48 Uy l
+272.94 Ux 96.71 Uy l
+279.11 Ux 96.93 Uy l
+285.27 Ux 97.16 Uy l
+291.44 Ux 97.38 Uy l
+297.60 Ux 97.61 Uy l
+ s
+C10 297.60 Ux 97.61 Uy m (\0) show
+C10 303.77 Ux 97.84 Uy m (\0) show
+C10 309.93 Ux 98.06 Uy m (\0) show
+C10 316.10 Ux 98.29 Uy m (\0) show
+C10 322.27 Ux 98.52 Uy m (\0) show
+C10 328.43 Ux 98.75 Uy m (\0) show
+C10 334.60 Ux 98.98 Uy m (\0) show
+C10 340.76 Ux 99.21 Uy m (\0) show
+C10 346.93 Ux 99.44 Uy m (\0) show
+C10 353.09 Ux 99.67 Uy m (\0) show
+C10 359.26 Ux 99.90 Uy m (\0) show
+C10 365.43 Ux 100.14 Uy m (\0) show
+C10 371.59 Ux 100.37 Uy m (\0) show
+C10 377.76 Ux 100.61 Uy m (\0) show
+C10 383.92 Ux 100.84 Uy m (\0) show
+C10 390.09 Ux 101.08 Uy m (\0) show
+C10 396.25 Ux 101.31 Uy m (\0) show
+C10 402.42 Ux 101.55 Uy m (\0) show
+C10 408.59 Ux 101.79 Uy m (\0) show
+C10 414.75 Ux 102.03 Uy m (\0) show
+C10 420.92 Ux 102.26 Uy m (\0) show
+C10 427.08 Ux 102.50 Uy m (\0) show
+C10 433.25 Ux 102.74 Uy m (\0) show
+C10 439.41 Ux 102.99 Uy m (\0) show
+C10 445.58 Ux 103.23 Uy m (\0) show
+C10 451.75 Ux 103.47 Uy m (\0) show
+C10 457.91 Ux 103.71 Uy m (\0) show
+C10 464.08 Ux 103.96 Uy m (\0) show
+C10 470.24 Ux 104.20 Uy m (\0) show
+C10 297.60 Ux 97.61 Uy m
+303.77 Ux 97.84 Uy l
+309.93 Ux 98.06 Uy l
+316.10 Ux 98.29 Uy l
+322.27 Ux 98.52 Uy l
+328.43 Ux 98.75 Uy l
+334.60 Ux 98.98 Uy l
+340.76 Ux 99.21 Uy l
+346.93 Ux 99.44 Uy l
+353.09 Ux 99.67 Uy l
+359.26 Ux 99.90 Uy l
+365.43 Ux 100.14 Uy l
+371.59 Ux 100.37 Uy l
+377.76 Ux 100.61 Uy l
+383.92 Ux 100.84 Uy l
+390.09 Ux 101.08 Uy l
+396.25 Ux 101.31 Uy l
+402.42 Ux 101.55 Uy l
+408.59 Ux 101.79 Uy l
+414.75 Ux 102.03 Uy l
+420.92 Ux 102.26 Uy l
+427.08 Ux 102.50 Uy l
+433.25 Ux 102.74 Uy l
+439.41 Ux 102.99 Uy l
+445.58 Ux 103.23 Uy l
+451.75 Ux 103.47 Uy l
+457.91 Ux 103.71 Uy l
+464.08 Ux 103.96 Uy l
+470.24 Ux 104.20 Uy l
+476.41 Ux 104.45 Uy l
+ s
+C10 476.41 Ux 104.45 Uy m (\0) show
+C10 482.57 Ux 104.69 Uy m (\0) show
+C10 488.74 Ux 104.94 Uy m (\0) show
+C10 494.91 Ux 105.19 Uy m (\0) show
+C10 501.07 Ux 105.44 Uy m (\0) show
+C10 507.24 Ux 105.68 Uy m (\0) show
+C10 513.40 Ux 105.93 Uy m (\0) show
+C10 519.57 Ux 106.18 Uy m (\0) show
+C10 525.73 Ux 106.44 Uy m (\0) show
+C10 531.90 Ux 106.69 Uy m (\0) show
+C10 538.07 Ux 106.94 Uy m (\0) show
+C10 544.23 Ux 107.19 Uy m (\0) show
+C10 550.40 Ux 107.45 Uy m (\0) show
+C10 556.56 Ux 107.70 Uy m (\0) show
+C10 562.73 Ux 107.96 Uy m (\0) show
+C10 568.89 Ux 108.22 Uy m (\0) show
+C10 575.06 Ux 108.47 Uy m (\0) show
+C10 581.23 Ux 108.73 Uy m (\0) show
+C10 587.39 Ux 108.99 Uy m (\0) show
+C10 593.56 Ux 109.25 Uy m (\0) show
+C10 599.72 Ux 109.51 Uy m (\0) show
+C10 605.89 Ux 109.77 Uy m (\0) show
+C10 612.05 Ux 110.03 Uy m (\0) show
+C10 618.22 Ux 110.30 Uy m (\0) show
+C10 624.39 Ux 110.56 Uy m (\0) show
+C10 630.55 Ux 110.82 Uy m (\0) show
+C10 636.72 Ux 111.09 Uy m (\0) show
+C10 642.88 Ux 111.36 Uy m (\0) show
+C10 649.05 Ux 111.62 Uy m (\0) show
+C10 476.41 Ux 104.45 Uy m
+482.57 Ux 104.69 Uy l
+488.74 Ux 104.94 Uy l
+494.91 Ux 105.19 Uy l
+501.07 Ux 105.44 Uy l
+507.24 Ux 105.68 Uy l
+513.40 Ux 105.93 Uy l
+519.57 Ux 106.18 Uy l
+525.73 Ux 106.44 Uy l
+531.90 Ux 106.69 Uy l
+538.07 Ux 106.94 Uy l
+544.23 Ux 107.19 Uy l
+550.40 Ux 107.45 Uy l
+556.56 Ux 107.70 Uy l
+562.73 Ux 107.96 Uy l
+568.89 Ux 108.22 Uy l
+575.06 Ux 108.47 Uy l
+581.23 Ux 108.73 Uy l
+587.39 Ux 108.99 Uy l
+593.56 Ux 109.25 Uy l
+599.72 Ux 109.51 Uy l
+605.89 Ux 109.77 Uy l
+612.05 Ux 110.03 Uy l
+618.22 Ux 110.30 Uy l
+624.39 Ux 110.56 Uy l
+630.55 Ux 110.82 Uy l
+636.72 Ux 111.09 Uy l
+642.88 Ux 111.36 Uy l
+649.05 Ux 111.62 Uy l
+655.21 Ux 111.89 Uy l
+ s
+C10 655.21 Ux 111.89 Uy m (\0) show
+C10 661.38 Ux 112.16 Uy m (\0) show
+C10 667.55 Ux 112.43 Uy m (\0) show
+C10 673.71 Ux 112.70 Uy m (\0) show
+C10 679.88 Ux 112.97 Uy m (\0) show
+C10 686.04 Ux 113.24 Uy m (\0) show
+C10 692.21 Ux 113.52 Uy m (\0) show
+C10 698.37 Ux 113.79 Uy m (\0) show
+C10 704.54 Ux 114.07 Uy m (\0) show
+C10 710.71 Ux 114.34 Uy m (\0) show
+C10 716.87 Ux 114.62 Uy m (\0) show
+C10 723.04 Ux 114.90 Uy m (\0) show
+C10 729.20 Ux 115.18 Uy m (\0) show
+C10 655.21 Ux 111.89 Uy m
+661.38 Ux 112.16 Uy l
+667.55 Ux 112.43 Uy l
+673.71 Ux 112.70 Uy l
+679.88 Ux 112.97 Uy l
+686.04 Ux 113.24 Uy l
+692.21 Ux 113.52 Uy l
+698.37 Ux 113.79 Uy l
+704.54 Ux 114.07 Uy l
+710.71 Ux 114.34 Uy l
+716.87 Ux 114.62 Uy l
+723.04 Ux 114.90 Uy l
+729.20 Ux 115.18 Uy l
+ s
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 801.00 Ux 0 rl 0 430.00 Uy rl -801.000000 Ux 0 rl closepath clip 
+% SetClipRectangle: Define clip region 
+ newpath 104.00 Ux 38.00 Uy m 640.00 Ux 0 rl 0 344.00 Uy rl -640.00 Ux 0 rl closepath clip newpath
+C3 118.80 Ux 279.70 Uy m (\0) show
+C3 124.96 Ux 279.70 Uy m (\0) show
+C3 131.13 Ux 279.70 Uy m (\0) show
+C3 137.29 Ux 279.70 Uy m (\0) show
+C3 143.46 Ux 279.70 Uy m (\0) show
+C3 149.63 Ux 279.70 Uy m (\0) show
+C3 155.79 Ux 279.70 Uy m (\0) show
+C3 161.96 Ux 283.71 Uy m (\0) show
+C3 168.12 Ux 287.92 Uy m (\0) show
+C3 174.29 Ux 292.35 Uy m (\0) show
+C3 180.45 Ux 297.02 Uy m (\0) show
+C3 186.62 Ux 301.98 Uy m (\0) show
+C3 192.79 Ux 307.24 Uy m (\0) show
+C3 198.95 Ux 312.84 Uy m (\0) show
+C3 205.12 Ux 318.81 Uy m (\0) show
+C3 211.28 Ux 325.25 Uy m (\0) show
+C3 217.45 Ux 332.21 Uy m (\0) show
+C3 223.61 Ux 339.81 Uy m (\0) show
+C3 229.78 Ux 343.89 Uy m (\0) show
+C3 235.95 Ux 343.89 Uy m (\0) show
+C3 242.11 Ux 343.89 Uy m (\0) show
+C3 248.28 Ux 344.11 Uy m (\0) show
+C3 254.44 Ux 344.33 Uy m (\0) show
+C3 260.61 Ux 344.55 Uy m (\0) show
+C3 266.77 Ux 344.78 Uy m (\0) show
+C3 272.94 Ux 345.00 Uy m (\0) show
+C3 279.11 Ux 345.22 Uy m (\0) show
+C3 285.27 Ux 345.45 Uy m (\0) show
+C3 291.44 Ux 345.67 Uy m (\0) show
+0.594257 slw slsolid C3 118.80 Ux 279.70 Uy m
+124.96 Ux 279.70 Uy l
+131.13 Ux 279.70 Uy l
+137.29 Ux 279.70 Uy l
+143.46 Ux 279.70 Uy l
+149.63 Ux 279.70 Uy l
+155.79 Ux 279.70 Uy l
+161.96 Ux 283.71 Uy l
+168.12 Ux 287.92 Uy l
+174.29 Ux 292.35 Uy l
+180.45 Ux 297.02 Uy l
+186.62 Ux 301.98 Uy l
+192.79 Ux 307.24 Uy l
+198.95 Ux 312.84 Uy l
+205.12 Ux 318.81 Uy l
+211.28 Ux 325.25 Uy l
+217.45 Ux 332.21 Uy l
+223.61 Ux 339.81 Uy l
+229.78 Ux 343.89 Uy l
+235.95 Ux 343.89 Uy l
+242.11 Ux 343.89 Uy l
+248.28 Ux 344.11 Uy l
+254.44 Ux 344.33 Uy l
+260.61 Ux 344.55 Uy l
+266.77 Ux 344.78 Uy l
+272.94 Ux 345.00 Uy l
+279.11 Ux 345.22 Uy l
+285.27 Ux 345.45 Uy l
+291.44 Ux 345.67 Uy l
+297.60 Ux 345.90 Uy l
+ s
+C3 297.60 Ux 345.90 Uy m (\0) show
+C3 303.77 Ux 346.13 Uy m (\0) show
+C3 309.93 Ux 346.36 Uy m (\0) show
+C3 316.10 Ux 346.58 Uy m (\0) show
+C3 322.27 Ux 346.81 Uy m (\0) show
+C3 328.43 Ux 347.04 Uy m (\0) show
+C3 334.60 Ux 347.27 Uy m (\0) show
+C3 340.76 Ux 347.50 Uy m (\0) show
+C3 346.93 Ux 347.73 Uy m (\0) show
+C3 353.09 Ux 347.96 Uy m (\0) show
+C3 359.26 Ux 348.20 Uy m (\0) show
+C3 365.43 Ux 348.43 Uy m (\0) show
+C3 371.59 Ux 348.66 Uy m (\0) show
+C3 377.76 Ux 348.90 Uy m (\0) show
+C3 383.92 Ux 349.13 Uy m (\0) show
+C3 390.09 Ux 349.37 Uy m (\0) show
+C3 396.25 Ux 349.60 Uy m (\0) show
+C3 402.42 Ux 349.84 Uy m (\0) show
+C3 408.59 Ux 350.08 Uy m (\0) show
+C3 414.75 Ux 350.32 Uy m (\0) show
+C3 420.92 Ux 350.56 Uy m (\0) show
+C3 427.08 Ux 350.80 Uy m (\0) show
+C3 433.25 Ux 351.04 Uy m (\0) show
+C3 439.41 Ux 351.28 Uy m (\0) show
+C3 445.58 Ux 351.52 Uy m (\0) show
+C3 451.75 Ux 351.76 Uy m (\0) show
+C3 457.91 Ux 352.01 Uy m (\0) show
+C3 464.08 Ux 352.25 Uy m (\0) show
+C3 470.24 Ux 352.49 Uy m (\0) show
+C3 297.60 Ux 345.90 Uy m
+303.77 Ux 346.13 Uy l
+309.93 Ux 346.36 Uy l
+316.10 Ux 346.58 Uy l
+322.27 Ux 346.81 Uy l
+328.43 Ux 347.04 Uy l
+334.60 Ux 347.27 Uy l
+340.76 Ux 347.50 Uy l
+346.93 Ux 347.73 Uy l
+353.09 Ux 347.96 Uy l
+359.26 Ux 348.20 Uy l
+365.43 Ux 348.43 Uy l
+371.59 Ux 348.66 Uy l
+377.76 Ux 348.90 Uy l
+383.92 Ux 349.13 Uy l
+390.09 Ux 349.37 Uy l
+396.25 Ux 349.60 Uy l
+402.42 Ux 349.84 Uy l
+408.59 Ux 350.08 Uy l
+414.75 Ux 350.32 Uy l
+420.92 Ux 350.56 Uy l
+427.08 Ux 350.80 Uy l
+433.25 Ux 351.04 Uy l
+439.41 Ux 351.28 Uy l
+445.58 Ux 351.52 Uy l
+451.75 Ux 351.76 Uy l
+457.91 Ux 352.01 Uy l
+464.08 Ux 352.25 Uy l
+470.24 Ux 352.49 Uy l
+476.41 Ux 352.74 Uy l
+ s
+C3 476.41 Ux 352.74 Uy m (\0) show
+C3 482.57 Ux 352.99 Uy m (\0) show
+C3 488.74 Ux 353.23 Uy m (\0) show
+C3 494.91 Ux 353.48 Uy m (\0) show
+C3 501.07 Ux 353.73 Uy m (\0) show
+C3 507.24 Ux 353.98 Uy m (\0) show
+C3 513.40 Ux 354.23 Uy m (\0) show
+C3 519.57 Ux 354.48 Uy m (\0) show
+C3 525.73 Ux 354.73 Uy m (\0) show
+C3 531.90 Ux 354.98 Uy m (\0) show
+C3 538.07 Ux 355.23 Uy m (\0) show
+C3 544.23 Ux 355.49 Uy m (\0) show
+C3 550.40 Ux 355.74 Uy m (\0) show
+C3 556.56 Ux 356.00 Uy m (\0) show
+C3 562.73 Ux 356.25 Uy m (\0) show
+C3 568.89 Ux 356.51 Uy m (\0) show
+C3 575.06 Ux 356.76 Uy m (\0) show
+C3 581.23 Ux 357.02 Uy m (\0) show
+C3 587.39 Ux 357.28 Uy m (\0) show
+C3 593.56 Ux 357.54 Uy m (\0) show
+C3 599.72 Ux 357.80 Uy m (\0) show
+C3 605.89 Ux 358.06 Uy m (\0) show
+C3 612.05 Ux 358.33 Uy m (\0) show
+C3 618.22 Ux 358.59 Uy m (\0) show
+C3 624.39 Ux 358.85 Uy m (\0) show
+C3 630.55 Ux 359.12 Uy m (\0) show
+C3 636.72 Ux 359.38 Uy m (\0) show
+C3 642.88 Ux 359.65 Uy m (\0) show
+C3 649.05 Ux 359.92 Uy m (\0) show
+C3 476.41 Ux 352.74 Uy m
+482.57 Ux 352.99 Uy l
+488.74 Ux 353.23 Uy l
+494.91 Ux 353.48 Uy l
+501.07 Ux 353.73 Uy l
+507.24 Ux 353.98 Uy l
+513.40 Ux 354.23 Uy l
+519.57 Ux 354.48 Uy l
+525.73 Ux 354.73 Uy l
+531.90 Ux 354.98 Uy l
+538.07 Ux 355.23 Uy l
+544.23 Ux 355.49 Uy l
+550.40 Ux 355.74 Uy l
+556.56 Ux 356.00 Uy l
+562.73 Ux 356.25 Uy l
+568.89 Ux 356.51 Uy l
+575.06 Ux 356.76 Uy l
+581.23 Ux 357.02 Uy l
+587.39 Ux 357.28 Uy l
+593.56 Ux 357.54 Uy l
+599.72 Ux 357.80 Uy l
+605.89 Ux 358.06 Uy l
+612.05 Ux 358.33 Uy l
+618.22 Ux 358.59 Uy l
+624.39 Ux 358.85 Uy l
+630.55 Ux 359.12 Uy l
+636.72 Ux 359.38 Uy l
+642.88 Ux 359.65 Uy l
+649.05 Ux 359.92 Uy l
+655.21 Ux 360.18 Uy l
+ s
+C3 655.21 Ux 360.18 Uy m (\0) show
+C3 661.38 Ux 360.45 Uy m (\0) show
+C3 667.55 Ux 360.72 Uy m (\0) show
+C3 673.71 Ux 360.99 Uy m (\0) show
+C3 679.88 Ux 361.26 Uy m (\0) show
+C3 686.04 Ux 361.54 Uy m (\0) show
+C3 692.21 Ux 361.81 Uy m (\0) show
+C3 698.37 Ux 362.08 Uy m (\0) show
+C3 704.54 Ux 362.36 Uy m (\0) show
+C3 710.71 Ux 362.64 Uy m (\0) show
+C3 716.87 Ux 362.91 Uy m (\0) show
+C3 723.04 Ux 363.19 Uy m (\0) show
+C3 729.20 Ux 363.47 Uy m (\0) show
+C3 655.21 Ux 360.18 Uy m
+661.38 Ux 360.45 Uy l
+667.55 Ux 360.72 Uy l
+673.71 Ux 360.99 Uy l
+679.88 Ux 361.26 Uy l
+686.04 Ux 361.54 Uy l
+692.21 Ux 361.81 Uy l
+698.37 Ux 362.08 Uy l
+704.54 Ux 362.36 Uy l
+710.71 Ux 362.64 Uy l
+716.87 Ux 362.91 Uy l
+723.04 Ux 363.19 Uy l
+729.20 Ux 363.47 Uy l
+ s
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 801.00 Ux 0 rl 0 430.00 Uy rl -801.000000 Ux 0 rl closepath clip 
+% SetClipRectangle: Define clip region 
+ newpath 104.00 Ux 38.00 Uy m 640.00 Ux 0 rl 0 344.00 Uy rl -640.00 Ux 0 rl closepath clip newpath
+C5 118.80 Ux 86.70 Uy m (\0) show
+C5 124.96 Ux 86.70 Uy m (\0) show
+C5 131.13 Ux 86.70 Uy m (\0) show
+C5 137.29 Ux 86.70 Uy m (\0) show
+C5 143.46 Ux 86.70 Uy m (\0) show
+C5 149.63 Ux 86.70 Uy m (\0) show
+C5 155.79 Ux 86.70 Uy m (\0) show
+C5 161.96 Ux 92.43 Uy m (\0) show
+C5 168.12 Ux 98.59 Uy m (\0) show
+C5 174.29 Ux 105.23 Uy m (\0) show
+C5 180.45 Ux 112.44 Uy m (\0) show
+C5 186.62 Ux 120.34 Uy m (\0) show
+C5 192.79 Ux 129.05 Uy m (\0) show
+C5 198.95 Ux 138.90 Uy m (\0) show
+C5 205.12 Ux 150.23 Uy m (\0) show
+C5 211.28 Ux 163.33 Uy m (\0) show
+C5 217.45 Ux 178.85 Uy m (\0) show
+C5 223.61 Ux 197.91 Uy m (\0) show
+C5 229.78 Ux 209.35 Uy m (\0) show
+C5 235.95 Ux 209.35 Uy m (\0) show
+C5 242.11 Ux 209.35 Uy m (\0) show
+C5 248.28 Ux 209.57 Uy m (\0) show
+C5 254.44 Ux 209.79 Uy m (\0) show
+C5 260.61 Ux 210.02 Uy m (\0) show
+C5 266.77 Ux 210.24 Uy m (\0) show
+C5 272.94 Ux 210.46 Uy m (\0) show
+C5 279.11 Ux 210.69 Uy m (\0) show
+C5 285.27 Ux 210.91 Uy m (\0) show
+C5 291.44 Ux 211.14 Uy m (\0) show
+C5 118.80 Ux 86.70 Uy m
+124.96 Ux 86.70 Uy l
+131.13 Ux 86.70 Uy l
+137.29 Ux 86.70 Uy l
+143.46 Ux 86.70 Uy l
+149.63 Ux 86.70 Uy l
+155.79 Ux 86.70 Uy l
+161.96 Ux 92.43 Uy l
+168.12 Ux 98.59 Uy l
+174.29 Ux 105.23 Uy l
+180.45 Ux 112.44 Uy l
+186.62 Ux 120.34 Uy l
+192.79 Ux 129.05 Uy l
+198.95 Ux 138.90 Uy l
+205.12 Ux 150.23 Uy l
+211.28 Ux 163.33 Uy l
+217.45 Ux 178.85 Uy l
+223.61 Ux 197.91 Uy l
+229.78 Ux 209.35 Uy l
+235.95 Ux 209.35 Uy l
+242.11 Ux 209.35 Uy l
+248.28 Ux 209.57 Uy l
+254.44 Ux 209.79 Uy l
+260.61 Ux 210.02 Uy l
+266.77 Ux 210.24 Uy l
+272.94 Ux 210.46 Uy l
+279.11 Ux 210.69 Uy l
+285.27 Ux 210.91 Uy l
+291.44 Ux 211.14 Uy l
+297.60 Ux 211.36 Uy l
+ s
+C5 297.60 Ux 211.36 Uy m (\0) show
+C5 303.77 Ux 211.59 Uy m (\0) show
+C5 309.93 Ux 211.82 Uy m (\0) show
+C5 316.10 Ux 212.05 Uy m (\0) show
+C5 322.27 Ux 212.27 Uy m (\0) show
+C5 328.43 Ux 212.50 Uy m (\0) show
+C5 334.60 Ux 212.73 Uy m (\0) show
+C5 340.76 Ux 212.96 Uy m (\0) show
+C5 346.93 Ux 213.20 Uy m (\0) show
+C5 353.09 Ux 213.43 Uy m (\0) show
+C5 359.26 Ux 213.66 Uy m (\0) show
+C5 365.43 Ux 213.89 Uy m (\0) show
+C5 371.59 Ux 214.13 Uy m (\0) show
+C5 377.76 Ux 214.36 Uy m (\0) show
+C5 383.92 Ux 214.60 Uy m (\0) show
+C5 390.09 Ux 214.83 Uy m (\0) show
+C5 396.25 Ux 215.07 Uy m (\0) show
+C5 402.42 Ux 215.30 Uy m (\0) show
+C5 408.59 Ux 215.54 Uy m (\0) show
+C5 414.75 Ux 215.78 Uy m (\0) show
+C5 420.92 Ux 216.02 Uy m (\0) show
+C5 427.08 Ux 216.26 Uy m (\0) show
+C5 433.25 Ux 216.50 Uy m (\0) show
+C5 439.41 Ux 216.74 Uy m (\0) show
+C5 445.58 Ux 216.98 Uy m (\0) show
+C5 451.75 Ux 217.23 Uy m (\0) show
+C5 457.91 Ux 217.47 Uy m (\0) show
+C5 464.08 Ux 217.71 Uy m (\0) show
+C5 470.24 Ux 217.96 Uy m (\0) show
+C5 297.60 Ux 211.36 Uy m
+303.77 Ux 211.59 Uy l
+309.93 Ux 211.82 Uy l
+316.10 Ux 212.05 Uy l
+322.27 Ux 212.27 Uy l
+328.43 Ux 212.50 Uy l
+334.60 Ux 212.73 Uy l
+340.76 Ux 212.96 Uy l
+346.93 Ux 213.20 Uy l
+353.09 Ux 213.43 Uy l
+359.26 Ux 213.66 Uy l
+365.43 Ux 213.89 Uy l
+371.59 Ux 214.13 Uy l
+377.76 Ux 214.36 Uy l
+383.92 Ux 214.60 Uy l
+390.09 Ux 214.83 Uy l
+396.25 Ux 215.07 Uy l
+402.42 Ux 215.30 Uy l
+408.59 Ux 215.54 Uy l
+414.75 Ux 215.78 Uy l
+420.92 Ux 216.02 Uy l
+427.08 Ux 216.26 Uy l
+433.25 Ux 216.50 Uy l
+439.41 Ux 216.74 Uy l
+445.58 Ux 216.98 Uy l
+451.75 Ux 217.23 Uy l
+457.91 Ux 217.47 Uy l
+464.08 Ux 217.71 Uy l
+470.24 Ux 217.96 Uy l
+476.41 Ux 218.20 Uy l
+ s
+C5 476.41 Ux 218.20 Uy m (\0) show
+C5 482.57 Ux 218.45 Uy m (\0) show
+C5 488.74 Ux 218.69 Uy m (\0) show
+C5 494.91 Ux 218.94 Uy m (\0) show
+C5 501.07 Ux 219.19 Uy m (\0) show
+C5 507.24 Ux 219.44 Uy m (\0) show
+C5 513.40 Ux 219.69 Uy m (\0) show
+C5 519.57 Ux 219.94 Uy m (\0) show
+C5 525.73 Ux 220.19 Uy m (\0) show
+C5 531.90 Ux 220.44 Uy m (\0) show
+C5 538.07 Ux 220.70 Uy m (\0) show
+C5 544.23 Ux 220.95 Uy m (\0) show
+C5 550.40 Ux 221.20 Uy m (\0) show
+C5 556.56 Ux 221.46 Uy m (\0) show
+C5 562.73 Ux 221.71 Uy m (\0) show
+C5 568.89 Ux 221.97 Uy m (\0) show
+C5 575.06 Ux 222.23 Uy m (\0) show
+C5 581.23 Ux 222.49 Uy m (\0) show
+C5 587.39 Ux 222.74 Uy m (\0) show
+C5 593.56 Ux 223.00 Uy m (\0) show
+C5 599.72 Ux 223.26 Uy m (\0) show
+C5 605.89 Ux 223.53 Uy m (\0) show
+C5 612.05 Ux 223.79 Uy m (\0) show
+C5 618.22 Ux 224.05 Uy m (\0) show
+C5 624.39 Ux 224.32 Uy m (\0) show
+C5 630.55 Ux 224.58 Uy m (\0) show
+C5 636.72 Ux 224.85 Uy m (\0) show
+C5 642.88 Ux 225.11 Uy m (\0) show
+C5 649.05 Ux 225.38 Uy m (\0) show
+C5 476.41 Ux 218.20 Uy m
+482.57 Ux 218.45 Uy l
+488.74 Ux 218.69 Uy l
+494.91 Ux 218.94 Uy l
+501.07 Ux 219.19 Uy l
+507.24 Ux 219.44 Uy l
+513.40 Ux 219.69 Uy l
+519.57 Ux 219.94 Uy l
+525.73 Ux 220.19 Uy l
+531.90 Ux 220.44 Uy l
+538.07 Ux 220.70 Uy l
+544.23 Ux 220.95 Uy l
+550.40 Ux 221.20 Uy l
+556.56 Ux 221.46 Uy l
+562.73 Ux 221.71 Uy l
+568.89 Ux 221.97 Uy l
+575.06 Ux 222.23 Uy l
+581.23 Ux 222.49 Uy l
+587.39 Ux 222.74 Uy l
+593.56 Ux 223.00 Uy l
+599.72 Ux 223.26 Uy l
+605.89 Ux 223.53 Uy l
+612.05 Ux 223.79 Uy l
+618.22 Ux 224.05 Uy l
+624.39 Ux 224.32 Uy l
+630.55 Ux 224.58 Uy l
+636.72 Ux 224.85 Uy l
+642.88 Ux 225.11 Uy l
+649.05 Ux 225.38 Uy l
+655.21 Ux 225.65 Uy l
+ s
+C5 655.21 Ux 225.65 Uy m (\0) show
+C5 661.38 Ux 225.92 Uy m (\0) show
+C5 667.55 Ux 226.19 Uy m (\0) show
+C5 673.71 Ux 226.46 Uy m (\0) show
+C5 679.88 Ux 226.73 Uy m (\0) show
+C5 686.04 Ux 227.00 Uy m (\0) show
+C5 692.21 Ux 227.27 Uy m (\0) show
+C5 698.37 Ux 227.55 Uy m (\0) show
+C5 704.54 Ux 227.82 Uy m (\0) show
+C5 710.71 Ux 228.10 Uy m (\0) show
+C5 716.87 Ux 228.37 Uy m (\0) show
+C5 723.04 Ux 228.65 Uy m (\0) show
+C5 729.20 Ux 228.93 Uy m (\0) show
+C5 655.21 Ux 225.65 Uy m
+661.38 Ux 225.92 Uy l
+667.55 Ux 226.19 Uy l
+673.71 Ux 226.46 Uy l
+679.88 Ux 226.73 Uy l
+686.04 Ux 227.00 Uy l
+692.21 Ux 227.27 Uy l
+698.37 Ux 227.55 Uy l
+704.54 Ux 227.82 Uy l
+710.71 Ux 228.10 Uy l
+716.87 Ux 228.37 Uy l
+723.04 Ux 228.65 Uy l
+729.20 Ux 228.93 Uy l
+ s
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 801.00 Ux 0 rl 0 430.00 Uy rl -801.000000 Ux 0 rl closepath clip 
+% SetClipRectangle: Define clip region 
+ newpath 104.00 Ux 38.00 Uy m 640.00 Ux 0 rl 0 344.00 Uy rl -640.00 Ux 0 rl closepath clip newpath
+C4 118.80 Ux 168.37 Uy m (\0) show
+C4 124.96 Ux 168.37 Uy m (\0) show
+C4 131.13 Ux 168.37 Uy m (\0) show
+C4 137.29 Ux 168.37 Uy m (\0) show
+C4 143.46 Ux 168.37 Uy m (\0) show
+C4 149.63 Ux 168.37 Uy m (\0) show
+C4 155.79 Ux 168.37 Uy m (\0) show
+C4 161.96 Ux 170.24 Uy m (\0) show
+C4 168.12 Ux 172.15 Uy m (\0) show
+C4 174.29 Ux 174.10 Uy m (\0) show
+C4 180.45 Ux 176.10 Uy m (\0) show
+C4 186.62 Ux 178.15 Uy m (\0) show
+C4 192.79 Ux 180.25 Uy m (\0) show
+C4 198.95 Ux 175.96 Uy m (\0) show
+C4 205.12 Ux 166.16 Uy m (\0) show
+C4 211.28 Ux 157.38 Uy m (\0) show
+C4 217.45 Ux 149.43 Uy m (\0) show
+C4 223.61 Ux 142.18 Uy m (\0) show
+C4 229.78 Ux 138.77 Uy m (\0) show
+C4 235.95 Ux 138.77 Uy m (\0) show
+C4 242.11 Ux 138.77 Uy m (\0) show
+C4 248.28 Ux 138.99 Uy m (\0) show
+C4 254.44 Ux 139.21 Uy m (\0) show
+C4 260.61 Ux 139.44 Uy m (\0) show
+C4 266.77 Ux 139.66 Uy m (\0) show
+C4 272.94 Ux 139.88 Uy m (\0) show
+C4 279.11 Ux 140.11 Uy m (\0) show
+C4 285.27 Ux 140.33 Uy m (\0) show
+C4 291.44 Ux 140.56 Uy m (\0) show
+C4 118.80 Ux 168.37 Uy m
+124.96 Ux 168.37 Uy l
+131.13 Ux 168.37 Uy l
+137.29 Ux 168.37 Uy l
+143.46 Ux 168.37 Uy l
+149.63 Ux 168.37 Uy l
+155.79 Ux 168.37 Uy l
+161.96 Ux 170.24 Uy l
+168.12 Ux 172.15 Uy l
+174.29 Ux 174.10 Uy l
+180.45 Ux 176.10 Uy l
+186.62 Ux 178.15 Uy l
+192.79 Ux 180.25 Uy l
+198.95 Ux 175.96 Uy l
+205.12 Ux 166.16 Uy l
+211.28 Ux 157.38 Uy l
+217.45 Ux 149.43 Uy l
+223.61 Ux 142.18 Uy l
+229.78 Ux 138.77 Uy l
+235.95 Ux 138.77 Uy l
+242.11 Ux 138.77 Uy l
+248.28 Ux 138.99 Uy l
+254.44 Ux 139.21 Uy l
+260.61 Ux 139.44 Uy l
+266.77 Ux 139.66 Uy l
+272.94 Ux 139.88 Uy l
+279.11 Ux 140.11 Uy l
+285.27 Ux 140.33 Uy l
+291.44 Ux 140.56 Uy l
+297.60 Ux 140.78 Uy l
+ s
+C4 297.60 Ux 140.78 Uy m (\0) show
+C4 303.77 Ux 141.01 Uy m (\0) show
+C4 309.93 Ux 141.24 Uy m (\0) show
+C4 316.10 Ux 141.47 Uy m (\0) show
+C4 322.27 Ux 141.69 Uy m (\0) show
+C4 328.43 Ux 141.92 Uy m (\0) show
+C4 334.60 Ux 142.15 Uy m (\0) show
+C4 340.76 Ux 142.38 Uy m (\0) show
+C4 346.93 Ux 142.61 Uy m (\0) show
+C4 353.09 Ux 142.85 Uy m (\0) show
+C4 359.26 Ux 143.08 Uy m (\0) show
+C4 365.43 Ux 143.31 Uy m (\0) show
+C4 371.59 Ux 143.55 Uy m (\0) show
+C4 377.76 Ux 143.78 Uy m (\0) show
+C4 383.92 Ux 144.02 Uy m (\0) show
+C4 390.09 Ux 144.25 Uy m (\0) show
+C4 396.25 Ux 144.49 Uy m (\0) show
+C4 402.42 Ux 144.72 Uy m (\0) show
+C4 408.59 Ux 144.96 Uy m (\0) show
+C4 414.75 Ux 145.20 Uy m (\0) show
+C4 420.92 Ux 145.44 Uy m (\0) show
+C4 427.08 Ux 145.68 Uy m (\0) show
+C4 433.25 Ux 145.92 Uy m (\0) show
+C4 439.41 Ux 146.16 Uy m (\0) show
+C4 445.58 Ux 146.40 Uy m (\0) show
+C4 451.75 Ux 146.64 Uy m (\0) show
+C4 457.91 Ux 146.89 Uy m (\0) show
+C4 464.08 Ux 147.13 Uy m (\0) show
+C4 470.24 Ux 147.38 Uy m (\0) show
+C4 297.60 Ux 140.78 Uy m
+303.77 Ux 141.01 Uy l
+309.93 Ux 141.24 Uy l
+316.10 Ux 141.47 Uy l
+322.27 Ux 141.69 Uy l
+328.43 Ux 141.92 Uy l
+334.60 Ux 142.15 Uy l
+340.76 Ux 142.38 Uy l
+346.93 Ux 142.61 Uy l
+353.09 Ux 142.85 Uy l
+359.26 Ux 143.08 Uy l
+365.43 Ux 143.31 Uy l
+371.59 Ux 143.55 Uy l
+377.76 Ux 143.78 Uy l
+383.92 Ux 144.02 Uy l
+390.09 Ux 144.25 Uy l
+396.25 Ux 144.49 Uy l
+402.42 Ux 144.72 Uy l
+408.59 Ux 144.96 Uy l
+414.75 Ux 145.20 Uy l
+420.92 Ux 145.44 Uy l
+427.08 Ux 145.68 Uy l
+433.25 Ux 145.92 Uy l
+439.41 Ux 146.16 Uy l
+445.58 Ux 146.40 Uy l
+451.75 Ux 146.64 Uy l
+457.91 Ux 146.89 Uy l
+464.08 Ux 147.13 Uy l
+470.24 Ux 147.38 Uy l
+476.41 Ux 147.62 Uy l
+ s
+C4 476.41 Ux 147.62 Uy m (\0) show
+C4 482.57 Ux 147.87 Uy m (\0) show
+C4 488.74 Ux 148.11 Uy m (\0) show
+C4 494.91 Ux 148.36 Uy m (\0) show
+C4 501.07 Ux 148.61 Uy m (\0) show
+C4 507.24 Ux 148.86 Uy m (\0) show
+C4 513.40 Ux 149.11 Uy m (\0) show
+C4 519.57 Ux 149.36 Uy m (\0) show
+C4 525.73 Ux 149.61 Uy m (\0) show
+C4 531.90 Ux 149.86 Uy m (\0) show
+C4 538.07 Ux 150.11 Uy m (\0) show
+C4 544.23 Ux 150.37 Uy m (\0) show
+C4 550.40 Ux 150.62 Uy m (\0) show
+C4 556.56 Ux 150.88 Uy m (\0) show
+C4 562.73 Ux 151.13 Uy m (\0) show
+C4 568.89 Ux 151.39 Uy m (\0) show
+C4 575.06 Ux 151.65 Uy m (\0) show
+C4 581.23 Ux 151.91 Uy m (\0) show
+C4 587.39 Ux 152.16 Uy m (\0) show
+C4 593.56 Ux 152.42 Uy m (\0) show
+C4 599.72 Ux 152.68 Uy m (\0) show
+C4 605.89 Ux 152.95 Uy m (\0) show
+C4 612.05 Ux 153.21 Uy m (\0) show
+C4 618.22 Ux 153.47 Uy m (\0) show
+C4 624.39 Ux 153.73 Uy m (\0) show
+C4 630.55 Ux 154.00 Uy m (\0) show
+C4 636.72 Ux 154.26 Uy m (\0) show
+C4 642.88 Ux 154.53 Uy m (\0) show
+C4 649.05 Ux 154.80 Uy m (\0) show
+C4 476.41 Ux 147.62 Uy m
+482.57 Ux 147.87 Uy l
+488.74 Ux 148.11 Uy l
+494.91 Ux 148.36 Uy l
+501.07 Ux 148.61 Uy l
+507.24 Ux 148.86 Uy l
+513.40 Ux 149.11 Uy l
+519.57 Ux 149.36 Uy l
+525.73 Ux 149.61 Uy l
+531.90 Ux 149.86 Uy l
+538.07 Ux 150.11 Uy l
+544.23 Ux 150.37 Uy l
+550.40 Ux 150.62 Uy l
+556.56 Ux 150.88 Uy l
+562.73 Ux 151.13 Uy l
+568.89 Ux 151.39 Uy l
+575.06 Ux 151.65 Uy l
+581.23 Ux 151.91 Uy l
+587.39 Ux 152.16 Uy l
+593.56 Ux 152.42 Uy l
+599.72 Ux 152.68 Uy l
+605.89 Ux 152.95 Uy l
+612.05 Ux 153.21 Uy l
+618.22 Ux 153.47 Uy l
+624.39 Ux 153.73 Uy l
+630.55 Ux 154.00 Uy l
+636.72 Ux 154.26 Uy l
+642.88 Ux 154.53 Uy l
+649.05 Ux 154.80 Uy l
+655.21 Ux 155.07 Uy l
+ s
+C4 655.21 Ux 155.07 Uy m (\0) show
+C4 661.38 Ux 155.34 Uy m (\0) show
+C4 667.55 Ux 155.60 Uy m (\0) show
+C4 673.71 Ux 155.88 Uy m (\0) show
+C4 679.88 Ux 156.15 Uy m (\0) show
+C4 686.04 Ux 156.42 Uy m (\0) show
+C4 692.21 Ux 156.69 Uy m (\0) show
+C4 698.37 Ux 156.97 Uy m (\0) show
+C4 704.54 Ux 157.24 Uy m (\0) show
+C4 710.71 Ux 157.52 Uy m (\0) show
+C4 716.87 Ux 157.79 Uy m (\0) show
+C4 723.04 Ux 158.07 Uy m (\0) show
+C4 729.20 Ux 158.35 Uy m (\0) show
+C4 655.21 Ux 155.07 Uy m
+661.38 Ux 155.34 Uy l
+667.55 Ux 155.60 Uy l
+673.71 Ux 155.88 Uy l
+679.88 Ux 156.15 Uy l
+686.04 Ux 156.42 Uy l
+692.21 Ux 156.69 Uy l
+698.37 Ux 156.97 Uy l
+704.54 Ux 157.24 Uy l
+710.71 Ux 157.52 Uy l
+716.87 Ux 157.79 Uy l
+723.04 Ux 158.07 Uy l
+729.20 Ux 158.35 Uy l
+ s
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 801.00 Ux 0 rl 0 430.00 Uy rl -801.000000 Ux 0 rl closepath clip 
+EndBloc
+%>EndBloc 1
+%>BeginBloc 2
+801.00 428.00 801.00 Ux 428.00 Uy 0.00 Ux 429.00 Uy NewBloc
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 801.00 Ux 0 rl 0 428.00 Uy rl -801.000000 Ux 0 rl closepath clip newpath
+/Courier ff 5.94257 FS /curfntsz 5.94257 def 
+1.18851 slw 0.594257 slw C0 n 104.00 Ux 380.00 Uy m 744.00 Ux 380.00 Uy l s
+C0 n 744.00 Ux 380.00 Uy m 744.00 Ux 38.00 Uy l s
+C0 n 744.00 Ux 38.00 Uy m 104.00 Ux 38.00 Uy l s
+C0 n 104.00 Ux 38.00 Uy m 104.00 Ux 380.00 Uy l s
+0.594257 slw sldott C0 n 118.80 Ux 380.00 Uy m 118.80 Ux 38.00 Uy l s
+C0 n 242.11 Ux 380.00 Uy m 242.11 Ux 38.00 Uy l s
+C0 n 365.43 Ux 380.00 Uy m 365.43 Ux 38.00 Uy l s
+C0 n 488.74 Ux 380.00 Uy m 488.74 Ux 38.00 Uy l s
+C0 n 612.05 Ux 380.00 Uy m 612.05 Ux 38.00 Uy l s
+C0 n 735.37 Ux 380.00 Uy m 735.37 Ux 38.00 Uy l s
+C0 n 104.00 Ux 380.00 Uy m 744.00 Ux 380.00 Uy l s
+C0 n 104.00 Ux 330.48 Uy m 744.00 Ux 330.48 Uy l s
+C0 n 104.00 Ux 280.97 Uy m 744.00 Ux 280.97 Uy l s
+C0 n 104.00 Ux 252.00 Uy m 744.00 Ux 252.00 Uy l s
+C0 n 104.00 Ux 215.51 Uy m 744.00 Ux 215.51 Uy l s
+C0 n 104.00 Ux 166.00 Uy m 744.00 Ux 166.00 Uy l s
+C0 n 104.00 Ux 116.48 Uy m 744.00 Ux 116.48 Uy l s
+C0 n 104.00 Ux 87.52 Uy m 744.00 Ux 87.52 Uy l s
+C0 n 104.00 Ux 51.02 Uy m 744.00 Ux 51.02 Uy l s
+0.594257 slw slsolid C0 n 118.80 Ux 380.00 Uy m 118.80 Ux 374.53 Uy l s
+C0 n 242.11 Ux 380.00 Uy m 242.11 Ux 374.53 Uy l s
+C0 n 365.43 Ux 380.00 Uy m 365.43 Ux 374.53 Uy l s
+C0 n 488.74 Ux 380.00 Uy m 488.74 Ux 374.53 Uy l s
+C0 n 612.05 Ux 380.00 Uy m 612.05 Ux 374.53 Uy l s
+C0 n 735.37 Ux 380.00 Uy m 735.37 Ux 374.53 Uy l s
+C0 n 118.80 Ux 43.47 Uy m 118.80 Ux 38.00 Uy l s
+C0 n 242.11 Ux 43.47 Uy m 242.11 Ux 38.00 Uy l s
+C0 n 365.43 Ux 43.47 Uy m 365.43 Ux 38.00 Uy l s
+C0 n 488.74 Ux 43.47 Uy m 488.74 Ux 38.00 Uy l s
+C0 n 612.05 Ux 43.47 Uy m 612.05 Ux 38.00 Uy l s
+C0 n 735.37 Ux 43.47 Uy m 735.37 Ux 38.00 Uy l s
+C0 n 104.00 Ux 380.00 Uy m 114.24 Ux 380.00 Uy l s
+C0 n 104.00 Ux 330.48 Uy m 114.24 Ux 330.48 Uy l s
+C0 n 104.00 Ux 280.97 Uy m 114.24 Ux 280.97 Uy l s
+C0 n 104.00 Ux 252.00 Uy m 114.24 Ux 252.00 Uy l s
+C0 n 104.00 Ux 215.51 Uy m 114.24 Ux 215.51 Uy l s
+C0 n 104.00 Ux 166.00 Uy m 114.24 Ux 166.00 Uy l s
+C0 n 104.00 Ux 116.48 Uy m 114.24 Ux 116.48 Uy l s
+C0 n 104.00 Ux 87.52 Uy m 114.24 Ux 87.52 Uy l s
+C0 n 104.00 Ux 51.02 Uy m 114.24 Ux 51.02 Uy l s
+C0 n 733.76 Ux 380.00 Uy m 744.00 Ux 380.00 Uy l s
+C0 n 733.76 Ux 330.48 Uy m 744.00 Ux 330.48 Uy l s
+C0 n 733.76 Ux 280.97 Uy m 744.00 Ux 280.97 Uy l s
+C0 n 733.76 Ux 252.00 Uy m 744.00 Ux 252.00 Uy l s
+C0 n 733.76 Ux 215.51 Uy m 744.00 Ux 215.51 Uy l s
+C0 n 733.76 Ux 166.00 Uy m 744.00 Ux 166.00 Uy l s
+C0 n 733.76 Ux 116.48 Uy m 744.00 Ux 116.48 Uy l s
+C0 n 733.76 Ux 87.52 Uy m 744.00 Ux 87.52 Uy l s
+C0 n 733.76 Ux 51.02 Uy m 744.00 Ux 51.02 Uy l s
+C0 n 118.80 Ux 380.00 Uy m 118.80 Ux 376.58 Uy l s
+C0 n 143.46 Ux 380.00 Uy m 143.46 Ux 376.58 Uy l s
+C0 n 168.12 Ux 380.00 Uy m 168.12 Ux 376.58 Uy l s
+C0 n 192.79 Ux 380.00 Uy m 192.79 Ux 376.58 Uy l s
+C0 n 217.45 Ux 380.00 Uy m 217.45 Ux 376.58 Uy l s
+C0 n 242.11 Ux 380.00 Uy m 242.11 Ux 376.58 Uy l s
+C0 n 266.77 Ux 380.00 Uy m 266.77 Ux 376.58 Uy l s
+C0 n 291.44 Ux 380.00 Uy m 291.44 Ux 376.58 Uy l s
+C0 n 316.10 Ux 380.00 Uy m 316.10 Ux 376.58 Uy l s
+C0 n 340.76 Ux 380.00 Uy m 340.76 Ux 376.58 Uy l s
+C0 n 365.43 Ux 380.00 Uy m 365.43 Ux 376.58 Uy l s
+C0 n 390.09 Ux 380.00 Uy m 390.09 Ux 376.58 Uy l s
+C0 n 414.75 Ux 380.00 Uy m 414.75 Ux 376.58 Uy l s
+C0 n 439.41 Ux 380.00 Uy m 439.41 Ux 376.58 Uy l s
+C0 n 464.08 Ux 380.00 Uy m 464.08 Ux 376.58 Uy l s
+C0 n 488.74 Ux 380.00 Uy m 488.74 Ux 376.58 Uy l s
+C0 n 513.40 Ux 380.00 Uy m 513.40 Ux 376.58 Uy l s
+C0 n 538.07 Ux 380.00 Uy m 538.07 Ux 376.58 Uy l s
+C0 n 562.73 Ux 380.00 Uy m 562.73 Ux 376.58 Uy l s
+C0 n 587.39 Ux 380.00 Uy m 587.39 Ux 376.58 Uy l s
+C0 n 612.05 Ux 380.00 Uy m 612.05 Ux 376.58 Uy l s
+C0 n 636.72 Ux 380.00 Uy m 636.72 Ux 376.58 Uy l s
+C0 n 661.38 Ux 380.00 Uy m 661.38 Ux 376.58 Uy l s
+C0 n 686.04 Ux 380.00 Uy m 686.04 Ux 376.58 Uy l s
+C0 n 710.71 Ux 380.00 Uy m 710.71 Ux 376.58 Uy l s
+C0 n 735.37 Ux 380.00 Uy m 735.37 Ux 376.58 Uy l s
+C0 n 118.80 Ux 41.42 Uy m 118.80 Ux 38.00 Uy l s
+C0 n 143.46 Ux 41.42 Uy m 143.46 Ux 38.00 Uy l s
+C0 n 168.12 Ux 41.42 Uy m 168.12 Ux 38.00 Uy l s
+C0 n 192.79 Ux 41.42 Uy m 192.79 Ux 38.00 Uy l s
+C0 n 217.45 Ux 41.42 Uy m 217.45 Ux 38.00 Uy l s
+C0 n 242.11 Ux 41.42 Uy m 242.11 Ux 38.00 Uy l s
+C0 n 266.77 Ux 41.42 Uy m 266.77 Ux 38.00 Uy l s
+C0 n 291.44 Ux 41.42 Uy m 291.44 Ux 38.00 Uy l s
+C0 n 316.10 Ux 41.42 Uy m 316.10 Ux 38.00 Uy l s
+C0 n 340.76 Ux 41.42 Uy m 340.76 Ux 38.00 Uy l s
+C0 n 365.43 Ux 41.42 Uy m 365.43 Ux 38.00 Uy l s
+C0 n 390.09 Ux 41.42 Uy m 390.09 Ux 38.00 Uy l s
+C0 n 414.75 Ux 41.42 Uy m 414.75 Ux 38.00 Uy l s
+C0 n 439.41 Ux 41.42 Uy m 439.41 Ux 38.00 Uy l s
+C0 n 464.08 Ux 41.42 Uy m 464.08 Ux 38.00 Uy l s
+C0 n 488.74 Ux 41.42 Uy m 488.74 Ux 38.00 Uy l s
+C0 n 513.40 Ux 41.42 Uy m 513.40 Ux 38.00 Uy l s
+C0 n 538.07 Ux 41.42 Uy m 538.07 Ux 38.00 Uy l s
+C0 n 562.73 Ux 41.42 Uy m 562.73 Ux 38.00 Uy l s
+C0 n 587.39 Ux 41.42 Uy m 587.39 Ux 38.00 Uy l s
+C0 n 612.05 Ux 41.42 Uy m 612.05 Ux 38.00 Uy l s
+C0 n 636.72 Ux 41.42 Uy m 636.72 Ux 38.00 Uy l s
+C0 n 661.38 Ux 41.42 Uy m 661.38 Ux 38.00 Uy l s
+C0 n 686.04 Ux 41.42 Uy m 686.04 Ux 38.00 Uy l s
+C0 n 710.71 Ux 41.42 Uy m 710.71 Ux 38.00 Uy l s
+C0 n 735.37 Ux 41.42 Uy m 735.37 Ux 38.00 Uy l s
+C0 n 104.00 Ux 380.00 Uy m 110.40 Ux 380.00 Uy l s
+C0 n 104.00 Ux 366.98 Uy m 110.40 Ux 366.98 Uy l s
+C0 n 104.00 Ux 355.96 Uy m 110.40 Ux 355.96 Uy l s
+C0 n 104.00 Ux 346.42 Uy m 110.40 Ux 346.42 Uy l s
+C0 n 104.00 Ux 338.01 Uy m 110.40 Ux 338.01 Uy l s
+C0 n 104.00 Ux 330.48 Uy m 110.40 Ux 330.48 Uy l s
+C0 n 104.00 Ux 317.46 Uy m 110.40 Ux 317.46 Uy l s
+C0 n 104.00 Ux 306.45 Uy m 110.40 Ux 306.45 Uy l s
+C0 n 104.00 Ux 296.91 Uy m 110.40 Ux 296.91 Uy l s
+C0 n 104.00 Ux 288.50 Uy m 110.40 Ux 288.50 Uy l s
+C0 n 104.00 Ux 280.97 Uy m 110.40 Ux 280.97 Uy l s
+C0 n 104.00 Ux 274.16 Uy m 110.40 Ux 274.16 Uy l s
+C0 n 104.00 Ux 267.94 Uy m 110.40 Ux 267.94 Uy l s
+C0 n 104.00 Ux 262.23 Uy m 110.40 Ux 262.23 Uy l s
+C0 n 104.00 Ux 256.93 Uy m 110.40 Ux 256.93 Uy l s
+C0 n 104.00 Ux 252.00 Uy m 110.40 Ux 252.00 Uy l s
+C0 n 104.00 Ux 243.06 Uy m 110.40 Ux 243.06 Uy l s
+C0 n 104.00 Ux 235.12 Uy m 110.40 Ux 235.12 Uy l s
+C0 n 104.00 Ux 227.97 Uy m 110.40 Ux 227.97 Uy l s
+C0 n 104.00 Ux 221.47 Uy m 110.40 Ux 221.47 Uy l s
+C0 n 104.00 Ux 215.51 Uy m 110.40 Ux 215.51 Uy l s
+C0 n 104.00 Ux 202.49 Uy m 110.40 Ux 202.49 Uy l s
+C0 n 104.00 Ux 191.48 Uy m 110.40 Ux 191.48 Uy l s
+C0 n 104.00 Ux 181.94 Uy m 110.40 Ux 181.94 Uy l s
+C0 n 104.00 Ux 173.52 Uy m 110.40 Ux 173.52 Uy l s
+C0 n 104.00 Ux 166.00 Uy m 110.40 Ux 166.00 Uy l s
+C0 n 104.00 Ux 152.97 Uy m 110.40 Ux 152.97 Uy l s
+C0 n 104.00 Ux 141.96 Uy m 110.40 Ux 141.96 Uy l s
+C0 n 104.00 Ux 132.42 Uy m 110.40 Ux 132.42 Uy l s
+C0 n 104.00 Ux 124.01 Uy m 110.40 Ux 124.01 Uy l s
+C0 n 104.00 Ux 116.48 Uy m 110.40 Ux 116.48 Uy l s
+C0 n 104.00 Ux 109.67 Uy m 110.40 Ux 109.67 Uy l s
+C0 n 104.00 Ux 103.46 Uy m 110.40 Ux 103.46 Uy l s
+C0 n 104.00 Ux 97.74 Uy m 110.40 Ux 97.74 Uy l s
+C0 n 104.00 Ux 92.44 Uy m 110.40 Ux 92.44 Uy l s
+C0 n 104.00 Ux 87.52 Uy m 110.40 Ux 87.52 Uy l s
+C0 n 104.00 Ux 78.57 Uy m 110.40 Ux 78.57 Uy l s
+C0 n 104.00 Ux 70.63 Uy m 110.40 Ux 70.63 Uy l s
+C0 n 104.00 Ux 63.48 Uy m 110.40 Ux 63.48 Uy l s
+C0 n 104.00 Ux 56.98 Uy m 110.40 Ux 56.98 Uy l s
+C0 n 104.00 Ux 51.02 Uy m 110.40 Ux 51.02 Uy l s
+C0 n 737.60 Ux 380.00 Uy m 744.00 Ux 380.00 Uy l s
+C0 n 737.60 Ux 366.98 Uy m 744.00 Ux 366.98 Uy l s
+C0 n 737.60 Ux 355.96 Uy m 744.00 Ux 355.96 Uy l s
+C0 n 737.60 Ux 346.42 Uy m 744.00 Ux 346.42 Uy l s
+C0 n 737.60 Ux 338.01 Uy m 744.00 Ux 338.01 Uy l s
+C0 n 737.60 Ux 330.48 Uy m 744.00 Ux 330.48 Uy l s
+C0 n 737.60 Ux 317.46 Uy m 744.00 Ux 317.46 Uy l s
+C0 n 737.60 Ux 306.45 Uy m 744.00 Ux 306.45 Uy l s
+C0 n 737.60 Ux 296.91 Uy m 744.00 Ux 296.91 Uy l s
+C0 n 737.60 Ux 288.50 Uy m 744.00 Ux 288.50 Uy l s
+C0 n 737.60 Ux 280.97 Uy m 744.00 Ux 280.97 Uy l s
+C0 n 737.60 Ux 274.16 Uy m 744.00 Ux 274.16 Uy l s
+C0 n 737.60 Ux 267.94 Uy m 744.00 Ux 267.94 Uy l s
+C0 n 737.60 Ux 262.23 Uy m 744.00 Ux 262.23 Uy l s
+C0 n 737.60 Ux 256.93 Uy m 744.00 Ux 256.93 Uy l s
+C0 n 737.60 Ux 252.00 Uy m 744.00 Ux 252.00 Uy l s
+C0 n 737.60 Ux 243.06 Uy m 744.00 Ux 243.06 Uy l s
+C0 n 737.60 Ux 235.12 Uy m 744.00 Ux 235.12 Uy l s
+C0 n 737.60 Ux 227.97 Uy m 744.00 Ux 227.97 Uy l s
+C0 n 737.60 Ux 221.47 Uy m 744.00 Ux 221.47 Uy l s
+C0 n 737.60 Ux 215.51 Uy m 744.00 Ux 215.51 Uy l s
+C0 n 737.60 Ux 202.49 Uy m 744.00 Ux 202.49 Uy l s
+C0 n 737.60 Ux 191.48 Uy m 744.00 Ux 191.48 Uy l s
+C0 n 737.60 Ux 181.94 Uy m 744.00 Ux 181.94 Uy l s
+C0 n 737.60 Ux 173.52 Uy m 744.00 Ux 173.52 Uy l s
+C0 n 737.60 Ux 166.00 Uy m 744.00 Ux 166.00 Uy l s
+C0 n 737.60 Ux 152.97 Uy m 744.00 Ux 152.97 Uy l s
+C0 n 737.60 Ux 141.96 Uy m 744.00 Ux 141.96 Uy l s
+C0 n 737.60 Ux 132.42 Uy m 744.00 Ux 132.42 Uy l s
+C0 n 737.60 Ux 124.01 Uy m 744.00 Ux 124.01 Uy l s
+C0 n 737.60 Ux 116.48 Uy m 744.00 Ux 116.48 Uy l s
+C0 n 737.60 Ux 109.67 Uy m 744.00 Ux 109.67 Uy l s
+C0 n 737.60 Ux 103.46 Uy m 744.00 Ux 103.46 Uy l s
+C0 n 737.60 Ux 97.74 Uy m 744.00 Ux 97.74 Uy l s
+C0 n 737.60 Ux 92.44 Uy m 744.00 Ux 92.44 Uy l s
+C0 n 737.60 Ux 87.52 Uy m 744.00 Ux 87.52 Uy l s
+C0 n 737.60 Ux 78.57 Uy m 744.00 Ux 78.57 Uy l s
+C0 n 737.60 Ux 70.63 Uy m 744.00 Ux 70.63 Uy l s
+C0 n 737.60 Ux 63.48 Uy m 744.00 Ux 63.48 Uy l s
+C0 n 737.60 Ux 56.98 Uy m 744.00 Ux 56.98 Uy l s
+C0 n 737.60 Ux 51.02 Uy m 744.00 Ux 51.02 Uy l s
+/Helvetica-Bold  ff 11.8851 FS /curfntsz 11.8851 def 
+gs 118.80 Ux 401.47 Uy m (0) hcshstr gr
+gs 118.80 Ux 401.47 Uy m (0) hcvbshstr gr
+gs 242.11 Ux 401.47 Uy m (1) hcshstr gr
+gs 242.11 Ux 401.47 Uy m (1) hcvbshstr gr
+gs 365.43 Ux 401.47 Uy m (2) hcshstr gr
+gs 365.43 Ux 401.47 Uy m (2) hcvbshstr gr
+gs 488.74 Ux 401.47 Uy m (3) hcshstr gr
+gs 488.74 Ux 401.47 Uy m (3) hcvbshstr gr
+gs 612.05 Ux 401.47 Uy m (4) hcshstr gr
+gs 612.05 Ux 401.47 Uy m (4) hcvbshstr gr
+gs 735.37 Ux 401.47 Uy m (5) hcshstr gr
+gs 735.37 Ux 401.47 Uy m (5) hcvbshstr gr
+gs 93.76 Ux 385.00 Uy m (0.001) hrshstr gr
+gs 93.76 Ux 385.00 Uy m (0.001) hrvbshstr gr
+gs 93.76 Ux 335.48 Uy m (0.002) hrshstr gr
+gs 93.76 Ux 335.48 Uy m (0.002) hrvbshstr gr
+gs 93.76 Ux 285.97 Uy m (0.004) hrshstr gr
+gs 93.76 Ux 285.97 Uy m (0.004) hrvbshstr gr
+gs 93.76 Ux 257.00 Uy m (0.006) hrshstr gr
+gs 93.76 Ux 257.00 Uy m (0.006) hrvbshstr gr
+gs 93.76 Ux 220.51 Uy m (0.01) hrshstr gr
+gs 93.76 Ux 220.51 Uy m (0.01) hrvbshstr gr
+gs 93.76 Ux 171.00 Uy m (0.02) hrshstr gr
+gs 93.76 Ux 171.00 Uy m (0.02) hrvbshstr gr
+gs 93.76 Ux 121.48 Uy m (0.04) hrshstr gr
+gs 93.76 Ux 121.48 Uy m (0.04) hrvbshstr gr
+gs 93.76 Ux 92.52 Uy m (0.06) hrshstr gr
+gs 93.76 Ux 92.52 Uy m (0.06) hrvbshstr gr
+gs 93.76 Ux 56.02 Uy m (0.1) hrshstr gr
+gs 93.76 Ux 56.02 Uy m (0.1) hrvbshstr gr
+/Helvetica-Bold  ff 10.6966 FS /curfntsz 10.6966 def 
+gs 424.00 Ux 19.32 Uy m (Ramos/useAll \(i\)  -25<M<-15  Ell:red, Spiral:Green, StarBurst:Blue) hcshstr gr
+gs 424.00 Ux 19.32 Uy m (Ramos/useAll \(i\)  -25<M<-15  Ell:red, Spiral:Green, StarBurst:Blue) hcvbshstr gr
+gs 424.00 Ux 421.65 Uy m ( \(IntegNb.Gal\) Total=Sum black , Total=All dashed) hcshstr gr
+gs 424.00 Ux 421.65 Uy m ( \(IntegNb.Gal\) Total=Sum black , Total=All dashed) hcvbshstr gr
+% SetClipRectangle: Define clip region 
+ newpath 104.00 Ux 38.00 Uy m 640.00 Ux 0 rl 0 342.00 Uy rl -640.00 Ux 0 rl closepath clip newpath
+C0 /PIMarkers ff 1 scf sf
+118.80 Ux 57.52 Uy m (\0) show
+C0 124.96 Ux 57.52 Uy m (\0) show
+C0 131.13 Ux 57.52 Uy m (\0) show
+C0 137.29 Ux 71.01 Uy m (\0) show
+C0 143.46 Ux 87.66 Uy m (\0) show
+C0 149.63 Ux 109.40 Uy m (\0) show
+C0 155.79 Ux 140.81 Uy m (\0) show
+C0 161.96 Ux 141.67 Uy m (\0) show
+C0 168.12 Ux 142.54 Uy m (\0) show
+C0 174.29 Ux 143.42 Uy m (\0) show
+C0 180.45 Ux 144.31 Uy m (\0) show
+C0 186.62 Ux 136.26 Uy m (\0) show
+C0 192.79 Ux 129.03 Uy m (\0) show
+C0 198.95 Ux 122.46 Uy m (\0) show
+C0 205.12 Ux 116.45 Uy m (\0) show
+C0 211.28 Ux 104.88 Uy m (\0) show
+C0 217.45 Ux 94.93 Uy m (\0) show
+C0 223.61 Ux 86.19 Uy m (\0) show
+C0 229.78 Ux 78.41 Uy m (\0) show
+C0 235.95 Ux 70.02 Uy m (\0) show
+C0 242.11 Ux 62.52 Uy m (\0) show
+C0 248.28 Ux 55.73 Uy m (\0) show
+C0 254.44 Ux 49.53 Uy m (\0) show
+C0 260.61 Ux 43.82 Uy m (\0) show
+C0 266.77 Ux 46.36 Uy m (\0) show
+C0 272.94 Ux 49.00 Uy m (\0) show
+C0 279.11 Ux 51.73 Uy m (\0) show
+C0 285.27 Ux 54.57 Uy m (\0) show
+C0 291.44 Ux 57.53 Uy m (\0) show
+1.18851 slw C0 118.80 Ux 57.52 Uy m
+124.96 Ux 57.52 Uy l
+131.13 Ux 57.52 Uy l
+137.29 Ux 71.01 Uy l
+143.46 Ux 87.66 Uy l
+149.63 Ux 109.40 Uy l
+155.79 Ux 140.81 Uy l
+161.96 Ux 141.67 Uy l
+168.12 Ux 142.54 Uy l
+174.29 Ux 143.42 Uy l
+180.45 Ux 144.31 Uy l
+186.62 Ux 136.26 Uy l
+192.79 Ux 129.03 Uy l
+198.95 Ux 122.46 Uy l
+205.12 Ux 116.45 Uy l
+211.28 Ux 104.88 Uy l
+217.45 Ux 94.93 Uy l
+223.61 Ux 86.19 Uy l
+229.78 Ux 78.41 Uy l
+235.95 Ux 70.02 Uy l
+242.11 Ux 62.52 Uy l
+248.28 Ux 55.73 Uy l
+254.44 Ux 49.53 Uy l
+260.61 Ux 43.82 Uy l
+266.77 Ux 46.36 Uy l
+272.94 Ux 49.00 Uy l
+279.11 Ux 51.73 Uy l
+285.27 Ux 54.57 Uy l
+291.44 Ux 57.53 Uy l
+297.60 Ux 60.62 Uy l
+ s
+C0 297.60 Ux 60.62 Uy m (\0) show
+C0 303.77 Ux 66.50 Uy m (\0) show
+C0 309.93 Ux 72.90 Uy m (\0) show
+C0 316.10 Ux 79.93 Uy m (\0) show
+C0 322.27 Ux 87.72 Uy m (\0) show
+C0 328.43 Ux 96.48 Uy m (\0) show
+C0 334.60 Ux 106.46 Uy m (\0) show
+C0 340.76 Ux 118.06 Uy m (\0) show
+C0 346.93 Ux 118.06 Uy m (\0) show
+C0 353.09 Ux 118.06 Uy m (\0) show
+C0 359.26 Ux 118.06 Uy m (\0) show
+C0 365.43 Ux 118.06 Uy m (\0) show
+C0 371.59 Ux 118.26 Uy m (\0) show
+C0 377.76 Ux 118.46 Uy m (\0) show
+C0 383.92 Ux 118.66 Uy m (\0) show
+C0 390.09 Ux 118.86 Uy m (\0) show
+C0 396.25 Ux 119.06 Uy m (\0) show
+C0 402.42 Ux 119.26 Uy m (\0) show
+C0 408.59 Ux 119.46 Uy m (\0) show
+C0 414.75 Ux 119.66 Uy m (\0) show
+C0 420.92 Ux 119.87 Uy m (\0) show
+C0 427.08 Ux 120.07 Uy m (\0) show
+C0 433.25 Ux 120.28 Uy m (\0) show
+C0 439.41 Ux 120.48 Uy m (\0) show
+C0 445.58 Ux 120.69 Uy m (\0) show
+C0 451.75 Ux 120.89 Uy m (\0) show
+C0 457.91 Ux 121.10 Uy m (\0) show
+C0 464.08 Ux 121.31 Uy m (\0) show
+C0 470.24 Ux 121.51 Uy m (\0) show
+C0 297.60 Ux 60.62 Uy m
+303.77 Ux 66.50 Uy l
+309.93 Ux 72.90 Uy l
+316.10 Ux 79.93 Uy l
+322.27 Ux 87.72 Uy l
+328.43 Ux 96.48 Uy l
+334.60 Ux 106.46 Uy l
+340.76 Ux 118.06 Uy l
+346.93 Ux 118.06 Uy l
+353.09 Ux 118.06 Uy l
+359.26 Ux 118.06 Uy l
+365.43 Ux 118.06 Uy l
+371.59 Ux 118.26 Uy l
+377.76 Ux 118.46 Uy l
+383.92 Ux 118.66 Uy l
+390.09 Ux 118.86 Uy l
+396.25 Ux 119.06 Uy l
+402.42 Ux 119.26 Uy l
+408.59 Ux 119.46 Uy l
+414.75 Ux 119.66 Uy l
+420.92 Ux 119.87 Uy l
+427.08 Ux 120.07 Uy l
+433.25 Ux 120.28 Uy l
+439.41 Ux 120.48 Uy l
+445.58 Ux 120.69 Uy l
+451.75 Ux 120.89 Uy l
+457.91 Ux 121.10 Uy l
+464.08 Ux 121.31 Uy l
+470.24 Ux 121.51 Uy l
+476.41 Ux 121.72 Uy l
+ s
+C0 476.41 Ux 121.72 Uy m (\0) show
+C0 482.57 Ux 121.93 Uy m (\0) show
+C0 488.74 Ux 122.14 Uy m (\0) show
+C0 494.91 Ux 122.35 Uy m (\0) show
+C0 501.07 Ux 122.56 Uy m (\0) show
+C0 507.24 Ux 122.77 Uy m (\0) show
+C0 513.40 Ux 122.99 Uy m (\0) show
+C0 519.57 Ux 123.20 Uy m (\0) show
+C0 525.73 Ux 123.41 Uy m (\0) show
+C0 531.90 Ux 123.63 Uy m (\0) show
+C0 538.07 Ux 123.84 Uy m (\0) show
+C0 544.23 Ux 124.06 Uy m (\0) show
+C0 550.40 Ux 124.27 Uy m (\0) show
+C0 556.56 Ux 124.49 Uy m (\0) show
+C0 562.73 Ux 124.71 Uy m (\0) show
+C0 568.89 Ux 124.93 Uy m (\0) show
+C0 575.06 Ux 125.15 Uy m (\0) show
+C0 581.23 Ux 125.36 Uy m (\0) show
+C0 587.39 Ux 125.58 Uy m (\0) show
+C0 593.56 Ux 125.81 Uy m (\0) show
+C0 599.72 Ux 126.03 Uy m (\0) show
+C0 605.89 Ux 126.25 Uy m (\0) show
+C0 612.05 Ux 126.47 Uy m (\0) show
+C0 618.22 Ux 126.70 Uy m (\0) show
+C0 624.39 Ux 126.92 Uy m (\0) show
+C0 630.55 Ux 127.15 Uy m (\0) show
+C0 636.72 Ux 127.37 Uy m (\0) show
+C0 642.88 Ux 127.60 Uy m (\0) show
+C0 649.05 Ux 127.82 Uy m (\0) show
+C0 476.41 Ux 121.72 Uy m
+482.57 Ux 121.93 Uy l
+488.74 Ux 122.14 Uy l
+494.91 Ux 122.35 Uy l
+501.07 Ux 122.56 Uy l
+507.24 Ux 122.77 Uy l
+513.40 Ux 122.99 Uy l
+519.57 Ux 123.20 Uy l
+525.73 Ux 123.41 Uy l
+531.90 Ux 123.63 Uy l
+538.07 Ux 123.84 Uy l
+544.23 Ux 124.06 Uy l
+550.40 Ux 124.27 Uy l
+556.56 Ux 124.49 Uy l
+562.73 Ux 124.71 Uy l
+568.89 Ux 124.93 Uy l
+575.06 Ux 125.15 Uy l
+581.23 Ux 125.36 Uy l
+587.39 Ux 125.58 Uy l
+593.56 Ux 125.81 Uy l
+599.72 Ux 126.03 Uy l
+605.89 Ux 126.25 Uy l
+612.05 Ux 126.47 Uy l
+618.22 Ux 126.70 Uy l
+624.39 Ux 126.92 Uy l
+630.55 Ux 127.15 Uy l
+636.72 Ux 127.37 Uy l
+642.88 Ux 127.60 Uy l
+649.05 Ux 127.82 Uy l
+655.21 Ux 128.05 Uy l
+ s
+C0 655.21 Ux 128.05 Uy m (\0) show
+C0 661.38 Ux 128.28 Uy m (\0) show
+C0 667.55 Ux 128.51 Uy m (\0) show
+C0 673.71 Ux 128.74 Uy m (\0) show
+C0 679.88 Ux 128.97 Uy m (\0) show
+C0 686.04 Ux 129.20 Uy m (\0) show
+C0 692.21 Ux 129.43 Uy m (\0) show
+C0 698.37 Ux 129.67 Uy m (\0) show
+C0 704.54 Ux 129.90 Uy m (\0) show
+C0 710.71 Ux 130.14 Uy m (\0) show
+C0 716.87 Ux 130.37 Uy m (\0) show
+C0 723.04 Ux 130.61 Uy m (\0) show
+C0 729.20 Ux 130.84 Uy m (\0) show
+C0 655.21 Ux 128.05 Uy m
+661.38 Ux 128.28 Uy l
+667.55 Ux 128.51 Uy l
+673.71 Ux 128.74 Uy l
+679.88 Ux 128.97 Uy l
+686.04 Ux 129.20 Uy l
+692.21 Ux 129.43 Uy l
+698.37 Ux 129.67 Uy l
+704.54 Ux 129.90 Uy l
+710.71 Ux 130.14 Uy l
+716.87 Ux 130.37 Uy l
+723.04 Ux 130.61 Uy l
+729.20 Ux 130.84 Uy l
+ s
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 801.00 Ux 0 rl 0 428.00 Uy rl -801.000000 Ux 0 rl closepath clip 
+% SetClipRectangle: Define clip region 
+ newpath 104.00 Ux 38.00 Uy m 640.00 Ux 0 rl 0 342.00 Uy rl -640.00 Ux 0 rl closepath clip newpath
+C10 118.80 Ux 57.52 Uy m (\0) show
+C10 124.96 Ux 57.52 Uy m (\0) show
+C10 131.13 Ux 57.52 Uy m (\0) show
+C10 137.29 Ux 71.01 Uy m (\0) show
+C10 143.46 Ux 87.66 Uy m (\0) show
+C10 149.63 Ux 109.40 Uy m (\0) show
+C10 155.79 Ux 140.81 Uy m (\0) show
+C10 161.96 Ux 141.67 Uy m (\0) show
+C10 168.12 Ux 142.54 Uy m (\0) show
+C10 174.29 Ux 143.42 Uy m (\0) show
+C10 180.45 Ux 144.31 Uy m (\0) show
+C10 186.62 Ux 136.26 Uy m (\0) show
+C10 192.79 Ux 129.03 Uy m (\0) show
+C10 198.95 Ux 122.46 Uy m (\0) show
+C10 205.12 Ux 116.45 Uy m (\0) show
+C10 211.28 Ux 104.88 Uy m (\0) show
+C10 217.45 Ux 94.93 Uy m (\0) show
+C10 223.61 Ux 86.19 Uy m (\0) show
+C10 229.78 Ux 78.41 Uy m (\0) show
+C10 235.95 Ux 70.02 Uy m (\0) show
+C10 242.11 Ux 62.52 Uy m (\0) show
+C10 248.28 Ux 55.73 Uy m (\0) show
+C10 254.44 Ux 49.53 Uy m (\0) show
+C10 260.61 Ux 43.82 Uy m (\0) show
+C10 266.77 Ux 46.36 Uy m (\0) show
+C10 272.94 Ux 49.00 Uy m (\0) show
+C10 279.11 Ux 51.73 Uy m (\0) show
+C10 285.27 Ux 54.57 Uy m (\0) show
+C10 291.44 Ux 57.53 Uy m (\0) show
+1.18851 slw sldash C10 118.80 Ux 57.52 Uy m
+124.96 Ux 57.52 Uy l
+131.13 Ux 57.52 Uy l
+137.29 Ux 71.01 Uy l
+143.46 Ux 87.66 Uy l
+149.63 Ux 109.40 Uy l
+155.79 Ux 140.81 Uy l
+161.96 Ux 141.67 Uy l
+168.12 Ux 142.54 Uy l
+174.29 Ux 143.42 Uy l
+180.45 Ux 144.31 Uy l
+186.62 Ux 136.26 Uy l
+192.79 Ux 129.03 Uy l
+198.95 Ux 122.46 Uy l
+205.12 Ux 116.45 Uy l
+211.28 Ux 104.88 Uy l
+217.45 Ux 94.93 Uy l
+223.61 Ux 86.19 Uy l
+229.78 Ux 78.41 Uy l
+235.95 Ux 70.02 Uy l
+242.11 Ux 62.52 Uy l
+248.28 Ux 55.73 Uy l
+254.44 Ux 49.53 Uy l
+260.61 Ux 43.82 Uy l
+266.77 Ux 46.36 Uy l
+272.94 Ux 49.00 Uy l
+279.11 Ux 51.73 Uy l
+285.27 Ux 54.57 Uy l
+291.44 Ux 57.53 Uy l
+297.60 Ux 60.62 Uy l
+ s
+C10 297.60 Ux 60.62 Uy m (\0) show
+C10 303.77 Ux 66.50 Uy m (\0) show
+C10 309.93 Ux 72.90 Uy m (\0) show
+C10 316.10 Ux 79.93 Uy m (\0) show
+C10 322.27 Ux 87.72 Uy m (\0) show
+C10 328.43 Ux 96.48 Uy m (\0) show
+C10 334.60 Ux 106.46 Uy m (\0) show
+C10 340.76 Ux 118.06 Uy m (\0) show
+C10 346.93 Ux 118.06 Uy m (\0) show
+C10 353.09 Ux 118.06 Uy m (\0) show
+C10 359.26 Ux 118.06 Uy m (\0) show
+C10 365.43 Ux 118.06 Uy m (\0) show
+C10 371.59 Ux 118.26 Uy m (\0) show
+C10 377.76 Ux 118.46 Uy m (\0) show
+C10 383.92 Ux 118.66 Uy m (\0) show
+C10 390.09 Ux 118.86 Uy m (\0) show
+C10 396.25 Ux 119.06 Uy m (\0) show
+C10 402.42 Ux 119.26 Uy m (\0) show
+C10 408.59 Ux 119.46 Uy m (\0) show
+C10 414.75 Ux 119.66 Uy m (\0) show
+C10 420.92 Ux 119.87 Uy m (\0) show
+C10 427.08 Ux 120.07 Uy m (\0) show
+C10 433.25 Ux 120.28 Uy m (\0) show
+C10 439.41 Ux 120.48 Uy m (\0) show
+C10 445.58 Ux 120.69 Uy m (\0) show
+C10 451.75 Ux 120.89 Uy m (\0) show
+C10 457.91 Ux 121.10 Uy m (\0) show
+C10 464.08 Ux 121.31 Uy m (\0) show
+C10 470.24 Ux 121.51 Uy m (\0) show
+C10 297.60 Ux 60.62 Uy m
+303.77 Ux 66.50 Uy l
+309.93 Ux 72.90 Uy l
+316.10 Ux 79.93 Uy l
+322.27 Ux 87.72 Uy l
+328.43 Ux 96.48 Uy l
+334.60 Ux 106.46 Uy l
+340.76 Ux 118.06 Uy l
+346.93 Ux 118.06 Uy l
+353.09 Ux 118.06 Uy l
+359.26 Ux 118.06 Uy l
+365.43 Ux 118.06 Uy l
+371.59 Ux 118.26 Uy l
+377.76 Ux 118.46 Uy l
+383.92 Ux 118.66 Uy l
+390.09 Ux 118.86 Uy l
+396.25 Ux 119.06 Uy l
+402.42 Ux 119.26 Uy l
+408.59 Ux 119.46 Uy l
+414.75 Ux 119.66 Uy l
+420.92 Ux 119.87 Uy l
+427.08 Ux 120.07 Uy l
+433.25 Ux 120.28 Uy l
+439.41 Ux 120.48 Uy l
+445.58 Ux 120.69 Uy l
+451.75 Ux 120.89 Uy l
+457.91 Ux 121.10 Uy l
+464.08 Ux 121.31 Uy l
+470.24 Ux 121.51 Uy l
+476.41 Ux 121.72 Uy l
+ s
+C10 476.41 Ux 121.72 Uy m (\0) show
+C10 482.57 Ux 121.93 Uy m (\0) show
+C10 488.74 Ux 122.14 Uy m (\0) show
+C10 494.91 Ux 122.35 Uy m (\0) show
+C10 501.07 Ux 122.56 Uy m (\0) show
+C10 507.24 Ux 122.77 Uy m (\0) show
+C10 513.40 Ux 122.99 Uy m (\0) show
+C10 519.57 Ux 123.20 Uy m (\0) show
+C10 525.73 Ux 123.41 Uy m (\0) show
+C10 531.90 Ux 123.63 Uy m (\0) show
+C10 538.07 Ux 123.84 Uy m (\0) show
+C10 544.23 Ux 124.06 Uy m (\0) show
+C10 550.40 Ux 124.27 Uy m (\0) show
+C10 556.56 Ux 124.49 Uy m (\0) show
+C10 562.73 Ux 124.71 Uy m (\0) show
+C10 568.89 Ux 124.93 Uy m (\0) show
+C10 575.06 Ux 125.15 Uy m (\0) show
+C10 581.23 Ux 125.36 Uy m (\0) show
+C10 587.39 Ux 125.58 Uy m (\0) show
+C10 593.56 Ux 125.81 Uy m (\0) show
+C10 599.72 Ux 126.03 Uy m (\0) show
+C10 605.89 Ux 126.25 Uy m (\0) show
+C10 612.05 Ux 126.47 Uy m (\0) show
+C10 618.22 Ux 126.70 Uy m (\0) show
+C10 624.39 Ux 126.92 Uy m (\0) show
+C10 630.55 Ux 127.15 Uy m (\0) show
+C10 636.72 Ux 127.37 Uy m (\0) show
+C10 642.88 Ux 127.60 Uy m (\0) show
+C10 649.05 Ux 127.82 Uy m (\0) show
+C10 476.41 Ux 121.72 Uy m
+482.57 Ux 121.93 Uy l
+488.74 Ux 122.14 Uy l
+494.91 Ux 122.35 Uy l
+501.07 Ux 122.56 Uy l
+507.24 Ux 122.77 Uy l
+513.40 Ux 122.99 Uy l
+519.57 Ux 123.20 Uy l
+525.73 Ux 123.41 Uy l
+531.90 Ux 123.63 Uy l
+538.07 Ux 123.84 Uy l
+544.23 Ux 124.06 Uy l
+550.40 Ux 124.27 Uy l
+556.56 Ux 124.49 Uy l
+562.73 Ux 124.71 Uy l
+568.89 Ux 124.93 Uy l
+575.06 Ux 125.15 Uy l
+581.23 Ux 125.36 Uy l
+587.39 Ux 125.58 Uy l
+593.56 Ux 125.81 Uy l
+599.72 Ux 126.03 Uy l
+605.89 Ux 126.25 Uy l
+612.05 Ux 126.47 Uy l
+618.22 Ux 126.70 Uy l
+624.39 Ux 126.92 Uy l
+630.55 Ux 127.15 Uy l
+636.72 Ux 127.37 Uy l
+642.88 Ux 127.60 Uy l
+649.05 Ux 127.82 Uy l
+655.21 Ux 128.05 Uy l
+ s
+C10 655.21 Ux 128.05 Uy m (\0) show
+C10 661.38 Ux 128.28 Uy m (\0) show
+C10 667.55 Ux 128.51 Uy m (\0) show
+C10 673.71 Ux 128.74 Uy m (\0) show
+C10 679.88 Ux 128.97 Uy m (\0) show
+C10 686.04 Ux 129.20 Uy m (\0) show
+C10 692.21 Ux 129.43 Uy m (\0) show
+C10 698.37 Ux 129.67 Uy m (\0) show
+C10 704.54 Ux 129.90 Uy m (\0) show
+C10 710.71 Ux 130.14 Uy m (\0) show
+C10 716.87 Ux 130.37 Uy m (\0) show
+C10 723.04 Ux 130.61 Uy m (\0) show
+C10 729.20 Ux 130.84 Uy m (\0) show
+C10 655.21 Ux 128.05 Uy m
+661.38 Ux 128.28 Uy l
+667.55 Ux 128.51 Uy l
+673.71 Ux 128.74 Uy l
+679.88 Ux 128.97 Uy l
+686.04 Ux 129.20 Uy l
+692.21 Ux 129.43 Uy l
+698.37 Ux 129.67 Uy l
+704.54 Ux 129.90 Uy l
+710.71 Ux 130.14 Uy l
+716.87 Ux 130.37 Uy l
+723.04 Ux 130.61 Uy l
+729.20 Ux 130.84 Uy l
+ s
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 801.00 Ux 0 rl 0 428.00 Uy rl -801.000000 Ux 0 rl closepath clip 
+% SetClipRectangle: Define clip region 
+ newpath 104.00 Ux 38.00 Uy m 640.00 Ux 0 rl 0 342.00 Uy rl -640.00 Ux 0 rl closepath clip newpath
+C3 118.80 Ux 254.02 Uy m (\0) show
+C3 124.96 Ux 254.02 Uy m (\0) show
+C3 131.13 Ux 254.02 Uy m (\0) show
+C3 137.29 Ux 257.80 Uy m (\0) show
+C3 143.46 Ux 261.78 Uy m (\0) show
+C3 149.63 Ux 266.00 Uy m (\0) show
+C3 155.79 Ux 270.49 Uy m (\0) show
+C3 161.96 Ux 278.73 Uy m (\0) show
+C3 168.12 Ux 288.06 Uy m (\0) show
+C3 174.29 Ux 298.78 Uy m (\0) show
+C3 180.45 Ux 311.41 Uy m (\0) show
+C3 186.62 Ux 309.02 Uy m (\0) show
+C3 192.79 Ux 306.71 Uy m (\0) show
+C3 198.95 Ux 304.48 Uy m (\0) show
+C3 205.12 Ux 302.31 Uy m (\0) show
+C3 211.28 Ux 301.36 Uy m (\0) show
+C3 217.45 Ux 300.43 Uy m (\0) show
+C3 223.61 Ux 299.52 Uy m (\0) show
+C3 229.78 Ux 298.61 Uy m (\0) show
+C3 235.95 Ux 303.47 Uy m (\0) show
+C3 242.11 Ux 308.69 Uy m (\0) show
+C3 248.28 Ux 314.31 Uy m (\0) show
+C3 254.44 Ux 320.42 Uy m (\0) show
+C3 260.61 Ux 327.10 Uy m (\0) show
+C3 266.77 Ux 329.66 Uy m (\0) show
+C3 272.94 Ux 332.30 Uy m (\0) show
+C3 279.11 Ux 335.05 Uy m (\0) show
+C3 285.27 Ux 337.91 Uy m (\0) show
+C3 291.44 Ux 340.89 Uy m (\0) show
+0.594257 slw slsolid C3 118.80 Ux 254.02 Uy m
+124.96 Ux 254.02 Uy l
+131.13 Ux 254.02 Uy l
+137.29 Ux 257.80 Uy l
+143.46 Ux 261.78 Uy l
+149.63 Ux 266.00 Uy l
+155.79 Ux 270.49 Uy l
+161.96 Ux 278.73 Uy l
+168.12 Ux 288.06 Uy l
+174.29 Ux 298.78 Uy l
+180.45 Ux 311.41 Uy l
+186.62 Ux 309.02 Uy l
+192.79 Ux 306.71 Uy l
+198.95 Ux 304.48 Uy l
+205.12 Ux 302.31 Uy l
+211.28 Ux 301.36 Uy l
+217.45 Ux 300.43 Uy l
+223.61 Ux 299.52 Uy l
+229.78 Ux 298.61 Uy l
+235.95 Ux 303.47 Uy l
+242.11 Ux 308.69 Uy l
+248.28 Ux 314.31 Uy l
+254.44 Ux 320.42 Uy l
+260.61 Ux 327.10 Uy l
+266.77 Ux 329.66 Uy l
+272.94 Ux 332.30 Uy l
+279.11 Ux 335.05 Uy l
+285.27 Ux 337.91 Uy l
+291.44 Ux 340.89 Uy l
+297.60 Ux 344.00 Uy l
+ s
+C3 297.60 Ux 344.00 Uy m (\0) show
+C3 303.77 Ux 344.00 Uy m (\0) show
+C3 309.93 Ux 344.00 Uy m (\0) show
+C3 316.10 Ux 344.00 Uy m (\0) show
+C3 322.27 Ux 344.00 Uy m (\0) show
+C3 328.43 Ux 344.00 Uy m (\0) show
+C3 334.60 Ux 344.00 Uy m (\0) show
+C3 340.76 Ux 344.00 Uy m (\0) show
+C3 346.93 Ux 344.00 Uy m (\0) show
+C3 353.09 Ux 344.00 Uy m (\0) show
+C3 359.26 Ux 344.00 Uy m (\0) show
+C3 365.43 Ux 344.00 Uy m (\0) show
+C3 371.59 Ux 344.20 Uy m (\0) show
+C3 377.76 Ux 344.40 Uy m (\0) show
+C3 383.92 Ux 344.60 Uy m (\0) show
+C3 390.09 Ux 344.80 Uy m (\0) show
+C3 396.25 Ux 345.00 Uy m (\0) show
+C3 402.42 Ux 345.20 Uy m (\0) show
+C3 408.59 Ux 345.40 Uy m (\0) show
+C3 414.75 Ux 345.61 Uy m (\0) show
+C3 420.92 Ux 345.81 Uy m (\0) show
+C3 427.08 Ux 346.01 Uy m (\0) show
+C3 433.25 Ux 346.22 Uy m (\0) show
+C3 439.41 Ux 346.42 Uy m (\0) show
+C3 445.58 Ux 346.63 Uy m (\0) show
+C3 451.75 Ux 346.84 Uy m (\0) show
+C3 457.91 Ux 347.04 Uy m (\0) show
+C3 464.08 Ux 347.25 Uy m (\0) show
+C3 470.24 Ux 347.46 Uy m (\0) show
+C3 297.60 Ux 344.00 Uy m
+303.77 Ux 344.00 Uy l
+309.93 Ux 344.00 Uy l
+316.10 Ux 344.00 Uy l
+322.27 Ux 344.00 Uy l
+328.43 Ux 344.00 Uy l
+334.60 Ux 344.00 Uy l
+340.76 Ux 344.00 Uy l
+346.93 Ux 344.00 Uy l
+353.09 Ux 344.00 Uy l
+359.26 Ux 344.00 Uy l
+365.43 Ux 344.00 Uy l
+371.59 Ux 344.20 Uy l
+377.76 Ux 344.40 Uy l
+383.92 Ux 344.60 Uy l
+390.09 Ux 344.80 Uy l
+396.25 Ux 345.00 Uy l
+402.42 Ux 345.20 Uy l
+408.59 Ux 345.40 Uy l
+414.75 Ux 345.61 Uy l
+420.92 Ux 345.81 Uy l
+427.08 Ux 346.01 Uy l
+433.25 Ux 346.22 Uy l
+439.41 Ux 346.42 Uy l
+445.58 Ux 346.63 Uy l
+451.75 Ux 346.84 Uy l
+457.91 Ux 347.04 Uy l
+464.08 Ux 347.25 Uy l
+470.24 Ux 347.46 Uy l
+476.41 Ux 347.67 Uy l
+ s
+C3 476.41 Ux 347.67 Uy m (\0) show
+C3 482.57 Ux 347.87 Uy m (\0) show
+C3 488.74 Ux 348.08 Uy m (\0) show
+C3 494.91 Ux 348.30 Uy m (\0) show
+C3 501.07 Ux 348.51 Uy m (\0) show
+C3 507.24 Ux 348.72 Uy m (\0) show
+C3 513.40 Ux 348.93 Uy m (\0) show
+C3 519.57 Ux 349.14 Uy m (\0) show
+C3 525.73 Ux 349.36 Uy m (\0) show
+C3 531.90 Ux 349.57 Uy m (\0) show
+C3 538.07 Ux 349.79 Uy m (\0) show
+C3 544.23 Ux 350.00 Uy m (\0) show
+C3 550.40 Ux 350.22 Uy m (\0) show
+C3 556.56 Ux 350.43 Uy m (\0) show
+C3 562.73 Ux 350.65 Uy m (\0) show
+C3 568.89 Ux 350.87 Uy m (\0) show
+C3 575.06 Ux 351.09 Uy m (\0) show
+C3 581.23 Ux 351.31 Uy m (\0) show
+C3 587.39 Ux 351.53 Uy m (\0) show
+C3 593.56 Ux 351.75 Uy m (\0) show
+C3 599.72 Ux 351.97 Uy m (\0) show
+C3 605.89 Ux 352.19 Uy m (\0) show
+C3 612.05 Ux 352.42 Uy m (\0) show
+C3 618.22 Ux 352.64 Uy m (\0) show
+C3 624.39 Ux 352.86 Uy m (\0) show
+C3 630.55 Ux 353.09 Uy m (\0) show
+C3 636.72 Ux 353.31 Uy m (\0) show
+C3 642.88 Ux 353.54 Uy m (\0) show
+C3 649.05 Ux 353.77 Uy m (\0) show
+C3 476.41 Ux 347.67 Uy m
+482.57 Ux 347.87 Uy l
+488.74 Ux 348.08 Uy l
+494.91 Ux 348.30 Uy l
+501.07 Ux 348.51 Uy l
+507.24 Ux 348.72 Uy l
+513.40 Ux 348.93 Uy l
+519.57 Ux 349.14 Uy l
+525.73 Ux 349.36 Uy l
+531.90 Ux 349.57 Uy l
+538.07 Ux 349.79 Uy l
+544.23 Ux 350.00 Uy l
+550.40 Ux 350.22 Uy l
+556.56 Ux 350.43 Uy l
+562.73 Ux 350.65 Uy l
+568.89 Ux 350.87 Uy l
+575.06 Ux 351.09 Uy l
+581.23 Ux 351.31 Uy l
+587.39 Ux 351.53 Uy l
+593.56 Ux 351.75 Uy l
+599.72 Ux 351.97 Uy l
+605.89 Ux 352.19 Uy l
+612.05 Ux 352.42 Uy l
+618.22 Ux 352.64 Uy l
+624.39 Ux 352.86 Uy l
+630.55 Ux 353.09 Uy l
+636.72 Ux 353.31 Uy l
+642.88 Ux 353.54 Uy l
+649.05 Ux 353.77 Uy l
+655.21 Ux 354.00 Uy l
+ s
+C3 655.21 Ux 354.00 Uy m (\0) show
+C3 661.38 Ux 354.22 Uy m (\0) show
+C3 667.55 Ux 354.45 Uy m (\0) show
+C3 673.71 Ux 354.68 Uy m (\0) show
+C3 679.88 Ux 354.91 Uy m (\0) show
+C3 686.04 Ux 355.15 Uy m (\0) show
+C3 692.21 Ux 355.38 Uy m (\0) show
+C3 698.37 Ux 355.61 Uy m (\0) show
+C3 704.54 Ux 355.85 Uy m (\0) show
+C3 710.71 Ux 356.08 Uy m (\0) show
+C3 716.87 Ux 356.32 Uy m (\0) show
+C3 723.04 Ux 356.55 Uy m (\0) show
+C3 729.20 Ux 356.79 Uy m (\0) show
+C3 655.21 Ux 354.00 Uy m
+661.38 Ux 354.22 Uy l
+667.55 Ux 354.45 Uy l
+673.71 Ux 354.68 Uy l
+679.88 Ux 354.91 Uy l
+686.04 Ux 355.15 Uy l
+692.21 Ux 355.38 Uy l
+698.37 Ux 355.61 Uy l
+704.54 Ux 355.85 Uy l
+710.71 Ux 356.08 Uy l
+716.87 Ux 356.32 Uy l
+723.04 Ux 356.55 Uy l
+729.20 Ux 356.79 Uy l
+ s
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 801.00 Ux 0 rl 0 428.00 Uy rl -801.000000 Ux 0 rl closepath clip 
+% SetClipRectangle: Define clip region 
+ newpath 104.00 Ux 38.00 Uy m 640.00 Ux 0 rl 0 342.00 Uy rl -640.00 Ux 0 rl closepath clip newpath
+C5 118.80 Ux 180.60 Uy m (\0) show
+C5 124.96 Ux 180.60 Uy m (\0) show
+C5 131.13 Ux 180.60 Uy m (\0) show
+C5 137.29 Ux 193.26 Uy m (\0) show
+C5 143.46 Ux 208.66 Uy m (\0) show
+C5 149.63 Ux 228.31 Uy m (\0) show
+C5 155.79 Ux 255.52 Uy m (\0) show
+C5 161.96 Ux 261.84 Uy m (\0) show
+C5 168.12 Ux 268.78 Uy m (\0) show
+C5 174.29 Ux 276.46 Uy m (\0) show
+C5 180.45 Ux 285.06 Uy m (\0) show
+C5 186.62 Ux 288.76 Uy m (\0) show
+C5 192.79 Ux 292.66 Uy m (\0) show
+C5 198.95 Ux 296.79 Uy m (\0) show
+C5 205.12 Ux 301.17 Uy m (\0) show
+C5 211.28 Ux 300.52 Uy m (\0) show
+C5 217.45 Ux 299.88 Uy m (\0) show
+C5 223.61 Ux 299.24 Uy m (\0) show
+C5 229.78 Ux 298.61 Uy m (\0) show
+C5 235.95 Ux 302.64 Uy m (\0) show
+C5 242.11 Ux 306.92 Uy m (\0) show
+C5 248.28 Ux 311.47 Uy m (\0) show
+C5 254.44 Ux 316.33 Uy m (\0) show
+C5 260.61 Ux 321.55 Uy m (\0) show
+C5 266.77 Ux 333.16 Uy m (\0) show
+C5 272.94 Ux 347.04 Uy m (\0) show
+C5 279.11 Ux 364.27 Uy m (\0) show
+C5 285.27 Ux 380.27 Uy m (\0) show
+C5 291.44 Ux 381.25 Uy m (\0) show
+C5 118.80 Ux 180.60 Uy m
+124.96 Ux 180.60 Uy l
+131.13 Ux 180.60 Uy l
+137.29 Ux 193.26 Uy l
+143.46 Ux 208.66 Uy l
+149.63 Ux 228.31 Uy l
+155.79 Ux 255.52 Uy l
+161.96 Ux 261.84 Uy l
+168.12 Ux 268.78 Uy l
+174.29 Ux 276.46 Uy l
+180.45 Ux 285.06 Uy l
+186.62 Ux 288.76 Uy l
+192.79 Ux 292.66 Uy l
+198.95 Ux 296.79 Uy l
+205.12 Ux 301.17 Uy l
+211.28 Ux 300.52 Uy l
+217.45 Ux 299.88 Uy l
+223.61 Ux 299.24 Uy l
+229.78 Ux 298.61 Uy l
+235.95 Ux 302.64 Uy l
+242.11 Ux 306.92 Uy l
+248.28 Ux 311.47 Uy l
+254.44 Ux 316.33 Uy l
+260.61 Ux 321.55 Uy l
+266.77 Ux 333.16 Uy l
+272.94 Ux 347.04 Uy l
+279.11 Ux 364.27 Uy l
+285.27 Ux 380.27 Uy l
+291.44 Ux 381.25 Uy l
+297.60 Ux 382.22 Uy l
+ s
+C5 297.60 Ux 382.22 Uy m (\0) show
+C5 303.77 Ux 382.26 Uy m (\0) show
+C5 309.93 Ux 382.29 Uy m (\0) show
+C5 316.10 Ux 382.32 Uy m (\0) show
+C5 322.27 Ux 382.35 Uy m (\0) show
+C5 328.43 Ux 382.38 Uy m (\0) show
+C5 334.60 Ux 382.41 Uy m (\0) show
+C5 340.76 Ux 382.44 Uy m (\0) show
+C5 346.93 Ux 382.44 Uy m (\0) show
+C5 353.09 Ux 382.44 Uy m (\0) show
+C5 359.26 Ux 382.44 Uy m (\0) show
+C5 365.43 Ux 382.44 Uy m (\0) show
+C5 371.59 Ux 382.44 Uy m (\0) show
+C5 377.76 Ux 382.44 Uy m (\0) show
+C5 383.92 Ux 382.44 Uy m (\0) show
+C5 390.09 Ux 382.44 Uy m (\0) show
+C5 396.25 Ux 382.45 Uy m (\0) show
+C5 402.42 Ux 382.45 Uy m (\0) show
+C5 408.59 Ux 382.45 Uy m (\0) show
+C5 414.75 Ux 382.45 Uy m (\0) show
+C5 420.92 Ux 382.45 Uy m (\0) show
+C5 427.08 Ux 382.45 Uy m (\0) show
+C5 433.25 Ux 382.45 Uy m (\0) show
+C5 439.41 Ux 382.45 Uy m (\0) show
+C5 445.58 Ux 382.45 Uy m (\0) show
+C5 451.75 Ux 382.46 Uy m (\0) show
+C5 457.91 Ux 382.46 Uy m (\0) show
+C5 464.08 Ux 382.46 Uy m (\0) show
+C5 470.24 Ux 382.46 Uy m (\0) show
+C5 297.60 Ux 382.22 Uy m
+303.77 Ux 382.26 Uy l
+309.93 Ux 382.29 Uy l
+316.10 Ux 382.32 Uy l
+322.27 Ux 382.35 Uy l
+328.43 Ux 382.38 Uy l
+334.60 Ux 382.41 Uy l
+340.76 Ux 382.44 Uy l
+346.93 Ux 382.44 Uy l
+353.09 Ux 382.44 Uy l
+359.26 Ux 382.44 Uy l
+365.43 Ux 382.44 Uy l
+371.59 Ux 382.44 Uy l
+377.76 Ux 382.44 Uy l
+383.92 Ux 382.44 Uy l
+390.09 Ux 382.44 Uy l
+396.25 Ux 382.45 Uy l
+402.42 Ux 382.45 Uy l
+408.59 Ux 382.45 Uy l
+414.75 Ux 382.45 Uy l
+420.92 Ux 382.45 Uy l
+427.08 Ux 382.45 Uy l
+433.25 Ux 382.45 Uy l
+439.41 Ux 382.45 Uy l
+445.58 Ux 382.45 Uy l
+451.75 Ux 382.46 Uy l
+457.91 Ux 382.46 Uy l
+464.08 Ux 382.46 Uy l
+470.24 Ux 382.46 Uy l
+476.41 Ux 382.46 Uy l
+ s
+C5 476.41 Ux 382.46 Uy m (\0) show
+C5 482.57 Ux 382.46 Uy m (\0) show
+C5 488.74 Ux 382.46 Uy m (\0) show
+C5 494.91 Ux 382.46 Uy m (\0) show
+C5 501.07 Ux 382.47 Uy m (\0) show
+C5 507.24 Ux 382.47 Uy m (\0) show
+C5 513.40 Ux 382.47 Uy m (\0) show
+C5 519.57 Ux 382.47 Uy m (\0) show
+C5 525.73 Ux 382.47 Uy m (\0) show
+C5 531.90 Ux 382.47 Uy m (\0) show
+C5 538.07 Ux 382.47 Uy m (\0) show
+C5 544.23 Ux 382.47 Uy m (\0) show
+C5 550.40 Ux 382.48 Uy m (\0) show
+C5 556.56 Ux 382.48 Uy m (\0) show
+C5 562.73 Ux 382.48 Uy m (\0) show
+C5 568.89 Ux 382.48 Uy m (\0) show
+C5 575.06 Ux 382.48 Uy m (\0) show
+C5 581.23 Ux 382.48 Uy m (\0) show
+C5 587.39 Ux 382.48 Uy m (\0) show
+C5 593.56 Ux 382.48 Uy m (\0) show
+C5 599.72 Ux 382.48 Uy m (\0) show
+C5 605.89 Ux 382.49 Uy m (\0) show
+C5 612.05 Ux 382.49 Uy m (\0) show
+C5 618.22 Ux 382.49 Uy m (\0) show
+C5 624.39 Ux 382.49 Uy m (\0) show
+C5 630.55 Ux 382.49 Uy m (\0) show
+C5 636.72 Ux 382.49 Uy m (\0) show
+C5 642.88 Ux 382.49 Uy m (\0) show
+C5 649.05 Ux 382.49 Uy m (\0) show
+C5 476.41 Ux 382.46 Uy m
+482.57 Ux 382.46 Uy l
+488.74 Ux 382.46 Uy l
+494.91 Ux 382.46 Uy l
+501.07 Ux 382.47 Uy l
+507.24 Ux 382.47 Uy l
+513.40 Ux 382.47 Uy l
+519.57 Ux 382.47 Uy l
+525.73 Ux 382.47 Uy l
+531.90 Ux 382.47 Uy l
+538.07 Ux 382.47 Uy l
+544.23 Ux 382.47 Uy l
+550.40 Ux 382.48 Uy l
+556.56 Ux 382.48 Uy l
+562.73 Ux 382.48 Uy l
+568.89 Ux 382.48 Uy l
+575.06 Ux 382.48 Uy l
+581.23 Ux 382.48 Uy l
+587.39 Ux 382.48 Uy l
+593.56 Ux 382.48 Uy l
+599.72 Ux 382.48 Uy l
+605.89 Ux 382.49 Uy l
+612.05 Ux 382.49 Uy l
+618.22 Ux 382.49 Uy l
+624.39 Ux 382.49 Uy l
+630.55 Ux 382.49 Uy l
+636.72 Ux 382.49 Uy l
+642.88 Ux 382.49 Uy l
+649.05 Ux 382.49 Uy l
+655.21 Ux 382.50 Uy l
+ s
+C5 655.21 Ux 382.50 Uy m (\0) show
+C5 661.38 Ux 382.50 Uy m (\0) show
+C5 667.55 Ux 382.50 Uy m (\0) show
+C5 673.71 Ux 382.50 Uy m (\0) show
+C5 679.88 Ux 382.50 Uy m (\0) show
+C5 686.04 Ux 382.50 Uy m (\0) show
+C5 692.21 Ux 382.50 Uy m (\0) show
+C5 698.37 Ux 382.50 Uy m (\0) show
+C5 704.54 Ux 382.51 Uy m (\0) show
+C5 710.71 Ux 382.51 Uy m (\0) show
+C5 716.87 Ux 382.51 Uy m (\0) show
+C5 723.04 Ux 382.51 Uy m (\0) show
+C5 729.20 Ux 382.51 Uy m (\0) show
+C5 655.21 Ux 382.50 Uy m
+661.38 Ux 382.50 Uy l
+667.55 Ux 382.50 Uy l
+673.71 Ux 382.50 Uy l
+679.88 Ux 382.50 Uy l
+686.04 Ux 382.50 Uy l
+692.21 Ux 382.50 Uy l
+698.37 Ux 382.50 Uy l
+704.54 Ux 382.51 Uy l
+710.71 Ux 382.51 Uy l
+716.87 Ux 382.51 Uy l
+723.04 Ux 382.51 Uy l
+729.20 Ux 382.51 Uy l
+ s
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 801.00 Ux 0 rl 0 428.00 Uy rl -801.000000 Ux 0 rl closepath clip 
+% SetClipRectangle: Define clip region 
+ newpath 104.00 Ux 38.00 Uy m 640.00 Ux 0 rl 0 342.00 Uy rl -640.00 Ux 0 rl closepath clip newpath
+C4 118.80 Ux 105.12 Uy m (\0) show
+C4 124.96 Ux 105.12 Uy m (\0) show
+C4 131.13 Ux 105.12 Uy m (\0) show
+C4 137.29 Ux 102.80 Uy m (\0) show
+C4 143.46 Ux 100.55 Uy m (\0) show
+C4 149.63 Ux 98.37 Uy m (\0) show
+C4 155.79 Ux 96.25 Uy m (\0) show
+C4 161.96 Ux 95.01 Uy m (\0) show
+C4 168.12 Ux 93.79 Uy m (\0) show
+C4 174.29 Ux 92.60 Uy m (\0) show
+C4 180.45 Ux 91.42 Uy m (\0) show
+C4 186.62 Ux 84.09 Uy m (\0) show
+C4 192.79 Ux 77.44 Uy m (\0) show
+C4 198.95 Ux 71.36 Uy m (\0) show
+C4 205.12 Ux 65.76 Uy m (\0) show
+C4 211.28 Ux 61.04 Uy m (\0) show
+C4 217.45 Ux 56.61 Uy m (\0) show
+C4 223.61 Ux 52.45 Uy m (\0) show
+C4 229.78 Ux 48.51 Uy m (\0) show
+C4 235.95 Ux 45.64 Uy m (\0) show
+C4 242.11 Ux 42.88 Uy m (\0) show
+C4 248.28 Ux 40.22 Uy m (\0) show
+C4 254.44 Ux 37.66 Uy m (\0) show
+C4 260.61 Ux 35.18 Uy m (\0) show
+C4 266.77 Ux 36.94 Uy m (\0) show
+C4 272.94 Ux 38.75 Uy m (\0) show
+C4 279.11 Ux 40.60 Uy m (\0) show
+C4 285.27 Ux 42.50 Uy m (\0) show
+C4 291.44 Ux 44.45 Uy m (\0) show
+C4 118.80 Ux 105.12 Uy m
+124.96 Ux 105.12 Uy l
+131.13 Ux 105.12 Uy l
+137.29 Ux 102.80 Uy l
+143.46 Ux 100.55 Uy l
+149.63 Ux 98.37 Uy l
+155.79 Ux 96.25 Uy l
+161.96 Ux 95.01 Uy l
+168.12 Ux 93.79 Uy l
+174.29 Ux 92.60 Uy l
+180.45 Ux 91.42 Uy l
+186.62 Ux 84.09 Uy l
+192.79 Ux 77.44 Uy l
+198.95 Ux 71.36 Uy l
+205.12 Ux 65.76 Uy l
+211.28 Ux 61.04 Uy l
+217.45 Ux 56.61 Uy l
+223.61 Ux 52.45 Uy l
+229.78 Ux 48.51 Uy l
+235.95 Ux 45.64 Uy l
+242.11 Ux 42.88 Uy l
+248.28 Ux 40.22 Uy l
+254.44 Ux 37.66 Uy l
+260.61 Ux 35.18 Uy l
+266.77 Ux 36.94 Uy l
+272.94 Ux 38.75 Uy l
+279.11 Ux 40.60 Uy l
+285.27 Ux 42.50 Uy l
+291.44 Ux 44.45 Uy l
+297.60 Ux 46.45 Uy l
+ s
+C4 297.60 Ux 46.45 Uy m (\0) show
+C4 303.77 Ux 49.96 Uy m (\0) show
+C4 309.93 Ux 53.65 Uy m (\0) show
+C4 316.10 Ux 57.54 Uy m (\0) show
+C4 322.27 Ux 61.66 Uy m (\0) show
+C4 328.43 Ux 66.02 Uy m (\0) show
+C4 334.60 Ux 70.68 Uy m (\0) show
+C4 340.76 Ux 75.65 Uy m (\0) show
+C4 346.93 Ux 75.65 Uy m (\0) show
+C4 353.09 Ux 75.65 Uy m (\0) show
+C4 359.26 Ux 75.65 Uy m (\0) show
+C4 365.43 Ux 75.65 Uy m (\0) show
+C4 371.59 Ux 75.85 Uy m (\0) show
+C4 377.76 Ux 76.05 Uy m (\0) show
+C4 383.92 Ux 76.25 Uy m (\0) show
+C4 390.09 Ux 76.45 Uy m (\0) show
+C4 396.25 Ux 76.65 Uy m (\0) show
+C4 402.42 Ux 76.85 Uy m (\0) show
+C4 408.59 Ux 77.05 Uy m (\0) show
+C4 414.75 Ux 77.26 Uy m (\0) show
+C4 420.92 Ux 77.46 Uy m (\0) show
+C4 427.08 Ux 77.66 Uy m (\0) show
+C4 433.25 Ux 77.87 Uy m (\0) show
+C4 439.41 Ux 78.07 Uy m (\0) show
+C4 445.58 Ux 78.28 Uy m (\0) show
+C4 451.75 Ux 78.49 Uy m (\0) show
+C4 457.91 Ux 78.69 Uy m (\0) show
+C4 464.08 Ux 78.90 Uy m (\0) show
+C4 470.24 Ux 79.11 Uy m (\0) show
+C4 297.60 Ux 46.45 Uy m
+303.77 Ux 49.96 Uy l
+309.93 Ux 53.65 Uy l
+316.10 Ux 57.54 Uy l
+322.27 Ux 61.66 Uy l
+328.43 Ux 66.02 Uy l
+334.60 Ux 70.68 Uy l
+340.76 Ux 75.65 Uy l
+346.93 Ux 75.65 Uy l
+353.09 Ux 75.65 Uy l
+359.26 Ux 75.65 Uy l
+365.43 Ux 75.65 Uy l
+371.59 Ux 75.85 Uy l
+377.76 Ux 76.05 Uy l
+383.92 Ux 76.25 Uy l
+390.09 Ux 76.45 Uy l
+396.25 Ux 76.65 Uy l
+402.42 Ux 76.85 Uy l
+408.59 Ux 77.05 Uy l
+414.75 Ux 77.26 Uy l
+420.92 Ux 77.46 Uy l
+427.08 Ux 77.66 Uy l
+433.25 Ux 77.87 Uy l
+439.41 Ux 78.07 Uy l
+445.58 Ux 78.28 Uy l
+451.75 Ux 78.49 Uy l
+457.91 Ux 78.69 Uy l
+464.08 Ux 78.90 Uy l
+470.24 Ux 79.11 Uy l
+476.41 Ux 79.32 Uy l
+ s
+C4 476.41 Ux 79.32 Uy m (\0) show
+C4 482.57 Ux 79.53 Uy m (\0) show
+C4 488.74 Ux 79.74 Uy m (\0) show
+C4 494.91 Ux 79.95 Uy m (\0) show
+C4 501.07 Ux 80.16 Uy m (\0) show
+C4 507.24 Ux 80.37 Uy m (\0) show
+C4 513.40 Ux 80.58 Uy m (\0) show
+C4 519.57 Ux 80.79 Uy m (\0) show
+C4 525.73 Ux 81.01 Uy m (\0) show
+C4 531.90 Ux 81.22 Uy m (\0) show
+C4 538.07 Ux 81.44 Uy m (\0) show
+C4 544.23 Ux 81.65 Uy m (\0) show
+C4 550.40 Ux 81.87 Uy m (\0) show
+C4 556.56 Ux 82.08 Uy m (\0) show
+C4 562.73 Ux 82.30 Uy m (\0) show
+C4 568.89 Ux 82.52 Uy m (\0) show
+C4 575.06 Ux 82.74 Uy m (\0) show
+C4 581.23 Ux 82.96 Uy m (\0) show
+C4 587.39 Ux 83.18 Uy m (\0) show
+C4 593.56 Ux 83.40 Uy m (\0) show
+C4 599.72 Ux 83.62 Uy m (\0) show
+C4 605.89 Ux 83.84 Uy m (\0) show
+C4 612.05 Ux 84.07 Uy m (\0) show
+C4 618.22 Ux 84.29 Uy m (\0) show
+C4 624.39 Ux 84.51 Uy m (\0) show
+C4 630.55 Ux 84.74 Uy m (\0) show
+C4 636.72 Ux 84.96 Uy m (\0) show
+C4 642.88 Ux 85.19 Uy m (\0) show
+C4 649.05 Ux 85.42 Uy m (\0) show
+C4 476.41 Ux 79.32 Uy m
+482.57 Ux 79.53 Uy l
+488.74 Ux 79.74 Uy l
+494.91 Ux 79.95 Uy l
+501.07 Ux 80.16 Uy l
+507.24 Ux 80.37 Uy l
+513.40 Ux 80.58 Uy l
+519.57 Ux 80.79 Uy l
+525.73 Ux 81.01 Uy l
+531.90 Ux 81.22 Uy l
+538.07 Ux 81.44 Uy l
+544.23 Ux 81.65 Uy l
+550.40 Ux 81.87 Uy l
+556.56 Ux 82.08 Uy l
+562.73 Ux 82.30 Uy l
+568.89 Ux 82.52 Uy l
+575.06 Ux 82.74 Uy l
+581.23 Ux 82.96 Uy l
+587.39 Ux 83.18 Uy l
+593.56 Ux 83.40 Uy l
+599.72 Ux 83.62 Uy l
+605.89 Ux 83.84 Uy l
+612.05 Ux 84.07 Uy l
+618.22 Ux 84.29 Uy l
+624.39 Ux 84.51 Uy l
+630.55 Ux 84.74 Uy l
+636.72 Ux 84.96 Uy l
+642.88 Ux 85.19 Uy l
+649.05 Ux 85.42 Uy l
+655.21 Ux 85.65 Uy l
+ s
+C4 655.21 Ux 85.65 Uy m (\0) show
+C4 661.38 Ux 85.87 Uy m (\0) show
+C4 667.55 Ux 86.10 Uy m (\0) show
+C4 673.71 Ux 86.33 Uy m (\0) show
+C4 679.88 Ux 86.56 Uy m (\0) show
+C4 686.04 Ux 86.80 Uy m (\0) show
+C4 692.21 Ux 87.03 Uy m (\0) show
+C4 698.37 Ux 87.26 Uy m (\0) show
+C4 704.54 Ux 87.50 Uy m (\0) show
+C4 710.71 Ux 87.73 Uy m (\0) show
+C4 716.87 Ux 87.97 Uy m (\0) show
+C4 723.04 Ux 88.20 Uy m (\0) show
+C4 729.20 Ux 88.44 Uy m (\0) show
+C4 655.21 Ux 85.65 Uy m
+661.38 Ux 85.87 Uy l
+667.55 Ux 86.10 Uy l
+673.71 Ux 86.33 Uy l
+679.88 Ux 86.56 Uy l
+686.04 Ux 86.80 Uy l
+692.21 Ux 87.03 Uy l
+698.37 Ux 87.26 Uy l
+704.54 Ux 87.50 Uy l
+710.71 Ux 87.73 Uy l
+716.87 Ux 87.97 Uy l
+723.04 Ux 88.20 Uy l
+729.20 Ux 88.44 Uy l
+ s
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 801.00 Ux 0 rl 0 428.00 Uy rl -801.000000 Ux 0 rl closepath clip 
+EndBloc
+%>EndBloc 2
+PState restore  showpage
+%>EndPage 1
+
+
+%%Page: 2 2
+/PState save def 1 -1 scale
+821.00 901.00 17.00 cm 18.66 cm 2.00 cm -24.18 cm newref
+/Courier ff 5.79781 FS /curfntsz 5.79781 def 
+%>BeginBloc 1
+821.00 450.00 821.00 Ux 450.00 Uy 0.00 Ux 0.00 Uy NewBloc
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 821.00 Ux 0 rl 0 450.00 Uy rl -821.000000 Ux 0 rl closepath clip newpath
+/Courier ff 5.79781 FS /curfntsz 5.79781 def 
+1.15956 slw 0.579781 slw C0 n 106.00 Ux 400.00 Uy m 763.00 Ux 400.00 Uy l s
+C0 n 763.00 Ux 400.00 Uy m 763.00 Ux 40.00 Uy l s
+C0 n 763.00 Ux 40.00 Uy m 106.00 Ux 40.00 Uy l s
+C0 n 106.00 Ux 40.00 Uy m 106.00 Ux 400.00 Uy l s
+C0 n 106.00 Ux 400.00 Uy m 106.00 Ux 394.24 Uy l s
+C0 n 188.12 Ux 400.00 Uy m 188.12 Ux 394.24 Uy l s
+C0 n 270.25 Ux 400.00 Uy m 270.25 Ux 394.24 Uy l s
+C0 n 352.38 Ux 400.00 Uy m 352.38 Ux 394.24 Uy l s
+C0 n 434.50 Ux 400.00 Uy m 434.50 Ux 394.24 Uy l s
+C0 n 516.62 Ux 400.00 Uy m 516.62 Ux 394.24 Uy l s
+C0 n 598.75 Ux 400.00 Uy m 598.75 Ux 394.24 Uy l s
+C0 n 680.88 Ux 400.00 Uy m 680.88 Ux 394.24 Uy l s
+C0 n 763.00 Ux 400.00 Uy m 763.00 Ux 394.24 Uy l s
+C0 n 106.00 Ux 45.76 Uy m 106.00 Ux 40.00 Uy l s
+C0 n 188.12 Ux 45.76 Uy m 188.12 Ux 40.00 Uy l s
+C0 n 270.25 Ux 45.76 Uy m 270.25 Ux 40.00 Uy l s
+C0 n 352.38 Ux 45.76 Uy m 352.38 Ux 40.00 Uy l s
+C0 n 434.50 Ux 45.76 Uy m 434.50 Ux 40.00 Uy l s
+C0 n 516.62 Ux 45.76 Uy m 516.62 Ux 40.00 Uy l s
+C0 n 598.75 Ux 45.76 Uy m 598.75 Ux 40.00 Uy l s
+C0 n 680.88 Ux 45.76 Uy m 680.88 Ux 40.00 Uy l s
+C0 n 763.00 Ux 45.76 Uy m 763.00 Ux 40.00 Uy l s
+C0 n 106.00 Ux 374.90 Uy m 116.51 Ux 374.90 Uy l s
+C0 n 106.00 Ux 346.27 Uy m 116.51 Ux 346.27 Uy l s
+C0 n 106.00 Ux 314.90 Uy m 116.51 Ux 314.90 Uy l s
+C0 n 106.00 Ux 286.27 Uy m 116.51 Ux 286.27 Uy l s
+C0 n 106.00 Ux 254.90 Uy m 116.51 Ux 254.90 Uy l s
+C0 n 106.00 Ux 226.27 Uy m 116.51 Ux 226.27 Uy l s
+C0 n 106.00 Ux 194.90 Uy m 116.51 Ux 194.90 Uy l s
+C0 n 106.00 Ux 166.27 Uy m 116.51 Ux 166.27 Uy l s
+C0 n 106.00 Ux 134.90 Uy m 116.51 Ux 134.90 Uy l s
+C0 n 106.00 Ux 106.27 Uy m 116.51 Ux 106.27 Uy l s
+C0 n 106.00 Ux 74.90 Uy m 116.51 Ux 74.90 Uy l s
+C0 n 106.00 Ux 46.27 Uy m 116.51 Ux 46.27 Uy l s
+C0 n 752.49 Ux 374.90 Uy m 763.00 Ux 374.90 Uy l s
+C0 n 752.49 Ux 346.27 Uy m 763.00 Ux 346.27 Uy l s
+C0 n 752.49 Ux 314.90 Uy m 763.00 Ux 314.90 Uy l s
+C0 n 752.49 Ux 286.27 Uy m 763.00 Ux 286.27 Uy l s
+C0 n 752.49 Ux 254.90 Uy m 763.00 Ux 254.90 Uy l s
+C0 n 752.49 Ux 226.27 Uy m 763.00 Ux 226.27 Uy l s
+C0 n 752.49 Ux 194.90 Uy m 763.00 Ux 194.90 Uy l s
+C0 n 752.49 Ux 166.27 Uy m 763.00 Ux 166.27 Uy l s
+C0 n 752.49 Ux 134.90 Uy m 763.00 Ux 134.90 Uy l s
+C0 n 752.49 Ux 106.27 Uy m 763.00 Ux 106.27 Uy l s
+C0 n 752.49 Ux 74.90 Uy m 763.00 Ux 74.90 Uy l s
+C0 n 752.49 Ux 46.27 Uy m 763.00 Ux 46.27 Uy l s
+C0 n 106.00 Ux 400.00 Uy m 106.00 Ux 396.40 Uy l s
+C0 n 122.42 Ux 400.00 Uy m 122.42 Ux 396.40 Uy l s
+C0 n 138.85 Ux 400.00 Uy m 138.85 Ux 396.40 Uy l s
+C0 n 155.27 Ux 400.00 Uy m 155.27 Ux 396.40 Uy l s
+C0 n 171.70 Ux 400.00 Uy m 171.70 Ux 396.40 Uy l s
+C0 n 188.12 Ux 400.00 Uy m 188.12 Ux 396.40 Uy l s
+C0 n 204.55 Ux 400.00 Uy m 204.55 Ux 396.40 Uy l s
+C0 n 220.97 Ux 400.00 Uy m 220.97 Ux 396.40 Uy l s
+C0 n 237.40 Ux 400.00 Uy m 237.40 Ux 396.40 Uy l s
+C0 n 253.82 Ux 400.00 Uy m 253.82 Ux 396.40 Uy l s
+C0 n 270.25 Ux 400.00 Uy m 270.25 Ux 396.40 Uy l s
+C0 n 286.67 Ux 400.00 Uy m 286.67 Ux 396.40 Uy l s
+C0 n 303.10 Ux 400.00 Uy m 303.10 Ux 396.40 Uy l s
+C0 n 319.52 Ux 400.00 Uy m 319.52 Ux 396.40 Uy l s
+C0 n 335.95 Ux 400.00 Uy m 335.95 Ux 396.40 Uy l s
+C0 n 352.37 Ux 400.00 Uy m 352.37 Ux 396.40 Uy l s
+C0 n 368.80 Ux 400.00 Uy m 368.80 Ux 396.40 Uy l s
+C0 n 385.22 Ux 400.00 Uy m 385.22 Ux 396.40 Uy l s
+C0 n 401.65 Ux 400.00 Uy m 401.65 Ux 396.40 Uy l s
+C0 n 418.07 Ux 400.00 Uy m 418.07 Ux 396.40 Uy l s
+C0 n 434.50 Ux 400.00 Uy m 434.50 Ux 396.40 Uy l s
+C0 n 450.92 Ux 400.00 Uy m 450.92 Ux 396.40 Uy l s
+C0 n 467.35 Ux 400.00 Uy m 467.35 Ux 396.40 Uy l s
+C0 n 483.77 Ux 400.00 Uy m 483.77 Ux 396.40 Uy l s
+C0 n 500.20 Ux 400.00 Uy m 500.20 Ux 396.40 Uy l s
+C0 n 516.62 Ux 400.00 Uy m 516.62 Ux 396.40 Uy l s
+C0 n 533.05 Ux 400.00 Uy m 533.05 Ux 396.40 Uy l s
+C0 n 549.47 Ux 400.00 Uy m 549.47 Ux 396.40 Uy l s
+C0 n 565.90 Ux 400.00 Uy m 565.90 Ux 396.40 Uy l s
+C0 n 582.32 Ux 400.00 Uy m 582.32 Ux 396.40 Uy l s
+C0 n 598.75 Ux 400.00 Uy m 598.75 Ux 396.40 Uy l s
+C0 n 615.17 Ux 400.00 Uy m 615.17 Ux 396.40 Uy l s
+C0 n 631.60 Ux 400.00 Uy m 631.60 Ux 396.40 Uy l s
+C0 n 648.02 Ux 400.00 Uy m 648.02 Ux 396.40 Uy l s
+C0 n 664.45 Ux 400.00 Uy m 664.45 Ux 396.40 Uy l s
+C0 n 680.87 Ux 400.00 Uy m 680.87 Ux 396.40 Uy l s
+C0 n 697.30 Ux 400.00 Uy m 697.30 Ux 396.40 Uy l s
+C0 n 713.72 Ux 400.00 Uy m 713.72 Ux 396.40 Uy l s
+C0 n 730.15 Ux 400.00 Uy m 730.15 Ux 396.40 Uy l s
+C0 n 746.57 Ux 400.00 Uy m 746.57 Ux 396.40 Uy l s
+C0 n 763.00 Ux 400.00 Uy m 763.00 Ux 396.40 Uy l s
+C0 n 106.00 Ux 43.60 Uy m 106.00 Ux 40.00 Uy l s
+C0 n 122.42 Ux 43.60 Uy m 122.42 Ux 40.00 Uy l s
+C0 n 138.85 Ux 43.60 Uy m 138.85 Ux 40.00 Uy l s
+C0 n 155.27 Ux 43.60 Uy m 155.27 Ux 40.00 Uy l s
+C0 n 171.70 Ux 43.60 Uy m 171.70 Ux 40.00 Uy l s
+C0 n 188.12 Ux 43.60 Uy m 188.12 Ux 40.00 Uy l s
+C0 n 204.55 Ux 43.60 Uy m 204.55 Ux 40.00 Uy l s
+C0 n 220.97 Ux 43.60 Uy m 220.97 Ux 40.00 Uy l s
+C0 n 237.40 Ux 43.60 Uy m 237.40 Ux 40.00 Uy l s
+C0 n 253.82 Ux 43.60 Uy m 253.82 Ux 40.00 Uy l s
+C0 n 270.25 Ux 43.60 Uy m 270.25 Ux 40.00 Uy l s
+C0 n 286.67 Ux 43.60 Uy m 286.67 Ux 40.00 Uy l s
+C0 n 303.10 Ux 43.60 Uy m 303.10 Ux 40.00 Uy l s
+C0 n 319.52 Ux 43.60 Uy m 319.52 Ux 40.00 Uy l s
+C0 n 335.95 Ux 43.60 Uy m 335.95 Ux 40.00 Uy l s
+C0 n 352.37 Ux 43.60 Uy m 352.37 Ux 40.00 Uy l s
+C0 n 368.80 Ux 43.60 Uy m 368.80 Ux 40.00 Uy l s
+C0 n 385.22 Ux 43.60 Uy m 385.22 Ux 40.00 Uy l s
+C0 n 401.65 Ux 43.60 Uy m 401.65 Ux 40.00 Uy l s
+C0 n 418.07 Ux 43.60 Uy m 418.07 Ux 40.00 Uy l s
+C0 n 434.50 Ux 43.60 Uy m 434.50 Ux 40.00 Uy l s
+C0 n 450.92 Ux 43.60 Uy m 450.92 Ux 40.00 Uy l s
+C0 n 467.35 Ux 43.60 Uy m 467.35 Ux 40.00 Uy l s
+C0 n 483.77 Ux 43.60 Uy m 483.77 Ux 40.00 Uy l s
+C0 n 500.20 Ux 43.60 Uy m 500.20 Ux 40.00 Uy l s
+C0 n 516.62 Ux 43.60 Uy m 516.62 Ux 40.00 Uy l s
+C0 n 533.05 Ux 43.60 Uy m 533.05 Ux 40.00 Uy l s
+C0 n 549.47 Ux 43.60 Uy m 549.47 Ux 40.00 Uy l s
+C0 n 565.90 Ux 43.60 Uy m 565.90 Ux 40.00 Uy l s
+C0 n 582.32 Ux 43.60 Uy m 582.32 Ux 40.00 Uy l s
+C0 n 598.75 Ux 43.60 Uy m 598.75 Ux 40.00 Uy l s
+C0 n 615.17 Ux 43.60 Uy m 615.17 Ux 40.00 Uy l s
+C0 n 631.60 Ux 43.60 Uy m 631.60 Ux 40.00 Uy l s
+C0 n 648.02 Ux 43.60 Uy m 648.02 Ux 40.00 Uy l s
+C0 n 664.45 Ux 43.60 Uy m 664.45 Ux 40.00 Uy l s
+C0 n 680.87 Ux 43.60 Uy m 680.87 Ux 40.00 Uy l s
+C0 n 697.30 Ux 43.60 Uy m 697.30 Ux 40.00 Uy l s
+C0 n 713.72 Ux 43.60 Uy m 713.72 Ux 40.00 Uy l s
+C0 n 730.15 Ux 43.60 Uy m 730.15 Ux 40.00 Uy l s
+C0 n 746.57 Ux 43.60 Uy m 746.57 Ux 40.00 Uy l s
+C0 n 763.00 Ux 43.60 Uy m 763.00 Ux 40.00 Uy l s
+C0 n 106.00 Ux 374.90 Uy m 112.57 Ux 374.90 Uy l s
+C0 n 106.00 Ux 366.13 Uy m 112.57 Ux 366.13 Uy l s
+C0 n 106.00 Ux 359.58 Uy m 112.57 Ux 359.58 Uy l s
+C0 n 106.00 Ux 354.35 Uy m 112.57 Ux 354.35 Uy l s
+C0 n 106.00 Ux 350.00 Uy m 112.57 Ux 350.00 Uy l s
+C0 n 106.00 Ux 346.27 Uy m 112.57 Ux 346.27 Uy l s
+C0 n 106.00 Ux 336.29 Uy m 112.57 Ux 336.29 Uy l s
+C0 n 106.00 Ux 329.09 Uy m 112.57 Ux 329.09 Uy l s
+C0 n 106.00 Ux 323.46 Uy m 112.57 Ux 323.46 Uy l s
+C0 n 106.00 Ux 318.83 Uy m 112.57 Ux 318.83 Uy l s
+C0 n 106.00 Ux 314.90 Uy m 112.57 Ux 314.90 Uy l s
+C0 n 106.00 Ux 306.13 Uy m 112.57 Ux 306.13 Uy l s
+C0 n 106.00 Ux 299.58 Uy m 112.57 Ux 299.58 Uy l s
+C0 n 106.00 Ux 294.35 Uy m 112.57 Ux 294.35 Uy l s
+C0 n 106.00 Ux 290.00 Uy m 112.57 Ux 290.00 Uy l s
+C0 n 106.00 Ux 286.27 Uy m 112.57 Ux 286.27 Uy l s
+C0 n 106.00 Ux 276.29 Uy m 112.57 Ux 276.29 Uy l s
+C0 n 106.00 Ux 269.09 Uy m 112.57 Ux 269.09 Uy l s
+C0 n 106.00 Ux 263.46 Uy m 112.57 Ux 263.46 Uy l s
+C0 n 106.00 Ux 258.83 Uy m 112.57 Ux 258.83 Uy l s
+C0 n 106.00 Ux 254.90 Uy m 112.57 Ux 254.90 Uy l s
+C0 n 106.00 Ux 246.13 Uy m 112.57 Ux 246.13 Uy l s
+C0 n 106.00 Ux 239.58 Uy m 112.57 Ux 239.58 Uy l s
+C0 n 106.00 Ux 234.35 Uy m 112.57 Ux 234.35 Uy l s
+C0 n 106.00 Ux 230.00 Uy m 112.57 Ux 230.00 Uy l s
+C0 n 106.00 Ux 226.27 Uy m 112.57 Ux 226.27 Uy l s
+C0 n 106.00 Ux 216.29 Uy m 112.57 Ux 216.29 Uy l s
+C0 n 106.00 Ux 209.09 Uy m 112.57 Ux 209.09 Uy l s
+C0 n 106.00 Ux 203.46 Uy m 112.57 Ux 203.46 Uy l s
+C0 n 106.00 Ux 198.83 Uy m 112.57 Ux 198.83 Uy l s
+C0 n 106.00 Ux 194.90 Uy m 112.57 Ux 194.90 Uy l s
+C0 n 106.00 Ux 186.13 Uy m 112.57 Ux 186.13 Uy l s
+C0 n 106.00 Ux 179.58 Uy m 112.57 Ux 179.58 Uy l s
+C0 n 106.00 Ux 174.35 Uy m 112.57 Ux 174.35 Uy l s
+C0 n 106.00 Ux 170.00 Uy m 112.57 Ux 170.00 Uy l s
+C0 n 106.00 Ux 166.27 Uy m 112.57 Ux 166.27 Uy l s
+C0 n 106.00 Ux 156.29 Uy m 112.57 Ux 156.29 Uy l s
+C0 n 106.00 Ux 149.09 Uy m 112.57 Ux 149.09 Uy l s
+C0 n 106.00 Ux 143.46 Uy m 112.57 Ux 143.46 Uy l s
+C0 n 106.00 Ux 138.83 Uy m 112.57 Ux 138.83 Uy l s
+C0 n 106.00 Ux 134.90 Uy m 112.57 Ux 134.90 Uy l s
+C0 n 106.00 Ux 126.13 Uy m 112.57 Ux 126.13 Uy l s
+C0 n 106.00 Ux 119.58 Uy m 112.57 Ux 119.58 Uy l s
+C0 n 106.00 Ux 114.35 Uy m 112.57 Ux 114.35 Uy l s
+C0 n 106.00 Ux 110.00 Uy m 112.57 Ux 110.00 Uy l s
+C0 n 106.00 Ux 106.27 Uy m 112.57 Ux 106.27 Uy l s
+C0 n 106.00 Ux 96.29 Uy m 112.57 Ux 96.29 Uy l s
+C0 n 106.00 Ux 89.09 Uy m 112.57 Ux 89.09 Uy l s
+C0 n 106.00 Ux 83.46 Uy m 112.57 Ux 83.46 Uy l s
+C0 n 106.00 Ux 78.83 Uy m 112.57 Ux 78.83 Uy l s
+C0 n 106.00 Ux 74.90 Uy m 112.57 Ux 74.90 Uy l s
+C0 n 106.00 Ux 66.13 Uy m 112.57 Ux 66.13 Uy l s
+C0 n 106.00 Ux 59.58 Uy m 112.57 Ux 59.58 Uy l s
+C0 n 106.00 Ux 54.35 Uy m 112.57 Ux 54.35 Uy l s
+C0 n 106.00 Ux 50.00 Uy m 112.57 Ux 50.00 Uy l s
+C0 n 106.00 Ux 46.27 Uy m 112.57 Ux 46.27 Uy l s
+C0 n 756.43 Ux 374.90 Uy m 763.00 Ux 374.90 Uy l s
+C0 n 756.43 Ux 366.13 Uy m 763.00 Ux 366.13 Uy l s
+C0 n 756.43 Ux 359.58 Uy m 763.00 Ux 359.58 Uy l s
+C0 n 756.43 Ux 354.35 Uy m 763.00 Ux 354.35 Uy l s
+C0 n 756.43 Ux 350.00 Uy m 763.00 Ux 350.00 Uy l s
+C0 n 756.43 Ux 346.27 Uy m 763.00 Ux 346.27 Uy l s
+C0 n 756.43 Ux 336.29 Uy m 763.00 Ux 336.29 Uy l s
+C0 n 756.43 Ux 329.09 Uy m 763.00 Ux 329.09 Uy l s
+C0 n 756.43 Ux 323.46 Uy m 763.00 Ux 323.46 Uy l s
+C0 n 756.43 Ux 318.83 Uy m 763.00 Ux 318.83 Uy l s
+C0 n 756.43 Ux 314.90 Uy m 763.00 Ux 314.90 Uy l s
+C0 n 756.43 Ux 306.13 Uy m 763.00 Ux 306.13 Uy l s
+C0 n 756.43 Ux 299.58 Uy m 763.00 Ux 299.58 Uy l s
+C0 n 756.43 Ux 294.35 Uy m 763.00 Ux 294.35 Uy l s
+C0 n 756.43 Ux 290.00 Uy m 763.00 Ux 290.00 Uy l s
+C0 n 756.43 Ux 286.27 Uy m 763.00 Ux 286.27 Uy l s
+C0 n 756.43 Ux 276.29 Uy m 763.00 Ux 276.29 Uy l s
+C0 n 756.43 Ux 269.09 Uy m 763.00 Ux 269.09 Uy l s
+C0 n 756.43 Ux 263.46 Uy m 763.00 Ux 263.46 Uy l s
+C0 n 756.43 Ux 258.83 Uy m 763.00 Ux 258.83 Uy l s
+C0 n 756.43 Ux 254.90 Uy m 763.00 Ux 254.90 Uy l s
+C0 n 756.43 Ux 246.13 Uy m 763.00 Ux 246.13 Uy l s
+C0 n 756.43 Ux 239.58 Uy m 763.00 Ux 239.58 Uy l s
+C0 n 756.43 Ux 234.35 Uy m 763.00 Ux 234.35 Uy l s
+C0 n 756.43 Ux 230.00 Uy m 763.00 Ux 230.00 Uy l s
+C0 n 756.43 Ux 226.27 Uy m 763.00 Ux 226.27 Uy l s
+C0 n 756.43 Ux 216.29 Uy m 763.00 Ux 216.29 Uy l s
+C0 n 756.43 Ux 209.09 Uy m 763.00 Ux 209.09 Uy l s
+C0 n 756.43 Ux 203.46 Uy m 763.00 Ux 203.46 Uy l s
+C0 n 756.43 Ux 198.83 Uy m 763.00 Ux 198.83 Uy l s
+C0 n 756.43 Ux 194.90 Uy m 763.00 Ux 194.90 Uy l s
+C0 n 756.43 Ux 186.13 Uy m 763.00 Ux 186.13 Uy l s
+C0 n 756.43 Ux 179.58 Uy m 763.00 Ux 179.58 Uy l s
+C0 n 756.43 Ux 174.35 Uy m 763.00 Ux 174.35 Uy l s
+C0 n 756.43 Ux 170.00 Uy m 763.00 Ux 170.00 Uy l s
+C0 n 756.43 Ux 166.27 Uy m 763.00 Ux 166.27 Uy l s
+C0 n 756.43 Ux 156.29 Uy m 763.00 Ux 156.29 Uy l s
+C0 n 756.43 Ux 149.09 Uy m 763.00 Ux 149.09 Uy l s
+C0 n 756.43 Ux 143.46 Uy m 763.00 Ux 143.46 Uy l s
+C0 n 756.43 Ux 138.83 Uy m 763.00 Ux 138.83 Uy l s
+C0 n 756.43 Ux 134.90 Uy m 763.00 Ux 134.90 Uy l s
+C0 n 756.43 Ux 126.13 Uy m 763.00 Ux 126.13 Uy l s
+C0 n 756.43 Ux 119.58 Uy m 763.00 Ux 119.58 Uy l s
+C0 n 756.43 Ux 114.35 Uy m 763.00 Ux 114.35 Uy l s
+C0 n 756.43 Ux 110.00 Uy m 763.00 Ux 110.00 Uy l s
+C0 n 756.43 Ux 106.27 Uy m 763.00 Ux 106.27 Uy l s
+C0 n 756.43 Ux 96.29 Uy m 763.00 Ux 96.29 Uy l s
+C0 n 756.43 Ux 89.09 Uy m 763.00 Ux 89.09 Uy l s
+C0 n 756.43 Ux 83.46 Uy m 763.00 Ux 83.46 Uy l s
+C0 n 756.43 Ux 78.83 Uy m 763.00 Ux 78.83 Uy l s
+C0 n 756.43 Ux 74.90 Uy m 763.00 Ux 74.90 Uy l s
+C0 n 756.43 Ux 66.13 Uy m 763.00 Ux 66.13 Uy l s
+C0 n 756.43 Ux 59.58 Uy m 763.00 Ux 59.58 Uy l s
+C0 n 756.43 Ux 54.35 Uy m 763.00 Ux 54.35 Uy l s
+C0 n 756.43 Ux 50.00 Uy m 763.00 Ux 50.00 Uy l s
+C0 n 756.43 Ux 46.27 Uy m 763.00 Ux 46.27 Uy l s
+/Helvetica-Bold  ff 11.5956 FS /curfntsz 11.5956 def 
+gs 106.00 Ux 421.76 Uy m (-25) hcshstr gr
+gs 106.00 Ux 421.76 Uy m (-25) hcvbshstr gr
+gs 188.12 Ux 421.76 Uy m (-24) hcshstr gr
+gs 188.12 Ux 421.76 Uy m (-24) hcvbshstr gr
+gs 270.25 Ux 421.76 Uy m (-23) hcshstr gr
+gs 270.25 Ux 421.76 Uy m (-23) hcvbshstr gr
+gs 352.38 Ux 421.76 Uy m (-22) hcshstr gr
+gs 352.38 Ux 421.76 Uy m (-22) hcvbshstr gr
+gs 434.50 Ux 421.76 Uy m (-21) hcshstr gr
+gs 434.50 Ux 421.76 Uy m (-21) hcvbshstr gr
+gs 516.62 Ux 421.76 Uy m (-20) hcshstr gr
+gs 516.62 Ux 421.76 Uy m (-20) hcvbshstr gr
+gs 598.75 Ux 421.76 Uy m (-19) hcshstr gr
+gs 598.75 Ux 421.76 Uy m (-19) hcvbshstr gr
+gs 680.88 Ux 421.76 Uy m (-18) hcshstr gr
+gs 680.88 Ux 421.76 Uy m (-18) hcvbshstr gr
+gs 763.00 Ux 421.76 Uy m (-17) hcshstr gr
+gs 763.00 Ux 421.76 Uy m (-17) hcvbshstr gr
+gs 95.49 Ux 379.90 Uy m (0.01) hrshstr gr
+gs 95.49 Ux 379.90 Uy m (0.01) hrvbshstr gr
+gs 95.49 Ux 351.27 Uy m (0.03) hrshstr gr
+gs 95.49 Ux 351.27 Uy m (0.03) hrvbshstr gr
+gs 95.49 Ux 319.90 Uy m (0.1) hrshstr gr
+gs 95.49 Ux 319.90 Uy m (0.1) hrvbshstr gr
+gs 95.49 Ux 291.27 Uy m (0.3) hrshstr gr
+gs 95.49 Ux 291.27 Uy m (0.3) hrvbshstr gr
+gs 95.49 Ux 259.90 Uy m (1) hrshstr gr
+gs 95.49 Ux 259.90 Uy m (1) hrvbshstr gr
+gs 95.49 Ux 231.27 Uy m (3) hrshstr gr
+gs 95.49 Ux 231.27 Uy m (3) hrvbshstr gr
+gs 95.49 Ux 199.90 Uy m (10) hrshstr gr
+gs 95.49 Ux 199.90 Uy m (10) hrvbshstr gr
+gs 95.49 Ux 171.27 Uy m (30) hrshstr gr
+gs 95.49 Ux 171.27 Uy m (30) hrvbshstr gr
+gs 95.49 Ux 139.90 Uy m (100) hrshstr gr
+gs 95.49 Ux 139.90 Uy m (100) hrvbshstr gr
+gs 95.49 Ux 111.27 Uy m (300) hrshstr gr
+gs 95.49 Ux 111.27 Uy m (300) hrvbshstr gr
+gs 95.49 Ux 79.90 Uy m (1000) hrshstr gr
+gs 95.49 Ux 79.90 Uy m (1000) hrvbshstr gr
+gs 95.49 Ux 51.27 Uy m (3000) hrshstr gr
+gs 95.49 Ux 51.27 Uy m (3000) hrvbshstr gr
+/Helvetica-Bold  ff 10.4361 FS /curfntsz 10.4361 def 
+gs 434.50 Ux 20.60 Uy m (Galaxy mag B distribution Ell:red, Spiral:Green, StarBurst:Blue black:all) hcshstr gr
+gs 434.50 Ux 20.60 Uy m (Galaxy mag B distribution Ell:red, Spiral:Green, StarBurst:Blue black:all) hcvbshstr gr
+gs 434.50 Ux 443.00 Uy m (Dahlen/useAll Absolute magnitude \(B\)) hcshstr gr
+gs 434.50 Ux 443.00 Uy m (Dahlen/useAll Absolute magnitude \(B\)) hcvbshstr gr
+% SetClipRectangle: Define clip region 
+ newpath 106.00 Ux 40.00 Uy m 657.00 Ux 0 rl 0 360.00 Uy rl -657.00 Ux 0 rl closepath clip newpath
+C0 106.00 Ux 400.00 Uy m
+106.00 Ux 400.00 Uy l
+114.21 Ux 400.00 Uy l
+114.21 Ux 400.00 Uy l
+122.43 Ux 400.00 Uy l
+122.42 Ux 400.00 Uy l
+130.64 Ux 400.00 Uy l
+130.64 Ux 400.00 Uy l
+138.85 Ux 400.00 Uy l
+138.85 Ux 400.00 Uy l
+147.06 Ux 400.00 Uy l
+147.06 Ux 400.00 Uy l
+155.28 Ux 400.00 Uy l
+155.28 Ux 400.00 Uy l
+163.49 Ux 400.00 Uy l
+163.49 Ux 400.00 Uy l
+171.70 Ux 400.00 Uy l
+171.70 Ux 400.00 Uy l
+179.91 Ux 400.00 Uy l
+179.91 Ux 400.00 Uy l
+188.12 Ux 400.00 Uy l
+188.12 Ux 400.00 Uy l
+196.34 Ux 400.00 Uy l
+196.34 Ux 400.00 Uy l
+204.55 Ux 400.00 Uy l
+204.55 Ux 254.90 Uy l
+212.76 Ux 254.90 Uy l
+212.76 Ux 400.00 Uy l
+220.98 Ux 400.00 Uy l
+220.97 Ux 254.90 Uy l
+229.19 Ux 254.90 Uy l
+229.19 Ux 400.00 Uy l
+237.40 Ux 400.00 Uy l
+237.40 Ux 218.77 Uy l
+245.61 Ux 218.77 Uy l
+245.61 Ux 208.21 Uy l
+253.83 Ux 208.21 Uy l
+253.83 Ux 212.96 Uy l
+262.04 Ux 212.96 Uy l
+262.04 Ux 194.90 Uy l
+270.25 Ux 194.90 Uy l
+270.25 Ux 155.13 Uy l
+278.46 Ux 155.13 Uy l
+278.46 Ux 158.13 Uy l
+286.68 Ux 158.13 Uy l
+286.67 Ux 158.77 Uy l
+294.89 Ux 158.77 Uy l
+294.89 Ux 160.80 Uy l
+303.10 Ux 160.80 Uy l
+303.10 Ux 133.38 Uy l
+311.31 Ux 133.38 Uy l
+311.31 Ux 132.89 Uy l
+319.53 Ux 132.89 Uy l
+319.53 Ux 133.13 Uy l
+327.74 Ux 133.13 Uy l
+327.74 Ux 126.69 Uy l
+335.95 Ux 126.69 Uy l
+335.95 Ux 111.33 Uy l
+344.16 Ux 111.33 Uy l
+344.16 Ux 106.80 Uy l
+352.38 Ux 106.80 Uy l
+352.38 Ux 112.74 Uy l
+360.59 Ux 112.74 Uy l
+360.59 Ux 109.50 Uy l
+368.80 Ux 109.50 Uy l
+368.80 Ux 94.46 Uy l
+377.01 Ux 94.46 Uy l
+377.01 Ux 95.07 Uy l
+385.23 Ux 95.07 Uy l
+385.22 Ux 93.22 Uy l
+393.44 Ux 93.22 Uy l
+393.44 Ux 93.91 Uy l
+401.65 Ux 93.91 Uy l
+401.65 Ux 83.06 Uy l
+409.86 Ux 83.06 Uy l
+409.86 Ux 81.88 Uy l
+418.08 Ux 81.88 Uy l
+418.08 Ux 84.23 Uy l
+426.29 Ux 84.23 Uy l
+426.29 Ux 82.88 Uy l
+434.50 Ux 82.88 Uy l
+434.50 Ux 75.91 Uy l
+442.71 Ux 75.91 Uy l
+442.71 Ux 75.05 Uy l
+450.93 Ux 75.05 Uy l
+450.92 Ux 74.33 Uy l
+459.14 Ux 74.33 Uy l
+459.14 Ux 74.30 Uy l
+467.35 Ux 74.30 Uy l
+467.35 Ux 68.04 Uy l
+475.56 Ux 68.04 Uy l
+475.56 Ux 68.46 Uy l
+483.78 Ux 68.46 Uy l
+483.78 Ux 69.46 Uy l
+491.99 Ux 69.46 Uy l
+491.99 Ux 67.12 Uy l
+500.20 Ux 67.12 Uy l
+500.20 Ux 63.83 Uy l
+508.41 Ux 63.83 Uy l
+508.41 Ux 62.34 Uy l
+516.62 Ux 62.34 Uy l
+516.62 Ux 61.97 Uy l
+524.84 Ux 61.97 Uy l
+524.84 Ux 61.93 Uy l
+533.05 Ux 61.93 Uy l
+533.05 Ux 58.31 Uy l
+541.26 Ux 58.31 Uy l
+541.26 Ux 58.56 Uy l
+549.48 Ux 58.56 Uy l
+549.47 Ux 58.53 Uy l
+557.69 Ux 58.53 Uy l
+557.69 Ux 58.08 Uy l
+565.90 Ux 58.08 Uy l
+565.90 Ux 54.46 Uy l
+574.11 Ux 54.46 Uy l
+574.11 Ux 55.41 Uy l
+582.33 Ux 55.41 Uy l
+582.33 Ux 54.91 Uy l
+590.54 Ux 54.91 Uy l
+590.54 Ux 55.00 Uy l
+598.75 Ux 55.00 Uy l
+598.75 Ux 51.28 Uy l
+606.96 Ux 51.28 Uy l
+606.96 Ux 51.65 Uy l
+615.18 Ux 51.65 Uy l
+615.17 Ux 51.29 Uy l
+623.39 Ux 51.29 Uy l
+623.39 Ux 51.54 Uy l
+631.60 Ux 51.54 Uy l
+631.60 Ux 48.04 Uy l
+639.81 Ux 48.04 Uy l
+639.81 Ux 47.86 Uy l
+648.03 Ux 47.86 Uy l
+648.03 Ux 48.08 Uy l
+656.24 Ux 48.08 Uy l
+656.24 Ux 48.49 Uy l
+664.45 Ux 48.49 Uy l
+664.45 Ux 45.65 Uy l
+672.66 Ux 45.65 Uy l
+672.66 Ux 46.32 Uy l
+680.88 Ux 46.32 Uy l
+680.88 Ux 45.34 Uy l
+689.09 Ux 45.34 Uy l
+689.09 Ux 46.09 Uy l
+697.30 Ux 46.09 Uy l
+697.30 Ux 43.50 Uy l
+705.51 Ux 43.50 Uy l
+705.51 Ux 42.82 Uy l
+713.73 Ux 42.82 Uy l
+713.72 Ux 43.70 Uy l
+721.94 Ux 43.70 Uy l
+721.94 Ux 43.14 Uy l
+730.15 Ux 43.14 Uy l
+730.15 Ux 40.00 Uy l
+738.36 Ux 40.00 Uy l
+738.36 Ux 40.43 Uy l
+746.58 Ux 40.43 Uy l
+746.58 Ux 40.12 Uy l
+754.79 Ux 40.12 Uy l
+754.79 Ux 40.43 Uy l
+763.00 Ux 40.43 Uy l
+763.00 Ux 400.00 Uy l
+ s
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 821.00 Ux 0 rl 0 450.00 Uy rl -821.000000 Ux 0 rl closepath clip 
+% SetClipRectangle: Define clip region 
+ newpath 106.00 Ux 40.00 Uy m 657.00 Ux 0 rl 0 360.00 Uy rl -657.00 Ux 0 rl closepath clip newpath
+C4 106.00 Ux 400.00 Uy m
+106.00 Ux 400.00 Uy l
+114.21 Ux 400.00 Uy l
+114.21 Ux 400.00 Uy l
+122.43 Ux 400.00 Uy l
+122.42 Ux 400.00 Uy l
+130.64 Ux 400.00 Uy l
+130.64 Ux 400.00 Uy l
+138.85 Ux 400.00 Uy l
+138.85 Ux 400.00 Uy l
+147.06 Ux 400.00 Uy l
+147.06 Ux 400.00 Uy l
+155.28 Ux 400.00 Uy l
+155.28 Ux 400.00 Uy l
+163.49 Ux 400.00 Uy l
+163.49 Ux 400.00 Uy l
+171.70 Ux 400.00 Uy l
+171.70 Ux 400.00 Uy l
+179.91 Ux 400.00 Uy l
+179.91 Ux 400.00 Uy l
+188.12 Ux 400.00 Uy l
+188.12 Ux 400.00 Uy l
+196.34 Ux 400.00 Uy l
+196.34 Ux 400.00 Uy l
+204.55 Ux 400.00 Uy l
+204.55 Ux 400.00 Uy l
+212.76 Ux 400.00 Uy l
+212.76 Ux 400.00 Uy l
+220.98 Ux 400.00 Uy l
+220.97 Ux 400.00 Uy l
+229.19 Ux 400.00 Uy l
+229.19 Ux 400.00 Uy l
+237.40 Ux 400.00 Uy l
+237.40 Ux 400.00 Uy l
+245.61 Ux 400.00 Uy l
+245.61 Ux 254.90 Uy l
+253.83 Ux 254.90 Uy l
+253.83 Ux 400.00 Uy l
+262.04 Ux 400.00 Uy l
+262.04 Ux 236.83 Uy l
+270.25 Ux 236.83 Uy l
+270.25 Ux 181.07 Uy l
+278.46 Ux 181.07 Uy l
+278.46 Ux 178.17 Uy l
+286.68 Ux 178.17 Uy l
+286.67 Ux 186.13 Uy l
+294.89 Ux 186.13 Uy l
+294.89 Ux 186.13 Uy l
+303.10 Ux 186.13 Uy l
+303.10 Ux 156.89 Uy l
+311.31 Ux 156.89 Uy l
+311.31 Ux 152.44 Uy l
+319.53 Ux 152.44 Uy l
+319.53 Ux 154.57 Uy l
+327.74 Ux 154.57 Uy l
+327.74 Ux 150.01 Uy l
+335.95 Ux 150.01 Uy l
+335.95 Ux 133.87 Uy l
+344.16 Ux 133.87 Uy l
+344.16 Ux 131.25 Uy l
+352.38 Ux 131.25 Uy l
+352.38 Ux 134.38 Uy l
+360.59 Ux 134.38 Uy l
+360.59 Ux 134.90 Uy l
+368.80 Ux 134.90 Uy l
+368.80 Ux 118.59 Uy l
+377.01 Ux 118.59 Uy l
+377.01 Ux 117.63 Uy l
+385.23 Ux 117.63 Uy l
+385.22 Ux 115.81 Uy l
+393.44 Ux 115.81 Uy l
+393.44 Ux 115.81 Uy l
+401.65 Ux 115.81 Uy l
+401.65 Ux 104.02 Uy l
+409.86 Ux 104.02 Uy l
+409.86 Ux 104.67 Uy l
+418.08 Ux 104.67 Uy l
+418.08 Ux 104.92 Uy l
+426.29 Ux 104.92 Uy l
+426.29 Ux 103.86 Uy l
+434.50 Ux 103.86 Uy l
+434.50 Ux 97.13 Uy l
+442.71 Ux 97.13 Uy l
+442.71 Ux 94.63 Uy l
+450.93 Ux 94.63 Uy l
+450.92 Ux 93.81 Uy l
+459.14 Ux 93.81 Uy l
+459.14 Ux 93.17 Uy l
+467.35 Ux 93.17 Uy l
+467.35 Ux 88.47 Uy l
+475.56 Ux 88.47 Uy l
+475.56 Ux 89.27 Uy l
+483.78 Ux 89.27 Uy l
+483.78 Ux 90.95 Uy l
+491.99 Ux 90.95 Uy l
+491.99 Ux 87.14 Uy l
+500.20 Ux 87.14 Uy l
+500.20 Ux 84.27 Uy l
+508.41 Ux 84.27 Uy l
+508.41 Ux 83.24 Uy l
+516.62 Ux 83.24 Uy l
+516.62 Ux 81.10 Uy l
+524.84 Ux 81.10 Uy l
+524.84 Ux 81.84 Uy l
+533.05 Ux 81.84 Uy l
+533.05 Ux 79.47 Uy l
+541.26 Ux 79.47 Uy l
+541.26 Ux 78.23 Uy l
+549.48 Ux 78.23 Uy l
+549.47 Ux 77.82 Uy l
+557.69 Ux 77.82 Uy l
+557.69 Ux 77.85 Uy l
+565.90 Ux 77.85 Uy l
+565.90 Ux 75.34 Uy l
+574.11 Ux 75.34 Uy l
+574.11 Ux 75.18 Uy l
+582.33 Ux 75.18 Uy l
+582.33 Ux 73.92 Uy l
+590.54 Ux 73.92 Uy l
+590.54 Ux 74.97 Uy l
+598.75 Ux 74.97 Uy l
+598.75 Ux 70.94 Uy l
+606.96 Ux 70.94 Uy l
+606.96 Ux 71.44 Uy l
+615.18 Ux 71.44 Uy l
+615.17 Ux 70.63 Uy l
+623.39 Ux 70.63 Uy l
+623.39 Ux 71.19 Uy l
+631.60 Ux 71.19 Uy l
+631.60 Ux 67.94 Uy l
+639.81 Ux 67.94 Uy l
+639.81 Ux 67.52 Uy l
+648.03 Ux 67.52 Uy l
+648.03 Ux 67.82 Uy l
+656.24 Ux 67.82 Uy l
+656.24 Ux 68.26 Uy l
+664.45 Ux 68.26 Uy l
+664.45 Ux 65.05 Uy l
+672.66 Ux 65.05 Uy l
+672.66 Ux 66.54 Uy l
+680.88 Ux 66.54 Uy l
+680.88 Ux 64.14 Uy l
+689.09 Ux 64.14 Uy l
+689.09 Ux 66.13 Uy l
+697.30 Ux 66.13 Uy l
+697.30 Ux 63.90 Uy l
+705.51 Ux 63.90 Uy l
+705.51 Ux 62.86 Uy l
+713.73 Ux 62.86 Uy l
+713.72 Ux 62.71 Uy l
+721.94 Ux 62.71 Uy l
+721.94 Ux 62.45 Uy l
+730.15 Ux 62.45 Uy l
+730.15 Ux 60.09 Uy l
+738.36 Ux 60.09 Uy l
+738.36 Ux 60.18 Uy l
+746.58 Ux 60.18 Uy l
+746.58 Ux 59.04 Uy l
+754.79 Ux 59.04 Uy l
+754.79 Ux 60.23 Uy l
+763.00 Ux 60.23 Uy l
+763.00 Ux 400.00 Uy l
+ s
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 821.00 Ux 0 rl 0 450.00 Uy rl -821.000000 Ux 0 rl closepath clip 
+% SetClipRectangle: Define clip region 
+ newpath 106.00 Ux 40.00 Uy m 657.00 Ux 0 rl 0 360.00 Uy rl -657.00 Ux 0 rl closepath clip newpath
+C5 106.00 Ux 400.00 Uy m
+106.00 Ux 400.00 Uy l
+114.21 Ux 400.00 Uy l
+114.21 Ux 400.00 Uy l
+122.43 Ux 400.00 Uy l
+122.42 Ux 400.00 Uy l
+130.64 Ux 400.00 Uy l
+130.64 Ux 400.00 Uy l
+138.85 Ux 400.00 Uy l
+138.85 Ux 400.00 Uy l
+147.06 Ux 400.00 Uy l
+147.06 Ux 400.00 Uy l
+155.28 Ux 400.00 Uy l
+155.28 Ux 400.00 Uy l
+163.49 Ux 400.00 Uy l
+163.49 Ux 400.00 Uy l
+171.70 Ux 400.00 Uy l
+171.70 Ux 400.00 Uy l
+179.91 Ux 400.00 Uy l
+179.91 Ux 400.00 Uy l
+188.12 Ux 400.00 Uy l
+188.12 Ux 400.00 Uy l
+196.34 Ux 400.00 Uy l
+196.34 Ux 400.00 Uy l
+204.55 Ux 400.00 Uy l
+204.55 Ux 254.90 Uy l
+212.76 Ux 254.90 Uy l
+212.76 Ux 400.00 Uy l
+220.98 Ux 400.00 Uy l
+220.97 Ux 400.00 Uy l
+229.19 Ux 400.00 Uy l
+229.19 Ux 400.00 Uy l
+237.40 Ux 400.00 Uy l
+237.40 Ux 236.83 Uy l
+245.61 Ux 236.83 Uy l
+245.61 Ux 254.90 Uy l
+253.83 Ux 254.90 Uy l
+253.83 Ux 226.27 Uy l
+262.04 Ux 226.27 Uy l
+262.04 Ux 212.96 Uy l
+270.25 Ux 212.96 Uy l
+270.25 Ux 182.65 Uy l
+278.46 Ux 182.65 Uy l
+278.46 Ux 182.65 Uy l
+286.68 Ux 182.65 Uy l
+286.67 Ux 190.15 Uy l
+294.89 Ux 190.15 Uy l
+294.89 Ux 188.06 Uy l
+303.10 Ux 188.06 Uy l
+303.10 Ux 162.25 Uy l
+311.31 Ux 162.25 Uy l
+311.31 Ux 157.50 Uy l
+319.53 Ux 157.50 Uy l
+319.53 Ux 155.70 Uy l
+327.74 Ux 155.70 Uy l
+327.74 Ux 149.09 Uy l
+335.95 Ux 149.09 Uy l
+335.95 Ux 135.96 Uy l
+344.16 Ux 135.96 Uy l
+344.16 Ux 127.86 Uy l
+352.38 Ux 127.86 Uy l
+352.38 Ux 135.69 Uy l
+360.59 Ux 135.69 Uy l
+360.59 Ux 131.03 Uy l
+368.80 Ux 131.03 Uy l
+368.80 Ux 115.07 Uy l
+377.01 Ux 115.07 Uy l
+377.01 Ux 115.69 Uy l
+385.23 Ux 115.69 Uy l
+385.22 Ux 113.31 Uy l
+393.44 Ux 113.31 Uy l
+393.44 Ux 116.19 Uy l
+401.65 Ux 116.19 Uy l
+401.65 Ux 104.18 Uy l
+409.86 Ux 104.18 Uy l
+409.86 Ux 100.66 Uy l
+418.08 Ux 100.66 Uy l
+418.08 Ux 106.80 Uy l
+426.29 Ux 106.80 Uy l
+426.29 Ux 104.26 Uy l
+434.50 Ux 104.26 Uy l
+434.50 Ux 96.41 Uy l
+442.71 Ux 96.41 Uy l
+442.71 Ux 96.65 Uy l
+450.93 Ux 96.65 Uy l
+450.92 Ux 95.42 Uy l
+459.14 Ux 95.42 Uy l
+459.14 Ux 96.11 Uy l
+467.35 Ux 96.11 Uy l
+467.35 Ux 88.73 Uy l
+475.56 Ux 88.73 Uy l
+475.56 Ux 89.41 Uy l
+483.78 Ux 89.41 Uy l
+483.78 Ux 89.27 Uy l
+491.99 Ux 89.27 Uy l
+491.99 Ux 87.56 Uy l
+500.20 Ux 87.56 Uy l
+500.20 Ux 83.86 Uy l
+508.41 Ux 83.86 Uy l
+508.41 Ux 82.74 Uy l
+516.62 Ux 82.74 Uy l
+516.62 Ux 83.20 Uy l
+524.84 Ux 83.20 Uy l
+524.84 Ux 81.98 Uy l
+533.05 Ux 81.98 Uy l
+533.05 Ux 78.02 Uy l
+541.26 Ux 78.02 Uy l
+541.26 Ux 79.50 Uy l
+549.48 Ux 79.50 Uy l
+549.47 Ux 79.38 Uy l
+557.69 Ux 79.38 Uy l
+557.69 Ux 78.08 Uy l
+565.90 Ux 78.08 Uy l
+565.90 Ux 74.05 Uy l
+574.11 Ux 74.05 Uy l
+574.11 Ux 75.53 Uy l
+582.33 Ux 75.53 Uy l
+582.33 Ux 75.45 Uy l
+590.54 Ux 75.45 Uy l
+590.54 Ux 75.16 Uy l
+598.75 Ux 75.16 Uy l
+598.75 Ux 71.12 Uy l
+606.96 Ux 71.12 Uy l
+606.96 Ux 71.30 Uy l
+615.18 Ux 71.30 Uy l
+615.17 Ux 71.73 Uy l
+623.39 Ux 71.73 Uy l
+623.39 Ux 71.69 Uy l
+631.60 Ux 71.69 Uy l
+631.60 Ux 67.35 Uy l
+639.81 Ux 67.35 Uy l
+639.81 Ux 67.60 Uy l
+648.03 Ux 67.60 Uy l
+648.03 Ux 67.74 Uy l
+656.24 Ux 67.74 Uy l
+656.24 Ux 68.04 Uy l
+664.45 Ux 68.04 Uy l
+664.45 Ux 65.54 Uy l
+672.66 Ux 65.54 Uy l
+672.66 Ux 65.38 Uy l
+680.88 Ux 65.38 Uy l
+680.88 Ux 65.39 Uy l
+689.09 Ux 65.39 Uy l
+689.09 Ux 65.20 Uy l
+697.30 Ux 65.20 Uy l
+697.30 Ux 62.13 Uy l
+705.51 Ux 62.13 Uy l
+705.51 Ux 61.85 Uy l
+713.73 Ux 61.85 Uy l
+713.72 Ux 64.16 Uy l
+721.94 Ux 64.16 Uy l
+721.94 Ux 62.76 Uy l
+730.15 Ux 62.76 Uy l
+730.15 Ux 58.59 Uy l
+738.36 Ux 58.59 Uy l
+738.36 Ux 59.39 Uy l
+746.58 Ux 59.39 Uy l
+746.58 Ux 60.06 Uy l
+754.79 Ux 60.06 Uy l
+754.79 Ux 59.54 Uy l
+763.00 Ux 59.54 Uy l
+763.00 Ux 400.00 Uy l
+ s
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 821.00 Ux 0 rl 0 450.00 Uy rl -821.000000 Ux 0 rl closepath clip 
+% SetClipRectangle: Define clip region 
+ newpath 106.00 Ux 40.00 Uy m 657.00 Ux 0 rl 0 360.00 Uy rl -657.00 Ux 0 rl closepath clip newpath
+C3 106.00 Ux 400.00 Uy m
+106.00 Ux 400.00 Uy l
+114.21 Ux 400.00 Uy l
+114.21 Ux 400.00 Uy l
+122.43 Ux 400.00 Uy l
+122.42 Ux 400.00 Uy l
+130.64 Ux 400.00 Uy l
+130.64 Ux 400.00 Uy l
+138.85 Ux 400.00 Uy l
+138.85 Ux 400.00 Uy l
+147.06 Ux 400.00 Uy l
+147.06 Ux 400.00 Uy l
+155.28 Ux 400.00 Uy l
+155.28 Ux 400.00 Uy l
+163.49 Ux 400.00 Uy l
+163.49 Ux 400.00 Uy l
+171.70 Ux 400.00 Uy l
+171.70 Ux 400.00 Uy l
+179.91 Ux 400.00 Uy l
+179.91 Ux 400.00 Uy l
+188.12 Ux 400.00 Uy l
+188.12 Ux 400.00 Uy l
+196.34 Ux 400.00 Uy l
+196.34 Ux 400.00 Uy l
+204.55 Ux 400.00 Uy l
+204.55 Ux 400.00 Uy l
+212.76 Ux 400.00 Uy l
+212.76 Ux 400.00 Uy l
+220.98 Ux 400.00 Uy l
+220.97 Ux 254.90 Uy l
+229.19 Ux 254.90 Uy l
+229.19 Ux 400.00 Uy l
+237.40 Ux 400.00 Uy l
+237.40 Ux 236.83 Uy l
+245.61 Ux 236.83 Uy l
+245.61 Ux 218.77 Uy l
+253.83 Ux 218.77 Uy l
+253.83 Ux 236.83 Uy l
+262.04 Ux 236.83 Uy l
+262.04 Ux 226.27 Uy l
+270.25 Ux 226.27 Uy l
+270.25 Ux 188.06 Uy l
+278.46 Ux 188.06 Uy l
+278.46 Ux 208.21 Uy l
+286.68 Ux 208.21 Uy l
+286.67 Ux 186.13 Uy l
+294.89 Ux 186.13 Uy l
+294.89 Ux 194.90 Uy l
+303.10 Ux 194.90 Uy l
+303.10 Ux 168.07 Uy l
+311.31 Ux 168.07 Uy l
+311.31 Ux 184.33 Uy l
+319.53 Ux 184.33 Uy l
+319.53 Ux 184.33 Uy l
+327.74 Ux 184.33 Uy l
+327.74 Ux 173.19 Uy l
+335.95 Ux 173.19 Uy l
+335.95 Ux 154.57 Uy l
+344.16 Ux 154.57 Uy l
+344.16 Ux 154.02 Uy l
+352.38 Ux 154.02 Uy l
+352.38 Ux 162.25 Uy l
+360.59 Ux 162.25 Uy l
+360.59 Ux 153.48 Uy l
+368.80 Ux 153.48 Uy l
+368.80 Ux 143.82 Uy l
+377.01 Ux 143.82 Uy l
+377.01 Ux 149.09 Uy l
+385.23 Ux 149.09 Uy l
+385.22 Ux 149.09 Uy l
+393.44 Ux 149.09 Uy l
+393.44 Ux 144.57 Uy l
+401.65 Ux 144.57 Uy l
+401.65 Ux 141.04 Uy l
+409.86 Ux 141.04 Uy l
+409.86 Ux 142.74 Uy l
+418.08 Ux 142.74 Uy l
+418.08 Ux 137.93 Uy l
+426.29 Ux 137.93 Uy l
+426.29 Ux 139.75 Uy l
+434.50 Ux 139.75 Uy l
+434.50 Ux 135.42 Uy l
+442.71 Ux 135.42 Uy l
+442.71 Ux 137.35 Uy l
+450.93 Ux 137.35 Uy l
+450.92 Ux 139.75 Uy l
+459.14 Ux 139.75 Uy l
+459.14 Ux 139.44 Uy l
+467.35 Ux 139.44 Uy l
+467.35 Ux 130.36 Uy l
+475.56 Ux 130.36 Uy l
+475.56 Ux 127.86 Uy l
+483.78 Ux 127.86 Uy l
+483.78 Ux 131.03 Uy l
+491.99 Ux 131.03 Uy l
+491.99 Ux 132.89 Uy l
+500.20 Ux 132.89 Uy l
+500.20 Ux 129.71 Uy l
+508.41 Ux 129.71 Uy l
+508.41 Ux 123.82 Uy l
+516.62 Ux 123.82 Uy l
+516.62 Ux 128.67 Uy l
+524.84 Ux 128.67 Uy l
+524.84 Ux 130.81 Uy l
+533.05 Ux 130.81 Uy l
+533.05 Ux 122.01 Uy l
+541.26 Ux 122.01 Uy l
+541.26 Ux 123.65 Uy l
+549.48 Ux 123.65 Uy l
+549.47 Ux 126.50 Uy l
+557.69 Ux 126.50 Uy l
+557.69 Ux 128.26 Uy l
+565.90 Ux 128.26 Uy l
+565.90 Ux 120.31 Uy l
+574.11 Ux 120.31 Uy l
+574.11 Ux 124.86 Uy l
+582.33 Ux 124.86 Uy l
+582.33 Ux 126.88 Uy l
+590.54 Ux 126.88 Uy l
+590.54 Ux 122.81 Uy l
+598.75 Ux 122.81 Uy l
+598.75 Ux 123.48 Uy l
+606.96 Ux 123.48 Uy l
+606.96 Ux 124.33 Uy l
+615.18 Ux 124.33 Uy l
+615.17 Ux 121.53 Uy l
+623.39 Ux 121.53 Uy l
+623.39 Ux 121.53 Uy l
+631.60 Ux 121.53 Uy l
+631.60 Ux 122.49 Uy l
+639.81 Ux 122.49 Uy l
+639.81 Ux 120.76 Uy l
+648.03 Ux 120.76 Uy l
+648.03 Ux 120.92 Uy l
+656.24 Ux 120.92 Uy l
+656.24 Ux 122.01 Uy l
+664.45 Ux 122.01 Uy l
+664.45 Ux 119.44 Uy l
+672.66 Ux 119.44 Uy l
+672.66 Ux 120.31 Uy l
+680.88 Ux 120.31 Uy l
+680.88 Ux 122.98 Uy l
+689.09 Ux 122.98 Uy l
+689.09 Ux 121.07 Uy l
+697.30 Ux 121.07 Uy l
+697.30 Ux 119.58 Uy l
+705.51 Ux 119.58 Uy l
+705.51 Ux 118.45 Uy l
+713.73 Ux 118.45 Uy l
+713.72 Ux 116.19 Uy l
+721.94 Ux 116.19 Uy l
+721.94 Ux 119.87 Uy l
+730.15 Ux 119.87 Uy l
+730.15 Ux 119.44 Uy l
+738.36 Ux 119.44 Uy l
+738.36 Ux 119.29 Uy l
+746.58 Ux 119.29 Uy l
+746.58 Ux 117.63 Uy l
+754.79 Ux 117.63 Uy l
+754.79 Ux 117.49 Uy l
+763.00 Ux 117.49 Uy l
+763.00 Ux 400.00 Uy l
+ s
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 821.00 Ux 0 rl 0 450.00 Uy rl -821.000000 Ux 0 rl closepath clip 
+EndBloc
+%>EndBloc 1
+%>BeginBloc 2
+821.00 449.00 821.00 Ux 449.00 Uy 0.00 Ux 450.00 Uy NewBloc
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 821.00 Ux 0 rl 0 449.00 Uy rl -821.000000 Ux 0 rl closepath clip newpath
+/Courier ff 5.79781 FS /curfntsz 5.79781 def 
+1.15956 slw 0.579781 slw C0 n 106.00 Ux 399.00 Uy m 763.00 Ux 399.00 Uy l s
+C0 n 763.00 Ux 399.00 Uy m 763.00 Ux 40.00 Uy l s
+C0 n 763.00 Ux 40.00 Uy m 106.00 Ux 40.00 Uy l s
+C0 n 106.00 Ux 40.00 Uy m 106.00 Ux 399.00 Uy l s
+C0 n 106.00 Ux 399.00 Uy m 106.00 Ux 393.26 Uy l s
+C0 n 188.12 Ux 399.00 Uy m 188.12 Ux 393.26 Uy l s
+C0 n 270.25 Ux 399.00 Uy m 270.25 Ux 393.26 Uy l s
+C0 n 352.38 Ux 399.00 Uy m 352.38 Ux 393.26 Uy l s
+C0 n 434.50 Ux 399.00 Uy m 434.50 Ux 393.26 Uy l s
+C0 n 516.62 Ux 399.00 Uy m 516.62 Ux 393.26 Uy l s
+C0 n 598.75 Ux 399.00 Uy m 598.75 Ux 393.26 Uy l s
+C0 n 680.88 Ux 399.00 Uy m 680.88 Ux 393.26 Uy l s
+C0 n 763.00 Ux 399.00 Uy m 763.00 Ux 393.26 Uy l s
+C0 n 106.00 Ux 45.74 Uy m 106.00 Ux 40.00 Uy l s
+C0 n 188.12 Ux 45.74 Uy m 188.12 Ux 40.00 Uy l s
+C0 n 270.25 Ux 45.74 Uy m 270.25 Ux 40.00 Uy l s
+C0 n 352.38 Ux 45.74 Uy m 352.38 Ux 40.00 Uy l s
+C0 n 434.50 Ux 45.74 Uy m 434.50 Ux 40.00 Uy l s
+C0 n 516.62 Ux 45.74 Uy m 516.62 Ux 40.00 Uy l s
+C0 n 598.75 Ux 45.74 Uy m 598.75 Ux 40.00 Uy l s
+C0 n 680.88 Ux 45.74 Uy m 680.88 Ux 40.00 Uy l s
+C0 n 763.00 Ux 45.74 Uy m 763.00 Ux 40.00 Uy l s
+C0 n 106.00 Ux 372.77 Uy m 116.51 Ux 372.77 Uy l s
+C0 n 106.00 Ux 344.22 Uy m 116.51 Ux 344.22 Uy l s
+C0 n 106.00 Ux 312.93 Uy m 116.51 Ux 312.93 Uy l s
+C0 n 106.00 Ux 284.39 Uy m 116.51 Ux 284.39 Uy l s
+C0 n 106.00 Ux 253.10 Uy m 116.51 Ux 253.10 Uy l s
+C0 n 106.00 Ux 224.55 Uy m 116.51 Ux 224.55 Uy l s
+C0 n 106.00 Ux 193.27 Uy m 116.51 Ux 193.27 Uy l s
+C0 n 106.00 Ux 164.72 Uy m 116.51 Ux 164.72 Uy l s
+C0 n 106.00 Ux 133.43 Uy m 116.51 Ux 133.43 Uy l s
+C0 n 106.00 Ux 104.89 Uy m 116.51 Ux 104.89 Uy l s
+C0 n 106.00 Ux 73.60 Uy m 116.51 Ux 73.60 Uy l s
+C0 n 106.00 Ux 45.05 Uy m 116.51 Ux 45.05 Uy l s
+C0 n 752.49 Ux 372.77 Uy m 763.00 Ux 372.77 Uy l s
+C0 n 752.49 Ux 344.22 Uy m 763.00 Ux 344.22 Uy l s
+C0 n 752.49 Ux 312.93 Uy m 763.00 Ux 312.93 Uy l s
+C0 n 752.49 Ux 284.39 Uy m 763.00 Ux 284.39 Uy l s
+C0 n 752.49 Ux 253.10 Uy m 763.00 Ux 253.10 Uy l s
+C0 n 752.49 Ux 224.55 Uy m 763.00 Ux 224.55 Uy l s
+C0 n 752.49 Ux 193.27 Uy m 763.00 Ux 193.27 Uy l s
+C0 n 752.49 Ux 164.72 Uy m 763.00 Ux 164.72 Uy l s
+C0 n 752.49 Ux 133.43 Uy m 763.00 Ux 133.43 Uy l s
+C0 n 752.49 Ux 104.89 Uy m 763.00 Ux 104.89 Uy l s
+C0 n 752.49 Ux 73.60 Uy m 763.00 Ux 73.60 Uy l s
+C0 n 752.49 Ux 45.05 Uy m 763.00 Ux 45.05 Uy l s
+C0 n 106.00 Ux 399.00 Uy m 106.00 Ux 395.41 Uy l s
+C0 n 122.42 Ux 399.00 Uy m 122.42 Ux 395.41 Uy l s
+C0 n 138.85 Ux 399.00 Uy m 138.85 Ux 395.41 Uy l s
+C0 n 155.27 Ux 399.00 Uy m 155.27 Ux 395.41 Uy l s
+C0 n 171.70 Ux 399.00 Uy m 171.70 Ux 395.41 Uy l s
+C0 n 188.12 Ux 399.00 Uy m 188.12 Ux 395.41 Uy l s
+C0 n 204.55 Ux 399.00 Uy m 204.55 Ux 395.41 Uy l s
+C0 n 220.97 Ux 399.00 Uy m 220.97 Ux 395.41 Uy l s
+C0 n 237.40 Ux 399.00 Uy m 237.40 Ux 395.41 Uy l s
+C0 n 253.82 Ux 399.00 Uy m 253.82 Ux 395.41 Uy l s
+C0 n 270.25 Ux 399.00 Uy m 270.25 Ux 395.41 Uy l s
+C0 n 286.67 Ux 399.00 Uy m 286.67 Ux 395.41 Uy l s
+C0 n 303.10 Ux 399.00 Uy m 303.10 Ux 395.41 Uy l s
+C0 n 319.52 Ux 399.00 Uy m 319.52 Ux 395.41 Uy l s
+C0 n 335.95 Ux 399.00 Uy m 335.95 Ux 395.41 Uy l s
+C0 n 352.37 Ux 399.00 Uy m 352.37 Ux 395.41 Uy l s
+C0 n 368.80 Ux 399.00 Uy m 368.80 Ux 395.41 Uy l s
+C0 n 385.22 Ux 399.00 Uy m 385.22 Ux 395.41 Uy l s
+C0 n 401.65 Ux 399.00 Uy m 401.65 Ux 395.41 Uy l s
+C0 n 418.07 Ux 399.00 Uy m 418.07 Ux 395.41 Uy l s
+C0 n 434.50 Ux 399.00 Uy m 434.50 Ux 395.41 Uy l s
+C0 n 450.92 Ux 399.00 Uy m 450.92 Ux 395.41 Uy l s
+C0 n 467.35 Ux 399.00 Uy m 467.35 Ux 395.41 Uy l s
+C0 n 483.77 Ux 399.00 Uy m 483.77 Ux 395.41 Uy l s
+C0 n 500.20 Ux 399.00 Uy m 500.20 Ux 395.41 Uy l s
+C0 n 516.62 Ux 399.00 Uy m 516.62 Ux 395.41 Uy l s
+C0 n 533.05 Ux 399.00 Uy m 533.05 Ux 395.41 Uy l s
+C0 n 549.47 Ux 399.00 Uy m 549.47 Ux 395.41 Uy l s
+C0 n 565.90 Ux 399.00 Uy m 565.90 Ux 395.41 Uy l s
+C0 n 582.32 Ux 399.00 Uy m 582.32 Ux 395.41 Uy l s
+C0 n 598.75 Ux 399.00 Uy m 598.75 Ux 395.41 Uy l s
+C0 n 615.17 Ux 399.00 Uy m 615.17 Ux 395.41 Uy l s
+C0 n 631.60 Ux 399.00 Uy m 631.60 Ux 395.41 Uy l s
+C0 n 648.02 Ux 399.00 Uy m 648.02 Ux 395.41 Uy l s
+C0 n 664.45 Ux 399.00 Uy m 664.45 Ux 395.41 Uy l s
+C0 n 680.87 Ux 399.00 Uy m 680.87 Ux 395.41 Uy l s
+C0 n 697.30 Ux 399.00 Uy m 697.30 Ux 395.41 Uy l s
+C0 n 713.72 Ux 399.00 Uy m 713.72 Ux 395.41 Uy l s
+C0 n 730.15 Ux 399.00 Uy m 730.15 Ux 395.41 Uy l s
+C0 n 746.57 Ux 399.00 Uy m 746.57 Ux 395.41 Uy l s
+C0 n 763.00 Ux 399.00 Uy m 763.00 Ux 395.41 Uy l s
+C0 n 106.00 Ux 43.59 Uy m 106.00 Ux 40.00 Uy l s
+C0 n 122.42 Ux 43.59 Uy m 122.42 Ux 40.00 Uy l s
+C0 n 138.85 Ux 43.59 Uy m 138.85 Ux 40.00 Uy l s
+C0 n 155.27 Ux 43.59 Uy m 155.27 Ux 40.00 Uy l s
+C0 n 171.70 Ux 43.59 Uy m 171.70 Ux 40.00 Uy l s
+C0 n 188.12 Ux 43.59 Uy m 188.12 Ux 40.00 Uy l s
+C0 n 204.55 Ux 43.59 Uy m 204.55 Ux 40.00 Uy l s
+C0 n 220.97 Ux 43.59 Uy m 220.97 Ux 40.00 Uy l s
+C0 n 237.40 Ux 43.59 Uy m 237.40 Ux 40.00 Uy l s
+C0 n 253.82 Ux 43.59 Uy m 253.82 Ux 40.00 Uy l s
+C0 n 270.25 Ux 43.59 Uy m 270.25 Ux 40.00 Uy l s
+C0 n 286.67 Ux 43.59 Uy m 286.67 Ux 40.00 Uy l s
+C0 n 303.10 Ux 43.59 Uy m 303.10 Ux 40.00 Uy l s
+C0 n 319.52 Ux 43.59 Uy m 319.52 Ux 40.00 Uy l s
+C0 n 335.95 Ux 43.59 Uy m 335.95 Ux 40.00 Uy l s
+C0 n 352.37 Ux 43.59 Uy m 352.37 Ux 40.00 Uy l s
+C0 n 368.80 Ux 43.59 Uy m 368.80 Ux 40.00 Uy l s
+C0 n 385.22 Ux 43.59 Uy m 385.22 Ux 40.00 Uy l s
+C0 n 401.65 Ux 43.59 Uy m 401.65 Ux 40.00 Uy l s
+C0 n 418.07 Ux 43.59 Uy m 418.07 Ux 40.00 Uy l s
+C0 n 434.50 Ux 43.59 Uy m 434.50 Ux 40.00 Uy l s
+C0 n 450.92 Ux 43.59 Uy m 450.92 Ux 40.00 Uy l s
+C0 n 467.35 Ux 43.59 Uy m 467.35 Ux 40.00 Uy l s
+C0 n 483.77 Ux 43.59 Uy m 483.77 Ux 40.00 Uy l s
+C0 n 500.20 Ux 43.59 Uy m 500.20 Ux 40.00 Uy l s
+C0 n 516.62 Ux 43.59 Uy m 516.62 Ux 40.00 Uy l s
+C0 n 533.05 Ux 43.59 Uy m 533.05 Ux 40.00 Uy l s
+C0 n 549.47 Ux 43.59 Uy m 549.47 Ux 40.00 Uy l s
+C0 n 565.90 Ux 43.59 Uy m 565.90 Ux 40.00 Uy l s
+C0 n 582.32 Ux 43.59 Uy m 582.32 Ux 40.00 Uy l s
+C0 n 598.75 Ux 43.59 Uy m 598.75 Ux 40.00 Uy l s
+C0 n 615.17 Ux 43.59 Uy m 615.17 Ux 40.00 Uy l s
+C0 n 631.60 Ux 43.59 Uy m 631.60 Ux 40.00 Uy l s
+C0 n 648.02 Ux 43.59 Uy m 648.02 Ux 40.00 Uy l s
+C0 n 664.45 Ux 43.59 Uy m 664.45 Ux 40.00 Uy l s
+C0 n 680.87 Ux 43.59 Uy m 680.87 Ux 40.00 Uy l s
+C0 n 697.30 Ux 43.59 Uy m 697.30 Ux 40.00 Uy l s
+C0 n 713.72 Ux 43.59 Uy m 713.72 Ux 40.00 Uy l s
+C0 n 730.15 Ux 43.59 Uy m 730.15 Ux 40.00 Uy l s
+C0 n 746.57 Ux 43.59 Uy m 746.57 Ux 40.00 Uy l s
+C0 n 763.00 Ux 43.59 Uy m 763.00 Ux 40.00 Uy l s
+C0 n 106.00 Ux 372.77 Uy m 112.57 Ux 372.77 Uy l s
+C0 n 106.00 Ux 364.02 Uy m 112.57 Ux 364.02 Uy l s
+C0 n 106.00 Ux 357.49 Uy m 112.57 Ux 357.49 Uy l s
+C0 n 106.00 Ux 352.28 Uy m 112.57 Ux 352.28 Uy l s
+C0 n 106.00 Ux 347.94 Uy m 112.57 Ux 347.94 Uy l s
+C0 n 106.00 Ux 344.22 Uy m 112.57 Ux 344.22 Uy l s
+C0 n 106.00 Ux 334.27 Uy m 112.57 Ux 334.27 Uy l s
+C0 n 106.00 Ux 327.09 Uy m 112.57 Ux 327.09 Uy l s
+C0 n 106.00 Ux 321.47 Uy m 112.57 Ux 321.47 Uy l s
+C0 n 106.00 Ux 316.85 Uy m 112.57 Ux 316.85 Uy l s
+C0 n 106.00 Ux 312.93 Uy m 112.57 Ux 312.93 Uy l s
+C0 n 106.00 Ux 304.19 Uy m 112.57 Ux 304.19 Uy l s
+C0 n 106.00 Ux 297.66 Uy m 112.57 Ux 297.66 Uy l s
+C0 n 106.00 Ux 292.45 Uy m 112.57 Ux 292.45 Uy l s
+C0 n 106.00 Ux 288.11 Uy m 112.57 Ux 288.11 Uy l s
+C0 n 106.00 Ux 284.39 Uy m 112.57 Ux 284.39 Uy l s
+C0 n 106.00 Ux 274.43 Uy m 112.57 Ux 274.43 Uy l s
+C0 n 106.00 Ux 267.26 Uy m 112.57 Ux 267.26 Uy l s
+C0 n 106.00 Ux 261.64 Uy m 112.57 Ux 261.64 Uy l s
+C0 n 106.00 Ux 257.02 Uy m 112.57 Ux 257.02 Uy l s
+C0 n 106.00 Ux 253.10 Uy m 112.57 Ux 253.10 Uy l s
+C0 n 106.00 Ux 244.36 Uy m 112.57 Ux 244.36 Uy l s
+C0 n 106.00 Ux 237.83 Uy m 112.57 Ux 237.83 Uy l s
+C0 n 106.00 Ux 232.61 Uy m 112.57 Ux 232.61 Uy l s
+C0 n 106.00 Ux 228.27 Uy m 112.57 Ux 228.27 Uy l s
+C0 n 106.00 Ux 224.55 Uy m 112.57 Ux 224.55 Uy l s
+C0 n 106.00 Ux 214.60 Uy m 112.57 Ux 214.60 Uy l s
+C0 n 106.00 Ux 207.42 Uy m 112.57 Ux 207.42 Uy l s
+C0 n 106.00 Ux 201.80 Uy m 112.57 Ux 201.80 Uy l s
+C0 n 106.00 Ux 197.19 Uy m 112.57 Ux 197.19 Uy l s
+C0 n 106.00 Ux 193.27 Uy m 112.57 Ux 193.27 Uy l s
+C0 n 106.00 Ux 184.52 Uy m 112.57 Ux 184.52 Uy l s
+C0 n 106.00 Ux 177.99 Uy m 112.57 Ux 177.99 Uy l s
+C0 n 106.00 Ux 172.78 Uy m 112.57 Ux 172.78 Uy l s
+C0 n 106.00 Ux 168.44 Uy m 112.57 Ux 168.44 Uy l s
+C0 n 106.00 Ux 164.72 Uy m 112.57 Ux 164.72 Uy l s
+C0 n 106.00 Ux 154.77 Uy m 112.57 Ux 154.77 Uy l s
+C0 n 106.00 Ux 147.59 Uy m 112.57 Ux 147.59 Uy l s
+C0 n 106.00 Ux 141.97 Uy m 112.57 Ux 141.97 Uy l s
+C0 n 106.00 Ux 137.35 Uy m 112.57 Ux 137.35 Uy l s
+C0 n 106.00 Ux 133.43 Uy m 112.57 Ux 133.43 Uy l s
+C0 n 106.00 Ux 124.69 Uy m 112.57 Ux 124.69 Uy l s
+C0 n 106.00 Ux 118.16 Uy m 112.57 Ux 118.16 Uy l s
+C0 n 106.00 Ux 112.95 Uy m 112.57 Ux 112.95 Uy l s
+C0 n 106.00 Ux 108.61 Uy m 112.57 Ux 108.61 Uy l s
+C0 n 106.00 Ux 104.89 Uy m 112.57 Ux 104.89 Uy l s
+C0 n 106.00 Ux 94.93 Uy m 112.57 Ux 94.93 Uy l s
+C0 n 106.00 Ux 87.76 Uy m 112.57 Ux 87.76 Uy l s
+C0 n 106.00 Ux 82.14 Uy m 112.57 Ux 82.14 Uy l s
+C0 n 106.00 Ux 77.52 Uy m 112.57 Ux 77.52 Uy l s
+C0 n 106.00 Ux 73.60 Uy m 112.57 Ux 73.60 Uy l s
+C0 n 106.00 Ux 64.86 Uy m 112.57 Ux 64.86 Uy l s
+C0 n 106.00 Ux 58.33 Uy m 112.57 Ux 58.33 Uy l s
+C0 n 106.00 Ux 53.11 Uy m 112.57 Ux 53.11 Uy l s
+C0 n 106.00 Ux 48.77 Uy m 112.57 Ux 48.77 Uy l s
+C0 n 106.00 Ux 45.05 Uy m 112.57 Ux 45.05 Uy l s
+C0 n 756.43 Ux 372.77 Uy m 763.00 Ux 372.77 Uy l s
+C0 n 756.43 Ux 364.02 Uy m 763.00 Ux 364.02 Uy l s
+C0 n 756.43 Ux 357.49 Uy m 763.00 Ux 357.49 Uy l s
+C0 n 756.43 Ux 352.28 Uy m 763.00 Ux 352.28 Uy l s
+C0 n 756.43 Ux 347.94 Uy m 763.00 Ux 347.94 Uy l s
+C0 n 756.43 Ux 344.22 Uy m 763.00 Ux 344.22 Uy l s
+C0 n 756.43 Ux 334.27 Uy m 763.00 Ux 334.27 Uy l s
+C0 n 756.43 Ux 327.09 Uy m 763.00 Ux 327.09 Uy l s
+C0 n 756.43 Ux 321.47 Uy m 763.00 Ux 321.47 Uy l s
+C0 n 756.43 Ux 316.85 Uy m 763.00 Ux 316.85 Uy l s
+C0 n 756.43 Ux 312.93 Uy m 763.00 Ux 312.93 Uy l s
+C0 n 756.43 Ux 304.19 Uy m 763.00 Ux 304.19 Uy l s
+C0 n 756.43 Ux 297.66 Uy m 763.00 Ux 297.66 Uy l s
+C0 n 756.43 Ux 292.45 Uy m 763.00 Ux 292.45 Uy l s
+C0 n 756.43 Ux 288.11 Uy m 763.00 Ux 288.11 Uy l s
+C0 n 756.43 Ux 284.39 Uy m 763.00 Ux 284.39 Uy l s
+C0 n 756.43 Ux 274.43 Uy m 763.00 Ux 274.43 Uy l s
+C0 n 756.43 Ux 267.26 Uy m 763.00 Ux 267.26 Uy l s
+C0 n 756.43 Ux 261.64 Uy m 763.00 Ux 261.64 Uy l s
+C0 n 756.43 Ux 257.02 Uy m 763.00 Ux 257.02 Uy l s
+C0 n 756.43 Ux 253.10 Uy m 763.00 Ux 253.10 Uy l s
+C0 n 756.43 Ux 244.36 Uy m 763.00 Ux 244.36 Uy l s
+C0 n 756.43 Ux 237.83 Uy m 763.00 Ux 237.83 Uy l s
+C0 n 756.43 Ux 232.61 Uy m 763.00 Ux 232.61 Uy l s
+C0 n 756.43 Ux 228.27 Uy m 763.00 Ux 228.27 Uy l s
+C0 n 756.43 Ux 224.55 Uy m 763.00 Ux 224.55 Uy l s
+C0 n 756.43 Ux 214.60 Uy m 763.00 Ux 214.60 Uy l s
+C0 n 756.43 Ux 207.42 Uy m 763.00 Ux 207.42 Uy l s
+C0 n 756.43 Ux 201.80 Uy m 763.00 Ux 201.80 Uy l s
+C0 n 756.43 Ux 197.19 Uy m 763.00 Ux 197.19 Uy l s
+C0 n 756.43 Ux 193.27 Uy m 763.00 Ux 193.27 Uy l s
+C0 n 756.43 Ux 184.52 Uy m 763.00 Ux 184.52 Uy l s
+C0 n 756.43 Ux 177.99 Uy m 763.00 Ux 177.99 Uy l s
+C0 n 756.43 Ux 172.78 Uy m 763.00 Ux 172.78 Uy l s
+C0 n 756.43 Ux 168.44 Uy m 763.00 Ux 168.44 Uy l s
+C0 n 756.43 Ux 164.72 Uy m 763.00 Ux 164.72 Uy l s
+C0 n 756.43 Ux 154.77 Uy m 763.00 Ux 154.77 Uy l s
+C0 n 756.43 Ux 147.59 Uy m 763.00 Ux 147.59 Uy l s
+C0 n 756.43 Ux 141.97 Uy m 763.00 Ux 141.97 Uy l s
+C0 n 756.43 Ux 137.35 Uy m 763.00 Ux 137.35 Uy l s
+C0 n 756.43 Ux 133.43 Uy m 763.00 Ux 133.43 Uy l s
+C0 n 756.43 Ux 124.69 Uy m 763.00 Ux 124.69 Uy l s
+C0 n 756.43 Ux 118.16 Uy m 763.00 Ux 118.16 Uy l s
+C0 n 756.43 Ux 112.95 Uy m 763.00 Ux 112.95 Uy l s
+C0 n 756.43 Ux 108.61 Uy m 763.00 Ux 108.61 Uy l s
+C0 n 756.43 Ux 104.89 Uy m 763.00 Ux 104.89 Uy l s
+C0 n 756.43 Ux 94.93 Uy m 763.00 Ux 94.93 Uy l s
+C0 n 756.43 Ux 87.76 Uy m 763.00 Ux 87.76 Uy l s
+C0 n 756.43 Ux 82.14 Uy m 763.00 Ux 82.14 Uy l s
+C0 n 756.43 Ux 77.52 Uy m 763.00 Ux 77.52 Uy l s
+C0 n 756.43 Ux 73.60 Uy m 763.00 Ux 73.60 Uy l s
+C0 n 756.43 Ux 64.86 Uy m 763.00 Ux 64.86 Uy l s
+C0 n 756.43 Ux 58.33 Uy m 763.00 Ux 58.33 Uy l s
+C0 n 756.43 Ux 53.11 Uy m 763.00 Ux 53.11 Uy l s
+C0 n 756.43 Ux 48.77 Uy m 763.00 Ux 48.77 Uy l s
+C0 n 756.43 Ux 45.05 Uy m 763.00 Ux 45.05 Uy l s
+/Helvetica-Bold  ff 11.5956 FS /curfntsz 11.5956 def 
+gs 106.00 Ux 420.74 Uy m (-25) hcshstr gr
+gs 106.00 Ux 420.74 Uy m (-25) hcvbshstr gr
+gs 188.12 Ux 420.74 Uy m (-24) hcshstr gr
+gs 188.12 Ux 420.74 Uy m (-24) hcvbshstr gr
+gs 270.25 Ux 420.74 Uy m (-23) hcshstr gr
+gs 270.25 Ux 420.74 Uy m (-23) hcvbshstr gr
+gs 352.38 Ux 420.74 Uy m (-22) hcshstr gr
+gs 352.38 Ux 420.74 Uy m (-22) hcvbshstr gr
+gs 434.50 Ux 420.74 Uy m (-21) hcshstr gr
+gs 434.50 Ux 420.74 Uy m (-21) hcvbshstr gr
+gs 516.62 Ux 420.74 Uy m (-20) hcshstr gr
+gs 516.62 Ux 420.74 Uy m (-20) hcvbshstr gr
+gs 598.75 Ux 420.74 Uy m (-19) hcshstr gr
+gs 598.75 Ux 420.74 Uy m (-19) hcvbshstr gr
+gs 680.88 Ux 420.74 Uy m (-18) hcshstr gr
+gs 680.88 Ux 420.74 Uy m (-18) hcvbshstr gr
+gs 763.00 Ux 420.74 Uy m (-17) hcshstr gr
+gs 763.00 Ux 420.74 Uy m (-17) hcvbshstr gr
+gs 95.49 Ux 377.77 Uy m (0.01) hrshstr gr
+gs 95.49 Ux 377.77 Uy m (0.01) hrvbshstr gr
+gs 95.49 Ux 349.22 Uy m (0.03) hrshstr gr
+gs 95.49 Ux 349.22 Uy m (0.03) hrvbshstr gr
+gs 95.49 Ux 317.93 Uy m (0.1) hrshstr gr
+gs 95.49 Ux 317.93 Uy m (0.1) hrvbshstr gr
+gs 95.49 Ux 289.39 Uy m (0.3) hrshstr gr
+gs 95.49 Ux 289.39 Uy m (0.3) hrvbshstr gr
+gs 95.49 Ux 258.10 Uy m (1) hrshstr gr
+gs 95.49 Ux 258.10 Uy m (1) hrvbshstr gr
+gs 95.49 Ux 229.55 Uy m (3) hrshstr gr
+gs 95.49 Ux 229.55 Uy m (3) hrvbshstr gr
+gs 95.49 Ux 198.27 Uy m (10) hrshstr gr
+gs 95.49 Ux 198.27 Uy m (10) hrvbshstr gr
+gs 95.49 Ux 169.72 Uy m (30) hrshstr gr
+gs 95.49 Ux 169.72 Uy m (30) hrvbshstr gr
+gs 95.49 Ux 138.43 Uy m (100) hrshstr gr
+gs 95.49 Ux 138.43 Uy m (100) hrvbshstr gr
+gs 95.49 Ux 109.89 Uy m (300) hrshstr gr
+gs 95.49 Ux 109.89 Uy m (300) hrvbshstr gr
+gs 95.49 Ux 78.60 Uy m (1000) hrshstr gr
+gs 95.49 Ux 78.60 Uy m (1000) hrvbshstr gr
+gs 95.49 Ux 50.05 Uy m (3000) hrshstr gr
+gs 95.49 Ux 50.05 Uy m (3000) hrvbshstr gr
+/Helvetica-Bold  ff 10.4361 FS /curfntsz 10.4361 def 
+gs 434.50 Ux 20.64 Uy m (Galaxy mag i distribution Ell:red, Spiral:Green, StarBurst:Blue black:all) hcshstr gr
+gs 434.50 Ux 20.64 Uy m (Galaxy mag i distribution Ell:red, Spiral:Green, StarBurst:Blue black:all) hcvbshstr gr
+gs 434.50 Ux 441.93 Uy m (Ramos/useAll Absolute magnitude \(B\)) hcshstr gr
+gs 434.50 Ux 441.93 Uy m (Ramos/useAll Absolute magnitude \(B\)) hcvbshstr gr
+% SetClipRectangle: Define clip region 
+ newpath 106.00 Ux 40.00 Uy m 657.00 Ux 0 rl 0 359.00 Uy rl -657.00 Ux 0 rl closepath clip newpath
+C0 106.00 Ux 399.00 Uy m
+106.00 Ux 399.00 Uy l
+114.21 Ux 399.00 Uy l
+114.21 Ux 399.00 Uy l
+122.43 Ux 399.00 Uy l
+122.42 Ux 399.00 Uy l
+130.64 Ux 399.00 Uy l
+130.64 Ux 399.00 Uy l
+138.85 Ux 399.00 Uy l
+138.85 Ux 253.10 Uy l
+147.06 Ux 253.10 Uy l
+147.06 Ux 399.00 Uy l
+155.28 Ux 399.00 Uy l
+155.28 Ux 399.00 Uy l
+163.49 Ux 399.00 Uy l
+163.49 Ux 399.00 Uy l
+171.70 Ux 399.00 Uy l
+171.70 Ux 211.28 Uy l
+179.91 Ux 211.28 Uy l
+179.91 Ux 217.08 Uy l
+188.12 Ux 217.08 Uy l
+188.12 Ux 399.00 Uy l
+196.34 Ux 399.00 Uy l
+196.34 Ux 199.07 Uy l
+204.55 Ux 199.07 Uy l
+204.55 Ux 167.46 Uy l
+212.76 Ux 167.46 Uy l
+212.76 Ux 175.26 Uy l
+220.98 Ux 175.26 Uy l
+220.97 Ux 177.99 Uy l
+229.19 Ux 177.99 Uy l
+229.19 Ux 186.45 Uy l
+237.40 Ux 186.45 Uy l
+237.40 Ux 149.45 Uy l
+245.61 Ux 149.45 Uy l
+245.61 Ux 149.45 Uy l
+253.83 Ux 149.45 Uy l
+253.83 Ux 149.93 Uy l
+262.04 Ux 149.93 Uy l
+262.04 Ux 146.28 Uy l
+270.25 Ux 146.28 Uy l
+270.25 Ux 127.43 Uy l
+278.46 Ux 127.43 Uy l
+278.46 Ux 118.45 Uy l
+286.68 Ux 118.45 Uy l
+286.67 Ux 122.38 Uy l
+294.89 Ux 122.38 Uy l
+294.89 Ux 125.07 Uy l
+303.10 Ux 125.07 Uy l
+303.10 Ux 107.05 Uy l
+311.31 Ux 107.05 Uy l
+311.31 Ux 107.15 Uy l
+319.53 Ux 107.15 Uy l
+319.53 Ux 106.59 Uy l
+327.74 Ux 106.59 Uy l
+327.74 Ux 107.15 Uy l
+335.95 Ux 107.15 Uy l
+335.95 Ux 95.41 Uy l
+344.16 Ux 95.41 Uy l
+344.16 Ux 95.05 Uy l
+352.38 Ux 95.05 Uy l
+352.38 Ux 95.65 Uy l
+360.59 Ux 95.65 Uy l
+360.59 Ux 92.62 Uy l
+368.80 Ux 92.62 Uy l
+368.80 Ux 82.83 Uy l
+377.01 Ux 82.83 Uy l
+377.01 Ux 85.90 Uy l
+385.23 Ux 85.90 Uy l
+385.22 Ux 86.53 Uy l
+393.44 Ux 86.53 Uy l
+393.44 Ux 85.44 Uy l
+401.65 Ux 85.44 Uy l
+401.65 Ux 76.78 Uy l
+409.86 Ux 76.78 Uy l
+409.86 Ux 77.10 Uy l
+418.08 Ux 77.10 Uy l
+418.08 Ux 78.57 Uy l
+426.29 Ux 78.57 Uy l
+426.29 Ux 76.31 Uy l
+434.50 Ux 76.31 Uy l
+434.50 Ux 69.63 Uy l
+442.71 Ux 69.63 Uy l
+442.71 Ux 71.20 Uy l
+450.93 Ux 71.20 Uy l
+450.92 Ux 70.13 Uy l
+459.14 Ux 70.13 Uy l
+459.14 Ux 71.67 Uy l
+467.35 Ux 71.67 Uy l
+467.35 Ux 65.44 Uy l
+475.56 Ux 65.44 Uy l
+475.56 Ux 66.92 Uy l
+483.78 Ux 66.92 Uy l
+483.78 Ux 65.48 Uy l
+491.99 Ux 65.48 Uy l
+491.99 Ux 65.53 Uy l
+500.20 Ux 65.53 Uy l
+500.20 Ux 60.79 Uy l
+508.41 Ux 60.79 Uy l
+508.41 Ux 61.81 Uy l
+516.62 Ux 61.81 Uy l
+516.62 Ux 61.71 Uy l
+524.84 Ux 61.71 Uy l
+524.84 Ux 62.16 Uy l
+533.05 Ux 62.16 Uy l
+533.05 Ux 58.17 Uy l
+541.26 Ux 58.17 Uy l
+541.26 Ux 57.57 Uy l
+549.48 Ux 57.57 Uy l
+549.47 Ux 58.26 Uy l
+557.69 Ux 58.26 Uy l
+557.69 Ux 58.21 Uy l
+565.90 Ux 58.21 Uy l
+565.90 Ux 53.82 Uy l
+574.11 Ux 53.82 Uy l
+574.11 Ux 54.81 Uy l
+582.33 Ux 54.81 Uy l
+582.33 Ux 54.62 Uy l
+590.54 Ux 54.62 Uy l
+590.54 Ux 55.42 Uy l
+598.75 Ux 55.42 Uy l
+598.75 Ux 52.58 Uy l
+606.96 Ux 52.58 Uy l
+606.96 Ux 52.01 Uy l
+615.18 Ux 52.01 Uy l
+615.17 Ux 51.54 Uy l
+623.39 Ux 51.54 Uy l
+623.39 Ux 52.13 Uy l
+631.60 Ux 52.13 Uy l
+631.60 Ux 48.37 Uy l
+639.81 Ux 48.37 Uy l
+639.81 Ux 48.24 Uy l
+648.03 Ux 48.24 Uy l
+648.03 Ux 49.48 Uy l
+656.24 Ux 49.48 Uy l
+656.24 Ux 47.86 Uy l
+664.45 Ux 47.86 Uy l
+664.45 Ux 46.05 Uy l
+672.66 Ux 46.05 Uy l
+672.66 Ux 45.44 Uy l
+680.88 Ux 45.44 Uy l
+680.88 Ux 45.46 Uy l
+689.09 Ux 45.46 Uy l
+689.09 Ux 45.57 Uy l
+697.30 Ux 45.57 Uy l
+697.30 Ux 42.59 Uy l
+705.51 Ux 42.59 Uy l
+705.51 Ux 43.00 Uy l
+713.73 Ux 43.00 Uy l
+713.72 Ux 42.26 Uy l
+721.94 Ux 42.26 Uy l
+721.94 Ux 43.22 Uy l
+730.15 Ux 43.22 Uy l
+730.15 Ux 40.00 Uy l
+738.36 Ux 40.00 Uy l
+738.36 Ux 40.55 Uy l
+746.58 Ux 40.55 Uy l
+746.58 Ux 40.30 Uy l
+754.79 Ux 40.30 Uy l
+754.79 Ux 40.13 Uy l
+763.00 Ux 40.13 Uy l
+763.00 Ux 399.00 Uy l
+ s
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 821.00 Ux 0 rl 0 449.00 Uy rl -821.000000 Ux 0 rl closepath clip 
+% SetClipRectangle: Define clip region 
+ newpath 106.00 Ux 40.00 Uy m 657.00 Ux 0 rl 0 359.00 Uy rl -657.00 Ux 0 rl closepath clip newpath
+C4 106.00 Ux 399.00 Uy m
+106.00 Ux 399.00 Uy l
+114.21 Ux 399.00 Uy l
+114.21 Ux 399.00 Uy l
+122.43 Ux 399.00 Uy l
+122.42 Ux 399.00 Uy l
+130.64 Ux 399.00 Uy l
+130.64 Ux 399.00 Uy l
+138.85 Ux 399.00 Uy l
+138.85 Ux 399.00 Uy l
+147.06 Ux 399.00 Uy l
+147.06 Ux 399.00 Uy l
+155.28 Ux 399.00 Uy l
+155.28 Ux 399.00 Uy l
+163.49 Ux 399.00 Uy l
+163.49 Ux 399.00 Uy l
+171.70 Ux 399.00 Uy l
+171.70 Ux 399.00 Uy l
+179.91 Ux 399.00 Uy l
+179.91 Ux 399.00 Uy l
+188.12 Ux 399.00 Uy l
+188.12 Ux 399.00 Uy l
+196.34 Ux 399.00 Uy l
+196.34 Ux 399.00 Uy l
+204.55 Ux 399.00 Uy l
+204.55 Ux 235.09 Uy l
+212.76 Ux 235.09 Uy l
+212.76 Ux 253.10 Uy l
+220.98 Ux 253.10 Uy l
+220.97 Ux 253.10 Uy l
+229.19 Ux 253.10 Uy l
+229.19 Ux 399.00 Uy l
+237.40 Ux 399.00 Uy l
+237.40 Ux 217.08 Uy l
+245.61 Ux 217.08 Uy l
+245.61 Ux 193.27 Uy l
+253.83 Ux 193.27 Uy l
+253.83 Ux 206.54 Uy l
+262.04 Ux 206.54 Uy l
+262.04 Ux 186.45 Uy l
+270.25 Ux 186.45 Uy l
+270.25 Ux 173.99 Uy l
+278.46 Ux 173.99 Uy l
+278.46 Ux 176.59 Uy l
+286.68 Ux 176.59 Uy l
+286.67 Ux 162.24 Uy l
+294.89 Ux 162.24 Uy l
+294.89 Ux 163.87 Uy l
+303.10 Ux 163.87 Uy l
+303.10 Ux 154.18 Uy l
+311.31 Ux 154.18 Uy l
+311.31 Ux 151.45 Uy l
+319.53 Ux 151.45 Uy l
+319.53 Ux 150.93 Uy l
+327.74 Ux 150.93 Uy l
+327.74 Ux 145.44 Uy l
+335.95 Ux 145.44 Uy l
+335.95 Ux 137.05 Uy l
+344.16 Ux 137.05 Uy l
+344.16 Ux 134.50 Uy l
+352.38 Ux 134.50 Uy l
+352.38 Ux 133.70 Uy l
+360.59 Ux 133.70 Uy l
+360.59 Ux 129.35 Uy l
+368.80 Ux 129.35 Uy l
+368.80 Ux 115.95 Uy l
+377.01 Ux 115.95 Uy l
+377.01 Ux 121.22 Uy l
+385.23 Ux 121.22 Uy l
+385.22 Ux 120.58 Uy l
+393.44 Ux 120.58 Uy l
+393.44 Ux 117.03 Uy l
+401.65 Ux 117.03 Uy l
+401.65 Ux 108.41 Uy l
+409.86 Ux 108.41 Uy l
+409.86 Ux 110.79 Uy l
+418.08 Ux 110.79 Uy l
+418.08 Ux 109.11 Uy l
+426.29 Ux 109.11 Uy l
+426.29 Ux 107.62 Uy l
+434.50 Ux 107.62 Uy l
+434.50 Ux 101.63 Uy l
+442.71 Ux 101.63 Uy l
+442.71 Ux 102.65 Uy l
+450.93 Ux 102.65 Uy l
+450.92 Ux 101.03 Uy l
+459.14 Ux 101.03 Uy l
+459.14 Ux 103.37 Uy l
+467.35 Ux 103.37 Uy l
+467.35 Ux 94.76 Uy l
+475.56 Ux 94.76 Uy l
+475.56 Ux 95.47 Uy l
+483.78 Ux 95.47 Uy l
+483.78 Ux 95.84 Uy l
+491.99 Ux 95.84 Uy l
+491.99 Ux 94.99 Uy l
+500.20 Ux 94.99 Uy l
+500.20 Ux 90.00 Uy l
+508.41 Ux 90.00 Uy l
+508.41 Ux 90.20 Uy l
+516.62 Ux 90.20 Uy l
+516.62 Ux 90.25 Uy l
+524.84 Ux 90.25 Uy l
+524.84 Ux 90.95 Uy l
+533.05 Ux 90.95 Uy l
+533.05 Ux 87.58 Uy l
+541.26 Ux 87.58 Uy l
+541.26 Ux 86.23 Uy l
+549.48 Ux 86.23 Uy l
+549.47 Ux 87.98 Uy l
+557.69 Ux 87.98 Uy l
+557.69 Ux 85.00 Uy l
+565.90 Ux 85.00 Uy l
+565.90 Ux 80.84 Uy l
+574.11 Ux 80.84 Uy l
+574.11 Ux 82.87 Uy l
+582.33 Ux 82.87 Uy l
+582.33 Ux 81.57 Uy l
+590.54 Ux 81.57 Uy l
+590.54 Ux 81.85 Uy l
+598.75 Ux 81.85 Uy l
+598.75 Ux 78.95 Uy l
+606.96 Ux 78.95 Uy l
+606.96 Ux 78.13 Uy l
+615.18 Ux 78.13 Uy l
+615.17 Ux 77.61 Uy l
+623.39 Ux 77.61 Uy l
+623.39 Ux 80.80 Uy l
+631.60 Ux 80.80 Uy l
+631.60 Ux 73.89 Uy l
+639.81 Ux 73.89 Uy l
+639.81 Ux 75.07 Uy l
+648.03 Ux 75.07 Uy l
+648.03 Ux 76.19 Uy l
+656.24 Ux 76.19 Uy l
+656.24 Ux 74.15 Uy l
+664.45 Ux 74.15 Uy l
+664.45 Ux 71.08 Uy l
+672.66 Ux 71.08 Uy l
+672.66 Ux 70.63 Uy l
+680.88 Ux 70.63 Uy l
+680.88 Ux 70.80 Uy l
+689.09 Ux 70.80 Uy l
+689.09 Ux 70.54 Uy l
+697.30 Ux 70.54 Uy l
+697.30 Ux 66.39 Uy l
+705.51 Ux 66.39 Uy l
+705.51 Ux 68.69 Uy l
+713.73 Ux 68.69 Uy l
+713.72 Ux 67.35 Uy l
+721.94 Ux 67.35 Uy l
+721.94 Ux 69.17 Uy l
+730.15 Ux 69.17 Uy l
+730.15 Ux 65.08 Uy l
+738.36 Ux 65.08 Uy l
+738.36 Ux 64.86 Uy l
+746.58 Ux 64.86 Uy l
+746.58 Ux 65.10 Uy l
+754.79 Ux 65.10 Uy l
+754.79 Ux 64.16 Uy l
+763.00 Ux 64.16 Uy l
+763.00 Ux 399.00 Uy l
+ s
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 821.00 Ux 0 rl 0 449.00 Uy rl -821.000000 Ux 0 rl closepath clip 
+% SetClipRectangle: Define clip region 
+ newpath 106.00 Ux 40.00 Uy m 657.00 Ux 0 rl 0 359.00 Uy rl -657.00 Ux 0 rl closepath clip newpath
+C5 106.00 Ux 399.00 Uy m
+106.00 Ux 399.00 Uy l
+114.21 Ux 399.00 Uy l
+114.21 Ux 399.00 Uy l
+122.43 Ux 399.00 Uy l
+122.42 Ux 399.00 Uy l
+130.64 Ux 399.00 Uy l
+130.64 Ux 399.00 Uy l
+138.85 Ux 399.00 Uy l
+138.85 Ux 399.00 Uy l
+147.06 Ux 399.00 Uy l
+147.06 Ux 399.00 Uy l
+155.28 Ux 399.00 Uy l
+155.28 Ux 399.00 Uy l
+163.49 Ux 399.00 Uy l
+163.49 Ux 399.00 Uy l
+171.70 Ux 399.00 Uy l
+171.70 Ux 399.00 Uy l
+179.91 Ux 399.00 Uy l
+179.91 Ux 399.00 Uy l
+188.12 Ux 399.00 Uy l
+188.12 Ux 399.00 Uy l
+196.34 Ux 399.00 Uy l
+196.34 Ux 253.10 Uy l
+204.55 Ux 253.10 Uy l
+204.55 Ux 399.00 Uy l
+212.76 Ux 399.00 Uy l
+212.76 Ux 224.55 Uy l
+220.98 Ux 224.55 Uy l
+220.97 Ux 253.10 Uy l
+229.19 Ux 253.10 Uy l
+229.19 Ux 235.09 Uy l
+237.40 Ux 235.09 Uy l
+237.40 Ux 217.08 Uy l
+245.61 Ux 217.08 Uy l
+245.61 Ux 211.28 Uy l
+253.83 Ux 211.28 Uy l
+253.83 Ux 211.28 Uy l
+262.04 Ux 211.28 Uy l
+262.04 Ux 206.54 Uy l
+270.25 Ux 206.54 Uy l
+270.25 Ux 182.73 Uy l
+278.46 Ux 182.73 Uy l
+278.46 Ux 165.60 Uy l
+286.68 Ux 165.60 Uy l
+286.67 Ux 175.26 Uy l
+294.89 Ux 175.26 Uy l
+294.89 Ux 176.59 Uy l
+303.10 Ux 176.59 Uy l
+303.10 Ux 149.45 Uy l
+311.31 Ux 149.45 Uy l
+311.31 Ux 145.03 Uy l
+319.53 Ux 145.03 Uy l
+319.53 Ux 147.15 Uy l
+327.74 Ux 147.15 Uy l
+327.74 Ux 144.63 Uy l
+335.95 Ux 144.63 Uy l
+335.95 Ux 130.96 Uy l
+344.16 Ux 130.96 Uy l
+344.16 Ux 135.32 Uy l
+352.38 Ux 135.32 Uy l
+352.38 Ux 130.96 Uy l
+360.59 Ux 130.96 Uy l
+360.59 Ux 127.43 Uy l
+368.80 Ux 127.43 Uy l
+368.80 Ux 118.45 Uy l
+377.01 Ux 118.45 Uy l
+377.01 Ux 119.49 Uy l
+385.23 Ux 119.49 Uy l
+385.22 Ux 119.65 Uy l
+393.44 Ux 119.65 Uy l
+393.44 Ux 119.65 Uy l
+401.65 Ux 119.65 Uy l
+401.65 Ux 110.15 Uy l
+409.86 Ux 110.15 Uy l
+409.86 Ux 109.73 Uy l
+418.08 Ux 109.73 Uy l
+418.08 Ux 110.04 Uy l
+426.29 Ux 110.04 Uy l
+426.29 Ux 107.43 Uy l
+434.50 Ux 107.43 Uy l
+434.50 Ux 101.33 Uy l
+442.71 Ux 101.33 Uy l
+442.71 Ux 102.02 Uy l
+450.93 Ux 102.02 Uy l
+450.92 Ux 99.30 Uy l
+459.14 Ux 99.30 Uy l
+459.14 Ux 102.10 Uy l
+467.35 Ux 102.10 Uy l
+467.35 Ux 96.71 Uy l
+475.56 Ux 96.71 Uy l
+475.56 Ux 98.14 Uy l
+483.78 Ux 98.14 Uy l
+483.78 Ux 94.52 Uy l
+491.99 Ux 94.52 Uy l
+491.99 Ux 94.64 Uy l
+500.20 Ux 94.64 Uy l
+500.20 Ux 89.95 Uy l
+508.41 Ux 89.95 Uy l
+508.41 Ux 90.90 Uy l
+516.62 Ux 90.90 Uy l
+516.62 Ux 91.05 Uy l
+524.84 Ux 91.05 Uy l
+524.84 Ux 91.56 Uy l
+533.05 Ux 91.56 Uy l
+533.05 Ux 85.77 Uy l
+541.26 Ux 85.77 Uy l
+541.26 Ux 85.94 Uy l
+549.48 Ux 85.94 Uy l
+549.47 Ux 85.61 Uy l
+557.69 Ux 85.61 Uy l
+557.69 Ux 85.77 Uy l
+565.90 Ux 85.77 Uy l
+565.90 Ux 81.29 Uy l
+574.11 Ux 81.29 Uy l
+574.11 Ux 81.43 Uy l
+582.33 Ux 81.43 Uy l
+582.33 Ux 81.29 Uy l
+590.54 Ux 81.29 Uy l
+590.54 Ux 82.35 Uy l
+598.75 Ux 82.35 Uy l
+598.75 Ux 80.36 Uy l
+606.96 Ux 80.36 Uy l
+606.96 Ux 78.57 Uy l
+615.18 Ux 78.57 Uy l
+615.17 Ux 78.85 Uy l
+623.39 Ux 78.85 Uy l
+623.39 Ux 77.40 Uy l
+631.60 Ux 77.40 Uy l
+631.60 Ux 75.35 Uy l
+639.81 Ux 75.35 Uy l
+639.81 Ux 74.50 Uy l
+648.03 Ux 74.50 Uy l
+648.03 Ux 75.46 Uy l
+656.24 Ux 75.46 Uy l
+656.24 Ux 72.48 Uy l
+664.45 Ux 72.48 Uy l
+664.45 Ux 73.19 Uy l
+672.66 Ux 73.19 Uy l
+672.66 Ux 71.01 Uy l
+680.88 Ux 71.01 Uy l
+680.88 Ux 71.20 Uy l
+689.09 Ux 71.20 Uy l
+689.09 Ux 71.12 Uy l
+697.30 Ux 71.12 Uy l
+697.30 Ux 69.21 Uy l
+705.51 Ux 69.21 Uy l
+705.51 Ux 67.82 Uy l
+713.73 Ux 67.82 Uy l
+713.72 Ux 66.84 Uy l
+721.94 Ux 66.84 Uy l
+721.94 Ux 67.82 Uy l
+730.15 Ux 67.82 Uy l
+730.15 Ux 64.75 Uy l
+738.36 Ux 64.75 Uy l
+738.36 Ux 66.15 Uy l
+746.58 Ux 66.15 Uy l
+746.58 Ux 65.42 Uy l
+754.79 Ux 65.42 Uy l
+754.79 Ux 64.60 Uy l
+763.00 Ux 64.60 Uy l
+763.00 Ux 399.00 Uy l
+ s
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 821.00 Ux 0 rl 0 449.00 Uy rl -821.000000 Ux 0 rl closepath clip 
+% SetClipRectangle: Define clip region 
+ newpath 106.00 Ux 40.00 Uy m 657.00 Ux 0 rl 0 359.00 Uy rl -657.00 Ux 0 rl closepath clip newpath
+C3 106.00 Ux 399.00 Uy m
+106.00 Ux 399.00 Uy l
+114.21 Ux 399.00 Uy l
+114.21 Ux 399.00 Uy l
+122.43 Ux 399.00 Uy l
+122.42 Ux 399.00 Uy l
+130.64 Ux 399.00 Uy l
+130.64 Ux 399.00 Uy l
+138.85 Ux 399.00 Uy l
+138.85 Ux 253.10 Uy l
+147.06 Ux 253.10 Uy l
+147.06 Ux 399.00 Uy l
+155.28 Ux 399.00 Uy l
+155.28 Ux 399.00 Uy l
+163.49 Ux 399.00 Uy l
+163.49 Ux 399.00 Uy l
+171.70 Ux 399.00 Uy l
+171.70 Ux 211.28 Uy l
+179.91 Ux 211.28 Uy l
+179.91 Ux 217.08 Uy l
+188.12 Ux 217.08 Uy l
+188.12 Ux 399.00 Uy l
+196.34 Ux 399.00 Uy l
+196.34 Ux 202.54 Uy l
+204.55 Ux 202.54 Uy l
+204.55 Ux 169.46 Uy l
+212.76 Ux 169.46 Uy l
+212.76 Ux 181.05 Uy l
+220.98 Ux 181.05 Uy l
+220.97 Ux 181.05 Uy l
+229.19 Ux 181.05 Uy l
+229.19 Ux 190.79 Uy l
+237.40 Ux 190.79 Uy l
+237.40 Ux 153.61 Uy l
+245.61 Ux 153.61 Uy l
+245.61 Ux 157.90 Uy l
+253.83 Ux 157.90 Uy l
+253.83 Ux 155.98 Uy l
+262.04 Ux 155.98 Uy l
+262.04 Ux 155.98 Uy l
+270.25 Ux 155.98 Uy l
+270.25 Ux 136.17 Uy l
+278.46 Ux 136.17 Uy l
+278.46 Ux 126.62 Uy l
+286.68 Ux 126.62 Uy l
+286.67 Ux 133.43 Uy l
+294.89 Ux 133.43 Uy l
+294.89 Ux 136.76 Uy l
+303.10 Ux 136.76 Uy l
+303.10 Ux 118.60 Uy l
+311.31 Ux 118.60 Uy l
+311.31 Ux 121.06 Uy l
+319.53 Ux 121.06 Uy l
+319.53 Ux 119.49 Uy l
+327.74 Ux 119.49 Uy l
+327.74 Ux 123.42 Uy l
+335.95 Ux 123.42 Uy l
+335.95 Ux 111.23 Uy l
+344.16 Ux 111.23 Uy l
+344.16 Ux 109.73 Uy l
+352.38 Ux 109.73 Uy l
+352.38 Ux 113.06 Uy l
+360.59 Ux 113.06 Uy l
+360.59 Ux 110.90 Uy l
+368.80 Ux 110.90 Uy l
+368.80 Ux 102.65 Uy l
+377.01 Ux 102.65 Uy l
+377.01 Ux 105.59 Uy l
+385.23 Ux 105.59 Uy l
+385.22 Ux 107.24 Uy l
+393.44 Ux 107.24 Uy l
+393.44 Ux 107.05 Uy l
+401.65 Ux 107.05 Uy l
+401.65 Ux 98.88 Uy l
+409.86 Ux 98.88 Uy l
+409.86 Ux 98.34 Uy l
+418.08 Ux 98.34 Uy l
+418.08 Ux 102.81 Uy l
+426.29 Ux 102.81 Uy l
+426.29 Ux 100.22 Uy l
+434.50 Ux 100.22 Uy l
+434.50 Ux 92.62 Uy l
+442.71 Ux 92.62 Uy l
+442.71 Ux 95.23 Uy l
+450.93 Ux 95.23 Uy l
+450.92 Ux 95.96 Uy l
+459.14 Ux 95.96 Uy l
+459.14 Ux 95.84 Uy l
+467.35 Ux 95.84 Uy l
+467.35 Ux 90.84 Uy l
+475.56 Ux 90.84 Uy l
+475.56 Ux 93.06 Uy l
+483.78 Ux 93.06 Uy l
+483.78 Ux 91.87 Uy l
+491.99 Ux 91.87 Uy l
+491.99 Ux 92.67 Uy l
+500.20 Ux 92.67 Uy l
+500.20 Ux 88.12 Uy l
+508.41 Ux 88.12 Uy l
+508.41 Ux 90.00 Uy l
+516.62 Ux 90.00 Uy l
+516.62 Ux 89.52 Uy l
+524.84 Ux 89.52 Uy l
+524.84 Ux 89.66 Uy l
+533.05 Ux 89.66 Uy l
+533.05 Ux 86.83 Uy l
+541.26 Ux 86.83 Uy l
+541.26 Ux 86.19 Uy l
+549.48 Ux 86.19 Uy l
+549.47 Ux 86.88 Uy l
+557.69 Ux 86.88 Uy l
+557.69 Ux 89.76 Uy l
+565.90 Ux 89.76 Uy l
+565.90 Ux 85.20 Uy l
+574.11 Ux 85.20 Uy l
+574.11 Ux 85.98 Uy l
+582.33 Ux 85.98 Uy l
+582.33 Ux 87.05 Uy l
+590.54 Ux 87.05 Uy l
+590.54 Ux 88.16 Uy l
+598.75 Ux 88.16 Uy l
+598.75 Ux 84.36 Uy l
+606.96 Ux 84.36 Uy l
+606.96 Ux 85.65 Uy l
+615.18 Ux 85.65 Uy l
+615.17 Ux 84.28 Uy l
+623.39 Ux 84.28 Uy l
+623.39 Ux 84.28 Uy l
+631.60 Ux 84.28 Uy l
+631.60 Ux 82.25 Uy l
+639.81 Ux 82.25 Uy l
+639.81 Ux 81.32 Uy l
+648.03 Ux 81.32 Uy l
+648.03 Ux 83.09 Uy l
+656.24 Ux 83.09 Uy l
+656.24 Ux 84.01 Uy l
+664.45 Ux 84.01 Uy l
+664.45 Ux 80.43 Uy l
+672.66 Ux 80.43 Uy l
+672.66 Ux 81.78 Uy l
+680.88 Ux 81.78 Uy l
+680.88 Ux 81.36 Uy l
+689.09 Ux 81.36 Uy l
+689.09 Ux 82.28 Uy l
+697.30 Ux 82.28 Uy l
+697.30 Ux 79.60 Uy l
+705.51 Ux 79.60 Uy l
+705.51 Ux 79.73 Uy l
+713.73 Ux 79.73 Uy l
+713.72 Ux 80.36 Uy l
+721.94 Ux 80.36 Uy l
+721.94 Ux 79.92 Uy l
+730.15 Ux 79.92 Uy l
+730.15 Ux 77.82 Uy l
+738.36 Ux 77.82 Uy l
+738.36 Ux 78.29 Uy l
+746.58 Ux 78.29 Uy l
+746.58 Ux 77.98 Uy l
+754.79 Ux 77.98 Uy l
+754.79 Ux 80.26 Uy l
+763.00 Ux 80.26 Uy l
+763.00 Ux 399.00 Uy l
+ s
+% Define clip region to the entire bloc area 
+initclip newpath 0 0 m 821.00 Ux 0 rl 0 449.00 Uy rl -821.000000 Ux 0 rl closepath clip 
+EndBloc
+%>EndBloc 2
+PState restore  showpage
+%>EndPage 2
+
+
+FState restore
+%%Trailer
+%%Pages: 2
+%%EOF

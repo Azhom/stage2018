@@ -1,0 +1,12 @@
+#############################################################################
+#  LF's schechter parameters LF_Params = phistar mstar alpha -
+#  From Dahlen et al paper   ApJ, 631:126-144, 2005
+#  This file has been prepared by F. Habibi, September 18th 2017
+#  Data from table 3 , in three redshift bins
+#  mstar values are in B-band for H0=70 km/s/Mpc (h_70=1), m(h_70) = mstar - 5log10(h_70)
+#   LF_Params = [ phistar mstar alpha ]
+#  zmin zmax LF_Params_Ell LF_Params_Spiral LF_Params_StarBurst LF_Params_All 
+#############################################################################
+0.1     0.5      0.0013     -21.16	-0.74	0.00212     -21.00	-1.35	0.00426     -18.72	-1.02	0.00281     -21.22	-1.37
+0.5     0.75     0.00167    -21.01	-0.39	0.00234     -21.29	-1.14	0.00278     -19.51	-1.04	0.00318     -21.46	-1.22
+0.75    1.0      0.00062    -21.44	-0.72	0.0022      -21.15	-0.87	0.00177     -20.32	-1.30	0.00245     -21.46	-1.24
