@@ -302,6 +302,7 @@ int main(int narg, char* arg[]) {
 	FitsManager::Read(fis, map);
 	double ebmv;
 	double totcnt, Ellcnt, Spcnt, SBcnt;
+	double totcnt_reddened;
 	
 	for(int ii = 0; ii<map.NbPixels(); ii++) {
 	    ebmv = map[ii];
