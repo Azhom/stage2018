@@ -14,7 +14,7 @@ MYOBJS = Objs/multitypzlf.o Objs/myschechter.o \
 
 MYINCS = myschechter.h multitypzlf.h kcorr.h galcnt.h  sedfilter.h  reddening.h sinterp.h 
 
-all :   mlf  tngal tngal1 
+all :   mlf tngal tngal1 mapngal
 
 clean :
 	rm Objs/* *.ppf 
@@ -31,6 +31,9 @@ tngal :   Objs/tngal
 
 tngal1 :   Objs/tngal1	
 	@echo 'Makefile:     tngal1 made'
+	
+mapngal : Objs/mapngal
+	@echo 'Makefile:	mapngal made'
 
 ######    executables made here
 ### mlf : Basic test of MultiType_Z_LF  
@@ -52,6 +55,13 @@ Objs/tngal1: Objs/tngal1.o $(MYOBJS)
 
 Objs/tngal1.o: tngal1.cc  $(MYINCS)
 	$(CXXCOMPILE) -I . -o Objs/tngal1.o tngal1.cc 
+
+#	mapngal : computing map of galaxy number density from dust map
+Objs/mapngal: Objs/mapngal.o $(MYOBJS)
+	$(CXXLINK) -o Objs/mapngal Objs/mapngal.o $(MYOBJS) $(SOPHYAEXTSLBLIST)
+	
+Objs/mapngal.o: mapngal.cc  $(MYINCS)
+	$(CXXCOMPILE) -I . -o Objs/mapngal.o mapngal.cc 
 
 #   Multi-type, per redshift bin LF's 
 Objs/multitypzlf.o: multitypzlf.cc  multitypzlf.h  myschechter.h  
