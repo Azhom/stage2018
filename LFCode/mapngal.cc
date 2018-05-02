@@ -297,9 +297,9 @@ int main(int narg, char* arg[]) {
 	//Loading the fit file
 	cout << "[5] Loading fits file ..." << endl;
 
-	FitsInOutFile fis("../Dustmaps/lambda_sfd_ebv.fits[1][col TEMPERATURE]", FitsInOutFile::Fits_RO);
+	FitsInOutFile fis("../Dustmaps/low4_sfd.fits[1][col I]", FitsInOutFile::Fits_RO);
 	SphereHEALPix<r_4> ebmv_map;
-	SphereHEALPix<r_4> diff_map(512);
+	SphereHEALPix<r_4> diff_map(4);
 
 	FitsManager::Read(fis, ebmv_map);
 	
@@ -310,14 +310,14 @@ int main(int narg, char* arg[]) {
 	galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax);
 	totcnt=galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt);
 	
-	for(int ii = 0; ii<10; ii++) {//<map.NbPixels(); ii++) {
+	for(int ii = 0; ii<ebmv_map.NbPixels(); ii++) {//<map.NbPixels(); ii++) {
 	    ebmv = ebmv_map[ii];
 	    
 	    galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax, ebmv);
 	    totcnt_reddened=galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt);
 	    
-	    diff_map[ii] = totcnt - totcnt_reddened;
-	    cout << ii << endl;
+	    diff_map[ii] = totcnt_reddened/totcnt;
+	    //cout << totcnt << " " << totcnt_reddened << "  -  " << ii << endl;
 	}
 	FitsInOutFile fos("Objs/diffgalcnt.fits", FitsInOutFile::Fits_Create);
 	FitsManager::Write(fos, diff_map);
