@@ -301,13 +301,13 @@ int main(int narg, char* arg[]) {
 	SphereHEALPix<r_4> ebmv_map;
 	SphereHEALPix<r_4> gcnt_map;
 	SphereHEALPix<r_4> gcnt_red_map;
-	FitsManager::Read(fis, map);
+	FitsManager::Read(fis, ebmv_map);
 	double ebmv;
 	double totcnt, Ellcnt, Spcnt, SBcnt;
 	double totcnt_reddened;
 	
 	for(int ii = 0; ii<100; ii++) {//<map.NbPixels(); ii++) {
-	    ebmv = map[ii];
+	    ebmv = ebmv_map[ii];
 	    galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax);
 	    totcnt=galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt);
 	    
