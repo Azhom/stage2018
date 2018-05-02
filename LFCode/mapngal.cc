@@ -299,32 +299,28 @@ int main(int narg, char* arg[]) {
 
 	FitsInOutFile fis("../Dustmaps/lambda_sfd_ebv.fits[1][col TEMPERATURE]", FitsInOutFile::Fits_RO);
 	SphereHEALPix<r_4> ebmv_map;
-	SphereHEALPix<r_4> gcnt_map;
-	SphereHEALPix<r_4> gcnt_red_map;
-	
-	gcnt_map.setNSide(512);
-	gcnt_red_map.setNSide(512);
+	SphereHEALPix<r_4> diff_map(512);
 
+	FitsManager::Read(fis, ebmv_map);
+	
 	double ebmv;
 	double totcnt, Ellcnt, Spcnt, SBcnt;
 	double totcnt_reddened;
 	
 	galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax);
 	totcnt=galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt);
-
+	
 	for(int ii = 0; ii<10; ii++) {//<map.NbPixels(); ii++) {
 	    ebmv = ebmv_map[ii];
 	    
 	    galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax, ebmv);
 	    totcnt_reddened=galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt);
 	    
-	    gcnt_map[ii]	 = totcnt;
-	    gcnt_red_map[ii] = totcnt_reddened;
+	    diff_map[ii] = totcnt - totcnt_reddened;
 	    cout << ii << endl;
 	}
 	FitsInOutFile fos("Objs/diffgalcnt.fits", FitsInOutFile::Fits_Create);
-	FitsManager::Write(fos, gcnt_map);
-	FitsManager::Write(fos, gcnt_red_map);
+	FitsManager::Write(fos, diff_map);
     }  // End of try bloc
     
     
