@@ -84,13 +84,14 @@ double KCorrector::ComputeRestFrameMagnitudeLimit(Filter & filt_RF,Filter & filt
    
     //Adding extinction sperately
     if (ebmv != 0.){
-		SEDzFilterProd integrand(sed, filt_Obs, z);
-		double F = FilterIntegrator(integrand, lambdamin*1e-9, lambdamax*1e-9).Value();
+		//SEDzFilterProd integrand(sed, filt_Obs, z);
+		//double F = FilterIntegrator(integrand, lambdamin*1e-9, lambdamax*1e-9).Value();
+		
 		sed.doRedden(ebmv, z);
 		SEDzFilterProd integrand_red(sed, filt_Obs, z);
 		double FRed = FilterIntegrator(integrand_red, lambdamin*1e-9, lambdamax*1e-9).Value();
 		sed.stopRedden();
-		double delta_m = -2.5*log10(FRed/F); 
+		double delta_m = -2.5*log10(FRed/Fr); 
 		magBlim -= delta_m;
     }
     //DBG cout << magBlim << endl;

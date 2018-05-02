@@ -301,24 +301,30 @@ int main(int narg, char* arg[]) {
 	SphereHEALPix<r_4> ebmv_map;
 	SphereHEALPix<r_4> gcnt_map;
 	SphereHEALPix<r_4> gcnt_red_map;
-	FitsManager::Read(fis, ebmv_map);
+	
+	gcnt_map.setNSide(512);
+	gcnt_red_map.setNSide(512);
+
 	double ebmv;
 	double totcnt, Ellcnt, Spcnt, SBcnt;
 	double totcnt_reddened;
 	
-	for(int ii = 0; ii<100; ii++) {//<map.NbPixels(); ii++) {
+	galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax);
+	totcnt=galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt);
+
+	for(int ii = 0; ii<10; ii++) {//<map.NbPixels(); ii++) {
 	    ebmv = ebmv_map[ii];
-	    galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax);
-	    totcnt=galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt);
 	    
 	    galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax, ebmv);
 	    totcnt_reddened=galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt);
 	    
-	    gcnt_map[ii] = totcnt; gcnt_red_map[ii] = totcnt_reddened;
+	    gcnt_map[ii]	 = totcnt;
+	    gcnt_red_map[ii] = totcnt_reddened;
+	    cout << ii << endl;
 	}
-	FitsInOut fos("diffgalcnt.fits");
-	FitsInOutFile::Write(fos, gcnt_map);
-	FitsInOutFile::Write(fos, gcnt_red_map);
+	FitsInOutFile fos("Objs/diffgalcnt.fits", FitsInOutFile::Fits_Create);
+	FitsManager::Write(fos, gcnt_map);
+	FitsManager::Write(fos, gcnt_red_map);
     }  // End of try bloc
     
     
