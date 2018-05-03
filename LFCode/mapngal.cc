@@ -326,12 +326,24 @@ int main(int narg, char* arg[]) {
 	//Loading the fit file
 	cout << "[6] Computing galaxy number map" << endl;
 
-	FitsInOutFile fis("../Dustmaps/lambda_sfd_ebv.fits[1][col TEMPERATURE]", FitsInOutFile::Fits_RO);
+	FitsInOutFile fis("../Dustmaps/planck.fits[1][col ebv]", FitsInOutFile::Fits_RO);
 	SphereHEALPix<r_4> ebmv_map;
-	SphereHEALPix<r_4> diff_map(512);
+	SphereHEALPix<r_4> diff_map;
 
 	FitsManager::Read(fis, ebmv_map);
 	double totcnt_reddened, totcnt;
+	
+	bool nested;
+	if(ebmv_map.TypeOfMap()=="NESTED"){
+		nested = false;
+	}
+	else{
+		nested = true;
+	}
+	diff_map.setNSide(ebmv_map.SizeIndex(), nested);
+	
+	cout << ebmv_map.TypeOfMap() << endl;
+	cout << diff_map.TypeOfMap() << endl;
 	
 	galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax);
 	totcnt=galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt);
