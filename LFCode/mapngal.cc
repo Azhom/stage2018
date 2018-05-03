@@ -292,29 +292,42 @@ int main(int narg, char* arg[]) {
 	}
 
 
+	//Creating interpolated n_gal(E(B-V))
+	cout << "[5] Interpolating n_gal ...";
+	vector<double> ngal_vector;
+	vector<double> ebmv_vector;
+	double ebmv;
+	double ebmv_max = 10;
+	double ebmv_min = 0.;
+	int ebmv_steps = 1000;
+	double Ellcnt, Spcnt, SBcnt;
+	
+	for(int ii=0; ii<ebmv_steps; ii++){
+		ebmv = (ebmv_max-ebmv_min)/ebmv_steps*ii+ebmv_min;
+	    galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax, ebmv);
+	    ngal_vector.push_back(galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt));
+	    ebmv_vector.push_back(ebmv);
+	}
+	
+	SLinInterp1D ngal_interpolated(ebmv_vector, ngal_vector);
+
 
 
 	//Loading the fit file
-	cout << "[5] Loading fits file ..." << endl;
+	cout << "[6] Computing galaxy number map" << endl;
 
-	FitsInOutFile fis("../Dustmaps/low8_sfd.fits[1][col I]", FitsInOutFile::Fits_RO);
+	FitsInOutFile fis("../Dustmaps/lambda_sfd_ebv.fits[1][col TEMPERATURE]", FitsInOutFile::Fits_RO);
 	SphereHEALPix<r_4> ebmv_map;
 	SphereHEALPix<r_4> diff_map(8);
 
 	FitsManager::Read(fis, ebmv_map);
-	
-	double ebmv;
-	double totcnt, Ellcnt, Spcnt, SBcnt;
-	double totcnt_reddened;
+	double totcnt_reddened, totcnt;
 	
 	galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax);
 	totcnt=galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt);
 	
 	for(int ii = 0; ii<ebmv_map.NbPixels(); ii++) {//<map.NbPixels(); ii++) {
-	    ebmv = ebmv_map[ii];
-	    
-	    galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax, ebmv);
-	    totcnt_reddened=galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt);
+	    totcnt_reddened = ngal_interpolated(ebmv_map[ii]);
 	    
 	    diff_map[ii] = totcnt_reddened/totcnt;
 	    cout << ii << endl;
