@@ -305,7 +305,7 @@ int main(int narg, char* arg[]) {
 	//int ebmv_steps = 1000;
 	
 	//ofstream ngal_points;
-	//ngal_points.open("Objs/ngal_points.txt");
+	//ngal_points.open("ngal_points.txt");
 	
 	//for(int ii=0; ii<ebmv_steps; ii++){
 		//ebmv = (ebmv_max-ebmv_min)/ebmv_steps*ii+ebmv_min;
@@ -313,6 +313,7 @@ int main(int narg, char* arg[]) {
 	    //ngal_vector.push_back(galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt));
 	    //ebmv_vector.push_back(ebmv);
 	    //ngal_points << ebmv_vector[ii] << " " << ngal_vector[ii] << endl;
+	    //cout << ebmv_vector[ii] << endl;
 	//}
 	//ngal_points.close();
 	
@@ -327,7 +328,7 @@ int main(int narg, char* arg[]) {
 	//Loading the fit file
 	cout << "[6] Loading dust map..." << endl;
 
-	FitsInOutFile fis("../Dustmaps/ps1.fits[1][col EBV]", FitsInOutFile::Fits_RO);
+	FitsInOutFile fis("../Dustmaps/planck.fits[1][col EBV]", FitsInOutFile::Fits_RO);
 	SphereHEALPix<r_4> ebmv_map;
 	SphereHEALPix<r_4> diff_map;
 
@@ -355,6 +356,10 @@ int main(int narg, char* arg[]) {
 		//cout << "DBG 1 : " << ii << " " << ebmv_map[ii] << endl;
 		if (ebmv_map[ii]<7.35){
 			totcnt_reddened = ngal_interpolated(ebmv_map[ii]*0.86);
+			//if (totcnt_reddened/totcnt>1){
+				//cout << "DBG: totcnt_reddened > 1 !"<< endl;
+				//cout << totcnt_reddened << " " << totcnt << endl;
+			//}
 			diff_map[ii] = totcnt_reddened/totcnt;
 		}
 		else{
