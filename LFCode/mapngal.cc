@@ -295,6 +295,7 @@ int main(int narg, char* arg[]) {
 	//Creating interpolated n_gal(E(B-V))
 	cout << "[5] Interpolating n_gal ...";
 	double Ellcnt, Spcnt, SBcnt;
+	string txtfilename = "ngal_points.txt";
 	
 	//
 	//vector<double> ngal_vector;
@@ -349,8 +350,9 @@ int main(int narg, char* arg[]) {
 	
 	cout << "[7] Computing galaxy number map" << endl;
 	
-	galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax);
-	totcnt=galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt);
+	//galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax);
+	//totcnt=galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt);
+	totcnt = ngal_interpolated(0);
 	
 	for(int ii = 0; ii<ebmv_map.NbPixels(); ii++) {//<map.NbPixels(); ii++) {
 		//cout << "DBG 1 : " << ii << " " << ebmv_map[ii] << endl;
