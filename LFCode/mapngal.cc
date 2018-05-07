@@ -306,7 +306,7 @@ int main(int narg, char* arg[]) {
 	//int ebmv_steps = 1000;
 	
 	//ofstream ngal_points;
-	//ngal_points.open("ngal_points.txt");
+	//ngal_points.open("ngal_points_rv32.txt");
 	
 	//for(int ii=0; ii<ebmv_steps; ii++){
 		//ebmv = (ebmv_max-ebmv_min)/ebmv_steps*ii+ebmv_min;
@@ -322,19 +322,22 @@ int main(int narg, char* arg[]) {
 	//
 	
 	SLinInterp1D ngal_interpolated;
+	SLinInterp1D ngal_interpolated_mod;
 	ngal_interpolated.ReadXYFromFile("ngal_points.txt");
+	ngal_interpolated_mod.ReadXYFromFile("ngal_points_rv32.txt");
 
 
 
 	//Loading the fit file
 	cout << "[6] Loading dust map..." << endl;
 
-	FitsInOutFile fis("../Dustmaps/planck.fits[1][col EBV]", FitsInOutFile::Fits_RO);
+	FitsInOutFile fis("../Dustmaps/sfd.fits[1][col TEMPERATURE]", FitsInOutFile::Fits_RO);
 	SphereHEALPix<r_4> ebmv_map;
 	SphereHEALPix<r_4> diff_map;
 
 	FitsManager::Read(fis, ebmv_map);
 	double totcnt_reddened, totcnt;
+	double totcnt_reddened_mod, totcnt_mod;
 	
 	bool nested;
 	if(ebmv_map.TypeOfMap()=="NESTED"){
@@ -349,20 +352,16 @@ int main(int narg, char* arg[]) {
 	cout << diff_map.TypeOfMap() << endl;
 	
 	cout << "[7] Computing galaxy number map" << endl;
-	
-	//galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax);
-	//totcnt=galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt);
+
 	totcnt = ngal_interpolated(0);
+	totcnt_mod = ngal_interpolated_mod(0);
 	
 	for(int ii = 0; ii<ebmv_map.NbPixels(); ii++) {//<map.NbPixels(); ii++) {
 		//cout << "DBG 1 : " << ii << " " << ebmv_map[ii] << endl;
 		if (ebmv_map[ii]<7.35){
-			totcnt_reddened = ngal_interpolated(ebmv_map[ii]*0.86);
-			//if (totcnt_reddened/totcnt>1){
-				//cout << "DBG: totcnt_reddened > 1 !"<< endl;
-				//cout << totcnt_reddened << " " << totcnt << endl;
-			//}
-			diff_map[ii] = totcnt_reddened/totcnt;
+			totcnt_reddened 	= ngal_interpolated(ebmv_map[ii]*0.86);
+			totcnt_reddened_mod = ngal_interpolated_mod(ebmv_map[ii]*0.86);
+			diff_map[ii] 		= totcnt_reddened_mod/totcnt_reddened;
 		}
 		else{
 			diff_map[ii] = 0.;
