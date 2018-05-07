@@ -295,28 +295,29 @@ int main(int narg, char* arg[]) {
 	//Creating interpolated n_gal(E(B-V))
 	cout << "[5] Interpolating n_gal ...";
 	double Ellcnt, Spcnt, SBcnt;
-	/*
-	vector<double> ngal_vector;
-	vector<double> ebmv_vector;
-	double ebmv;
-	double ebmv_max = 7.35;
-	double ebmv_min = 0.;
-	int ebmv_steps = 1000;
 	
-	ofstream ngal_points;
-	ngal_points.open("Objs/ngal_points.txt");
+	//
+	//vector<double> ngal_vector;
+	//vector<double> ebmv_vector;
+	//double ebmv;
+	//double ebmv_max = 7.35;
+	//double ebmv_min = 0.;
+	//int ebmv_steps = 1000;
 	
-	for(int ii=0; ii<ebmv_steps; ii++){
-		ebmv = (ebmv_max-ebmv_min)/ebmv_steps*ii+ebmv_min;
-	    galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax, ebmv);
-	    ngal_vector.push_back(galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt));
-	    ebmv_vector.push_back(ebmv);
-	    ngal_points << ebmv_vector[ii] << " " << ngal_vector[ii] << endl;
-	}
-	ngal_points.close();
-	cout << "hey" << endl;
+	//ofstream ngal_points;
+	//ngal_points.open("Objs/ngal_points.txt");
 	
-	SLinInterp1D ngal_interpolated(ebmv_vector, ngal_vector);*/
+	//for(int ii=0; ii<ebmv_steps; ii++){
+		//ebmv = (ebmv_max-ebmv_min)/ebmv_steps*ii+ebmv_min;
+	    //galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax, ebmv);
+	    //ngal_vector.push_back(galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt));
+	    //ebmv_vector.push_back(ebmv);
+	    //ngal_points << ebmv_vector[ii] << " " << ngal_vector[ii] << endl;
+	//}
+	//ngal_points.close();
+	
+	//SLinInterp1D ngal_interpolated(ebmv_vector, ngal_vector);
+	//
 	
 	SLinInterp1D ngal_interpolated;
 	ngal_interpolated.ReadXYFromFile("ngal_points.txt");
@@ -324,9 +325,9 @@ int main(int narg, char* arg[]) {
 
 
 	//Loading the fit file
-	cout << "[6] Computing galaxy number map" << endl;
+	cout << "[6] Loading dust map..." << endl;
 
-	FitsInOutFile fis("../Dustmaps/planck.fits[1][col ebv]", FitsInOutFile::Fits_RO);
+	FitsInOutFile fis("../Dustmaps/ps1.fits[1][col EBV]", FitsInOutFile::Fits_RO);
 	SphereHEALPix<r_4> ebmv_map;
 	SphereHEALPix<r_4> diff_map;
 
@@ -337,7 +338,7 @@ int main(int narg, char* arg[]) {
 	if(ebmv_map.TypeOfMap()=="NESTED"){
 		nested = false;
 	}
-	else{
+	else if(ebmv_map.TypeOfMap()=="RING"){
 		nested = true;
 	}
 	diff_map.setNSide(ebmv_map.SizeIndex(), nested);
@@ -345,13 +346,15 @@ int main(int narg, char* arg[]) {
 	cout << ebmv_map.TypeOfMap() << endl;
 	cout << diff_map.TypeOfMap() << endl;
 	
+	cout << "[7] Computing galaxy number map" << endl;
+	
 	galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax);
 	totcnt=galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt);
 	
 	for(int ii = 0; ii<ebmv_map.NbPixels(); ii++) {//<map.NbPixels(); ii++) {
 		//cout << "DBG 1 : " << ii << " " << ebmv_map[ii] << endl;
 		if (ebmv_map[ii]<7.35){
-			totcnt_reddened = ngal_interpolated(ebmv_map[ii]);
+			totcnt_reddened = ngal_interpolated(ebmv_map[ii]*0.86);
 			diff_map[ii] = totcnt_reddened/totcnt;
 		}
 		else{

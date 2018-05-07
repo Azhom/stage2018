@@ -58,7 +58,7 @@ public:
   inline double Value(double Mag) const
   {
     double X=pow(10., 0.4*(Mstar_-Mag));
-    double phiret= A * phistar_ * pow(X,alpha_+1);// * exp(-X) ; // The Shceshter function
+    double phiret= A * phistar_ * pow(X,alpha_+1) * exp(-X) ; // The Shceshter function
     return phiret;
   }
   // computes the LF
@@ -67,7 +67,7 @@ public:
     // luminosity for a magnitude Mag
     double Lum=pow(10., -0.4*Mag);
     double X=pow(10., 0.4*(Mstar_-Mag));
-    double valret= Lum* A * phistar_ * pow(X,alpha_+1);// * exp(-X) ;
+    double valret= Lum* A * phistar_ * pow(X,alpha_+1) * exp(-X) ;
     return valret;
   }
   
