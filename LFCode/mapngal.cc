@@ -53,172 +53,172 @@
 
 
 int main(int narg, char* arg[]) {
-    
-    cout << endl;
-    cout << " -------------------- mapngal.cc ( MultiType_Z_LF & GalaxyCountComputer ) ----------------------- " << endl;
-    cout << endl;
-    
-    string inlfname = "lfparamDahlenAll.txt";
-    string outppfname = "galcnt.ppf";
-    string outfitsname = "";
-    string sedpath = "../SEDs/";
-    string filtpath = "../Filters/";
-    int prtlev=0;
-    
-    bool fguseall = false;
-    bool fgLFfilB = true;
-    double magMin=-27. , magMax=-13;
-    int nbmagpts=50;
-    double zmin = 0.1, zmax=4.1, dz=0.05;
-    double lambdamin=300., lambdamax=1000.;  // in nanometre
-    double lambdaSEDmin=100.;  // on nanometre, SED wavelength interval
-    double lambdaSEDmax=2500.;
-    double maglim = 25.3;  // Magnitude limit in observation band (LSST-i-band for example)
-    double magerr = 0.;  // Error on magnitude , 0. -> NoError (used also for scan mag
-    /*  (science book) double x = pow(10,.4*(maglim-m5i)); double gammai = 0.039;
-         magErr = sqrt( (.04-gammai)*x + gammai*x*x );  */
-    double scanmagmin=23., scanmagmax=27., scanmagstep=0.2;
-    // Fraction of the galaxies for each LF distributed over the 6 SED 
-    double fEll[6]={1.,0.,0.,0.,0.,0.};   // for elliptical 
-    bool fg_fEll=false;      //  true, -fEll specified 
-    double fSp[6]={0.,0.4,0.4,0.2,0.,0.};   // for Spirals 
-    bool fg_fSp=false;       //  true, -fSp specified 
-    double fSB[6]={0.,0.,0.,0.,0.5,0.5};   // for StarBurst 
-    bool fg_fSB=false;       //  true, -fSB specified 
+	
+	cout << endl;
+	cout << " -------------------- mapngal.cc ( MultiType_Z_LF & GalaxyCountComputer ) ----------------------- " << endl;
+	cout << endl;
+	
+	string inlfname = "lfparamDahlenAll.txt";
+	string outppfname = "galcnt.ppf";
+	string outfitsname = "";
+	string sedpath = "../SEDs/";
+	string filtpath = "../Filters/";
+	int prtlev=0;
+	
+	bool fguseall = false;
+	bool fgLFfilB = true;
+	double magMin=-27. , magMax=-13;
+	int nbmagpts=50;
+	double zmin = 0.1, zmax=4.1, dz=0.05;
+	double lambdamin=300., lambdamax=1000.;  // in nanometre
+	double lambdaSEDmin=100.;  // on nanometre, SED wavelength interval
+	double lambdaSEDmax=2500.;
+	double maglim = 25.3;  // Magnitude limit in observation band (LSST-i-band for example)
+	double magerr = 0.;  // Error on magnitude , 0. -> NoError (used also for scan mag
+	/*  (science book) double x = pow(10,.4*(maglim-m5i)); double gammai = 0.039;
+		 magErr = sqrt( (.04-gammai)*x + gammai*x*x );  */
+	double scanmagmin=23., scanmagmax=27., scanmagstep=0.2;
+	// Fraction of the galaxies for each LF distributed over the 6 SED 
+	double fEll[6]={1.,0.,0.,0.,0.,0.};   // for elliptical 
+	bool fg_fEll=false;      //  true, -fEll specified 
+	double fSp[6]={0.,0.4,0.4,0.2,0.,0.};   // for Spirals 
+	bool fg_fSp=false;       //  true, -fSp specified 
+	double fSB[6]={0.,0.,0.,0.,0.5,0.5};   // for StarBurst 
+	bool fg_fSB=false;       //  true, -fSB specified 
 
-    if ((narg>1)&&(strcmp(arg[1],"-h")==0)) {
-        cout << " Test computation of ngal using MultiType_Z_LF & GalaxyCountComputer classes  Usage: \n"
-	     << " Usage: mapngal [-i input_schech_param_file] [-magMLF magMin,magMax,nbpts] [-useall] \n"
-	     << "              [-sedp SEDFilePath] [-filtp FilterPath] [-LFB] [-LFiS] \n"
-	     << "              [-lambda min,max] [-lambdaSED min,max] \n"
-	     << "              [-fEll f1,f2,f3,f4,f5,f6] [-fSp f1,f2,f3,f4,f5,f6] [-fSB f1,f2,f3,f4,f5,f6] \n"
-	     << "              [-o outppfname] [-fits outfitsname] [-prt lev] \n" 
-	     << "              [-limag magLimit,magErr] [-z zmin,zmax,dz] [-scanmag magmin,magmax,dmag] \n" << endl;
+	if ((narg>1)&&(strcmp(arg[1],"-h")==0)) {
+		cout << " Test computation of ngal using MultiType_Z_LF & GalaxyCountComputer classes  Usage: \n"
+		 << " Usage: mapngal [-i input_schech_param_file] [-magMLF magMin,magMax,nbpts] [-useall] \n"
+		 << "              [-sedp SEDFilePath] [-filtp FilterPath] [-LFB] [-LFiS] \n"
+		 << "              [-lambda min,max] [-lambdaSED min,max] \n"
+		 << "              [-fEll f1,f2,f3,f4,f5,f6] [-fSp f1,f2,f3,f4,f5,f6] [-fSB f1,f2,f3,f4,f5,f6] \n"
+		 << "              [-o outppfname] [-fits outfitsname] [-prt lev] \n" 
+		 << "              [-limag magLimit,magErr] [-z zmin,zmax,dz] [-scanmag magmin,magmax,dmag] \n" << endl;
 	cout << "  -i input_schech_param_file: input text file name containing Schechter LF parameters \n" 
-	     << " -magMLF magMin,magMax,nbmagpts: min/max/step step absolute magnitudes in LF function (def=-27,-13,50) \n"
-	     << " -useall: use the Scheshter parameters for total galaxies from the input file. False by default.\n"
-	     << " -sedp sedpath: path for the SEDs directory. default sedpath=" << sedpath << "\n"
-	     << " -filtp filtpath: path for the filters directory. default filtpath=" << filtpath << "\n"
-	     << " -LFB: if the Scheshter parameters are given in B-band. True by default \n" 
-	     << " -LFiS: if the Scheshter parameters are given in iS-band. False by default \n"
-	     << " -lambda lambdamin,lambdamax : wavelength range (in nm) for filter definitions. Default 300,1000 nm \n"
-	     << " -lambdaSED lambdamin,lambdamax : wavelength range (in nm) for SED's definitions. Default 100,2500 nm \n"
-	     << " -fEll -fSp -fSB f1,f2,f3,f4,f5,f6 : Specify for each LF (Elliptical, Spiral, StarBurst) the fractional \n"
-	     << "            distribution over the 6 SED's : El_cww, Scd_cww, Sbc_cww, Im_cww, SB2_kin, SB3_kin \n"
-	     << " -limag maglim,magerr: apparent magnitude limit and mag-error in i-band for count(redshift) NTuple. default = 25.3,0.  \n" 
-	     << " -z zmin,zmax,dz: redshift range. Default zmin=0.1, zmax=4.1 and dz=0.05 \n"
-	     << " -scanmag magmin,magmax,dmag: magnitude limit scan range Default: 23,27,0.2 (Note: uses same magErr as -limag) \n" 
-	     << " -o outppfname: output file name in ppf format. Default  = galcnt.ppf \n" 
-	     << " -fits outfitsname: output file name in FITS format. Default  NONE \n" 
-	     << " -prt lev: define print level. default=0 \n" << endl;		
+		 << " -magMLF magMin,magMax,nbmagpts: min/max/step step absolute magnitudes in LF function (def=-27,-13,50) \n"
+		 << " -useall: use the Scheshter parameters for total galaxies from the input file. False by default.\n"
+		 << " -sedp sedpath: path for the SEDs directory. default sedpath=" << sedpath << "\n"
+		 << " -filtp filtpath: path for the filters directory. default filtpath=" << filtpath << "\n"
+		 << " -LFB: if the Scheshter parameters are given in B-band. True by default \n" 
+		 << " -LFiS: if the Scheshter parameters are given in iS-band. False by default \n"
+		 << " -lambda lambdamin,lambdamax : wavelength range (in nm) for filter definitions. Default 300,1000 nm \n"
+		 << " -lambdaSED lambdamin,lambdamax : wavelength range (in nm) for SED's definitions. Default 100,2500 nm \n"
+		 << " -fEll -fSp -fSB f1,f2,f3,f4,f5,f6 : Specify for each LF (Elliptical, Spiral, StarBurst) the fractional \n"
+		 << "            distribution over the 6 SED's : El_cww, Scd_cww, Sbc_cww, Im_cww, SB2_kin, SB3_kin \n"
+		 << " -limag maglim,magerr: apparent magnitude limit and mag-error in i-band for count(redshift) NTuple. default = 25.3,0.  \n" 
+		 << " -z zmin,zmax,dz: redshift range. Default zmin=0.1, zmax=4.1 and dz=0.05 \n"
+		 << " -scanmag magmin,magmax,dmag: magnitude limit scan range Default: 23,27,0.2 (Note: uses same magErr as -limag) \n" 
+		 << " -o outppfname: output file name in ppf format. Default  = galcnt.ppf \n" 
+		 << " -fits outfitsname: output file name in FITS format. Default  NONE \n" 
+		 << " -prt lev: define print level. default=0 \n" << endl;		
 
-        return 1;
-    }
-    
-    
-    bool fgoptarg=true;
-    while (fgoptarg&&(narg>1))    {
-      string fbo = arg[1];
-      if (fbo=="-i")  {
+		return 1;
+	}
+	
+	
+	bool fgoptarg=true;
+	while (fgoptarg&&(narg>1))    {
+	  string fbo = arg[1];
+	  if (fbo=="-i")  {
 	if (narg<3) { cout << " mapngal.cc: missing/bad argument, -h for help " << endl;  return -1; }
 	inlfname = arg[2];   arg+=2; narg-=2;
-      }
-      else if (fbo=="-sedp")  {
+	  }
+	  else if (fbo=="-sedp")  {
 	if (narg<3) { cout << " mapngal.cc: missing/bad argument, -h for help " << endl;  return -1; }
 	sedpath = arg[2];   arg+=2; narg-=2;
-      }
-      else if (fbo=="-filtp")  {
+	  }
+	  else if (fbo=="-filtp")  {
 	if (narg<3) { cout << " mapngal.cc: missing/bad argument, -h for help " << endl;  return -1; }
 	filtpath=arg[2];   arg+=2; narg-=2;
-      }
-      else if (fbo=="-magMLF")  {
+	  }
+	  else if (fbo=="-magMLF")  {
 	if (narg<3) { cout << " mapngal.cc: missing/bad argument, -h for help " << endl;  return -1; }
 	sscanf(arg[2],"%lg,%lg,%d",&magMin,&magMax,&nbmagpts);   arg+=2; narg-=2;
-      }
-      else if (fbo=="-limag")  {
+	  }
+	  else if (fbo=="-limag")  {
 	if (narg<3) { cout << " mapngal.cc: missing/bad argument, -h for help " << endl;  return -1; }
 	sscanf(arg[2],"%lg,%lg",&maglim,&magerr);     arg+=2; narg-=2;
-      }
-      else if (fbo=="-z")  {
+	  }
+	  else if (fbo=="-z")  {
 	if (narg<3) { cout << " mapngal.cc: missing/bad argument, -h for help " << endl;  return -1; }
 	sscanf(arg[2],"%lg,%lg,%lg",&zmin,&zmax,&dz);   arg+=2; narg-=2;
-      }
-      else if (fbo=="-scanmag")  {
+	  }
+	  else if (fbo=="-scanmag")  {
 	if (narg<3) { cout << " mapngal.cc: missing/bad argument, -h for help " << endl;  return -1; }
 	sscanf(arg[2],"%lg,%lg,%lg",&scanmagmin,&scanmagmax,&scanmagstep);   arg+=2; narg-=2;
-      }
-      else if (fbo=="-lambda")  {
+	  }
+	  else if (fbo=="-lambda")  {
 	if (narg<3) { cout << " mapngal.cc: missing/bad argument, -h for help " << endl;  return -1; }
 	sscanf(arg[2],"%lg,%lg",&lambdamin,&lambdamax);   arg+=2; narg-=2;
-      }
-      else if (fbo=="-lambdaSED")  {
+	  }
+	  else if (fbo=="-lambdaSED")  {
 	if (narg<3) { cout << " mapngal.cc: missing/bad argument, -h for help " << endl;  return -1; }
 	sscanf(arg[2],"%lg,%lg",&lambdaSEDmin,&lambdaSEDmax);   arg+=2; narg-=2;
-      }
-      else if (fbo=="-fEll")  {
+	  }
+	  else if (fbo=="-fEll")  {
 	if (narg<3) { cout << " mapngal.cc: missing/bad argument, -h for help " << endl;  return -1; }
 	sscanf(arg[2],"%lg,%lg,%lg,%lg,%lg,%lg",fEll,fEll+1,fEll+2,fEll+3,fEll+4,fEll+5);  fg_fEll=true;  arg+=2; narg-=2;
-      }
-      else if (fbo=="-fSp")  {
+	  }
+	  else if (fbo=="-fSp")  {
 	if (narg<3) { cout << " mapngal.cc: missing/bad argument, -h for help " << endl;  return -1; }
 	sscanf(arg[2],"%lg,%lg,%lg,%lg,%lg,%lg",fSp,fSp+1,fSp+2,fSp+3,fSp+4,fSp+5);  fg_fSp=true;  arg+=2; narg-=2;
-      }
-      else if (fbo=="-fSB")  {
+	  }
+	  else if (fbo=="-fSB")  {
 	if (narg<3) { cout << " mapngal.cc: missing/bad argument, -h for help " << endl;  return -1; }
 	sscanf(arg[2],"%lg,%lg,%lg,%lg,%lg,%lg",fSB,fSB+1,fSB+2,fSB+3,fSB+4,fSB+5);  fg_fSB=true;  arg+=2; narg-=2;
-      }
-      else if (fbo=="-o")  {
+	  }
+	  else if (fbo=="-o")  {
 	if (narg<3) { cout << " mapngal.cc: missing/bad argument, -h for help " << endl;  return -1; }
 	outppfname=arg[2];   arg+=2; narg-=2;
-      }
-      else if (fbo=="-fits")  {
+	  }
+	  else if (fbo=="-fits")  {
 	if (narg<3) { cout << " mapngal.cc: missing/bad argument, -h for help " << endl;  return -1; }
 	outfitsname=arg[2];   arg+=2; narg-=2;
-      }
-      else if (fbo=="-prt")  {
+	  }
+	  else if (fbo=="-prt")  {
 	if (narg<3) { cout << " mapngal.cc: missing/bad argument, -h for help " << endl;  return -1; }
 	prtlev=atoi(arg[2]);   arg+=2; narg-=2;
-      }
-      else if (fbo=="-useall")  {
+	  }
+	  else if (fbo=="-useall")  {
 	fguseall=true; arg++; narg--;
-      }
-      else if (fbo=="-LFB")  {
+	  }
+	  else if (fbo=="-LFB")  {
 	fgLFfilB=true; arg++; narg--;
-      }
-      else if (fbo=="-LFiS")  {
+	  }
+	  else if (fbo=="-LFiS")  {
 	fgLFfilB=false; arg++; narg--;
-      }
-      else {
+	  }
+	  else {
 	cout << " mapngal.cc wrong option "<<fbo<<" use -h to see list of options"<<endl;
 	return 9;
-      }
-    }
-    
-    cout << " Inpute LF file: " << inlfname << endl;
-    cout << " Output file: " << outppfname << endl;
-    cout << " Reading SDEs from: " << sedpath << endl;
-    cout << " Reading Filters from: " << filtpath << endl;
-    cout << " MultiType_Z_LF magnitude range magMin=" << magMin << ", magMax=" << magMax << endl;
-    cout << " z-min=" << zmin << ", z-max=" << zmax << " z-step=" << dz << endl;
-    // setting the lambda's interval for the spectra
-    cout << " Wavelength interval(nm): [" << lambdamin << "," << lambdamax << "]" << endl;
-    cout << " SED Wavelength interval(nm): [" << lambdaSEDmin << "," << lambdaSEDmax << "]" << endl;
-    cout << " MagnitudeLimit (Observation band) = " << maglim << " MagnitudeError= "<< magerr <<endl;
-    cout << " MagnitudeLimit Scan Range (Observation band) = " << scanmagmin << "," << scanmagmax << "," << scanmagstep << endl;
-    cout << " Luminosity Functions filter = " << (fgLFfilB?"B-Filter":"iS-Filter") << endl;
-    cout << " PrintLevel = " << prtlev << endl;
+	  }
+	}
+	
+	cout << " Inpute LF file: " << inlfname << endl;
+	cout << " Output file: " << outppfname << endl;
+	cout << " Reading SDEs from: " << sedpath << endl;
+	cout << " Reading Filters from: " << filtpath << endl;
+	cout << " MultiType_Z_LF magnitude range magMin=" << magMin << ", magMax=" << magMax << endl;
+	cout << " z-min=" << zmin << ", z-max=" << zmax << " z-step=" << dz << endl;
+	// setting the lambda's interval for the spectra
+	cout << " Wavelength interval(nm): [" << lambdamin << "," << lambdamax << "]" << endl;
+	cout << " SED Wavelength interval(nm): [" << lambdaSEDmin << "," << lambdaSEDmax << "]" << endl;
+	cout << " MagnitudeLimit (Observation band) = " << maglim << " MagnitudeError= "<< magerr <<endl;
+	cout << " MagnitudeLimit Scan Range (Observation band) = " << scanmagmin << "," << scanmagmax << "," << scanmagstep << endl;
+	cout << " Luminosity Functions filter = " << (fgLFfilB?"B-Filter":"iS-Filter") << endl;
+	cout << " PrintLevel = " << prtlev << endl;
 
-    // make sure SOPHYA modules are initialized
-    SophyaInit();
-    FitsIOServerInit();
-    
-    SFPathManager sedpathmgr(sedpath);
-    SFPathManager filtpathmgr(filtpath);
+	// make sure SOPHYA modules are initialized
+	SophyaInit();
+	FitsIOServerInit();
+	
+	SFPathManager sedpathmgr(sedpath);
+	SFPathManager filtpathmgr(filtpath);
 
-    int rc = 0;
-    
-    double m5i = 24.+2.5;
-    try {
+	int rc = 0;
+	
+	double m5i = 24.+2.5;
+	try {
 	Timer tm("mapngal.cc");
 
 	cout << "[1] Creating SimpleUniverse su(Planck2015LambdaCDM) ..."<<endl;
@@ -270,25 +270,25 @@ int main(int narg, char* arg[]) {
 	GalaxyCountComputer galcntc(multLF, filt_LF, filt_Obs, su, sedpathmgr, lambdaSEDmin, lambdaSEDmax);
 	galcntc.setPrintLevel(prtlev);
 	if (fg_fEll) {
-	    double * fLF = fEll;
-	    cout << "[4...] Changing fractional distribution over the 6 SED's for LF-Ellipticals\n"
+		double * fLF = fEll;
+		cout << "[4...] Changing fractional distribution over the 6 SED's for LF-Ellipticals\n"
 		 << "   "<<fLF[0]<<","<<fLF[1]<<","<<fLF[2]<<","<<fLF[3]<<","<<fLF[4]<<","<<fLF[5]<<endl;
-	    std::vector<double> vfLF(6);  for(size_t jj=0; jj<6; jj++)  vfLF[jj]=fLF[jj];
-	    galcntc.setEllipticalSEDFraction(vfLF);
+		std::vector<double> vfLF(6);  for(size_t jj=0; jj<6; jj++)  vfLF[jj]=fLF[jj];
+		galcntc.setEllipticalSEDFraction(vfLF);
 	}
 	if (fg_fSp) {
-	    double * fLF = fSp;
-	    cout << "[4...] Changing fractional distribution over the 6 SED's for LF-Spirals\n"
+		double * fLF = fSp;
+		cout << "[4...] Changing fractional distribution over the 6 SED's for LF-Spirals\n"
 		 << "   "<<fLF[0]<<","<<fLF[1]<<","<<fLF[2]<<","<<fLF[3]<<","<<fLF[4]<<","<<fLF[5]<<endl;
-	    std::vector<double> vfLF(6);  for(size_t jj=0; jj<6; jj++)  vfLF[jj]=fLF[jj];
-	    galcntc.setSpiralSEDFraction(vfLF);
+		std::vector<double> vfLF(6);  for(size_t jj=0; jj<6; jj++)  vfLF[jj]=fLF[jj];
+		galcntc.setSpiralSEDFraction(vfLF);
 	}
 	if (fg_fSp) {
-	    double * fLF = fSB;
-	    cout << "[4...] Changing fractional distribution over the 6 SED's for LF-StarBurst\n"
+		double * fLF = fSB;
+		cout << "[4...] Changing fractional distribution over the 6 SED's for LF-StarBurst\n"
 		 << "   "<<fLF[0]<<","<<fLF[1]<<","<<fLF[2]<<","<<fLF[3]<<","<<fLF[4]<<","<<fLF[5]<<endl;
-	    std::vector<double> vfLF(6);  for(size_t jj=0; jj<6; jj++)  vfLF[jj]=fLF[jj];
-	    galcntc.setStarBurstSEDFraction(vfLF);
+		std::vector<double> vfLF(6);  for(size_t jj=0; jj<6; jj++)  vfLF[jj]=fLF[jj];
+		galcntc.setStarBurstSEDFraction(vfLF);
 	}
 
 
@@ -306,89 +306,91 @@ int main(int narg, char* arg[]) {
 	//int ebmv_steps = 1000;
 	
 	//ofstream ngal_points;
-	//ngal_points.open("ngal_points_rv32.txt");
+	//ngal_points.open("ngal_points_zucca.txt");
 	
 	//for(int ii=0; ii<ebmv_steps; ii++){
 		//ebmv = (ebmv_max-ebmv_min)/ebmv_steps*ii+ebmv_min;
-	    //galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax, ebmv);
-	    //ngal_vector.push_back(galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt));
-	    //ebmv_vector.push_back(ebmv);
-	    //ngal_points << ebmv_vector[ii] << " " << ngal_vector[ii] << endl;
-	    //cout << ebmv_vector[ii] << endl;
+		//galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax, ebmv);
+		//ngal_vector.push_back(galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt));
+		//ebmv_vector.push_back(ebmv);
+		//ngal_points << ebmv_vector[ii] << " " << ngal_vector[ii] << endl;
+		//cout << ebmv_vector[ii] << endl;
 	//}
 	//ngal_points.close();
 	
+	//cout << "[[[[[[[[[[[]]]]]]]]]]" << endl;
 	//SLinInterp1D ngal_interpolated(ebmv_vector, ngal_vector);
 	//
 	
 	SLinInterp1D ngal_interpolated;
 	SLinInterp1D ngal_interpolated_mod;
 	ngal_interpolated.ReadXYFromFile("ngal_points.txt");
-	ngal_interpolated_mod.ReadXYFromFile("ngal_points_rv32.txt");
+	ngal_interpolated_mod.ReadXYFromFile("ngal_points_zucca.txt");
 
 
 
 	//Loading the fit file
 	cout << "[6] Loading dust map..." << endl;
 
-	FitsInOutFile fis("../Dustmaps/sfd.fits[1][col TEMPERATURE]", FitsInOutFile::Fits_RO);
-	SphereHEALPix<r_4> ebmv_map;
+	FitsInOutFile fis1("../Dustmaps/ps1.fits[1][col EBV]", FitsInOutFile::Fits_RO);
+	FitsInOutFile fis2("../Dustmaps/gaussian_ebv.fits[1][col I]", FitsInOutFile::Fits_RO);
+	double correction_factor_sfd = 1.0;
+	SphereHEALPix<r_4> ebmv_map1;
+	SphereHEALPix<r_4> ebmv_map2;
 	SphereHEALPix<r_4> diff_map;
 
-	FitsManager::Read(fis, ebmv_map);
-	double totcnt_reddened, totcnt;
-	double totcnt_reddened_mod, totcnt_mod;
+	FitsManager::Read(fis1, ebmv_map1);
+	FitsManager::Read(fis2, ebmv_map2);
+	double totcnt_reddened;
+	double totcnt_reddened_mod;
+
+	diff_map.setNSide(ebmv_map1.SizeIndex(), true);
 	
-	bool nested;
-	if(ebmv_map.TypeOfMap()=="NESTED"){
-		nested = false;
-	}
-	else if(ebmv_map.TypeOfMap()=="RING"){
-		nested = true;
-	}
-	diff_map.setNSide(ebmv_map.SizeIndex(), nested);
-	
-	cout << ebmv_map.TypeOfMap() << endl;
+	cout << ebmv_map1.TypeOfMap() << endl;
+	cout << ebmv_map2.TypeOfMap() << endl;
 	cout << diff_map.TypeOfMap() << endl;
 	
 	cout << "[7] Computing galaxy number map" << endl;
-
-	totcnt = ngal_interpolated(0);
-	totcnt_mod = ngal_interpolated_mod(0);
 	
-	for(int ii = 0; ii<ebmv_map.NbPixels(); ii++) {//<map.NbPixels(); ii++) {
-		//cout << "DBG 1 : " << ii << " " << ebmv_map[ii] << endl;
-		if (ebmv_map[ii]<7.35){
-			totcnt_reddened 	= ngal_interpolated(ebmv_map[ii]*0.86);
-			totcnt_reddened_mod = ngal_interpolated_mod(ebmv_map[ii]*0.86);
-			diff_map[ii] 		= totcnt_reddened_mod/totcnt_reddened;
+	for(int ii = 0; ii<ebmv_map1.NbPixels(); ii++){
+		if (isnan(ebmv_map1[ii])) {cout << "nan" << endl;}
+		if (ebmv_map1[ii]<0 or ebmv_map2[ii]<0 or ebmv_map1[ii]>1000 or ebmv_map2[ii]>1000 or isnan(ebmv_map1[ii]) or isnan(ebmv_map2[ii])){
+			diff_map[ii]=-1.6375e+30;
 		}
 		else{
-			diff_map[ii] = 0.;
+			totcnt_reddened 	= ngal_interpolated(ebmv_map1[ii]*correction_factor_sfd);
+			totcnt_reddened_mod = ngal_interpolated(ebmv_map2[ii]*correction_factor_sfd);
+			if (totcnt_reddened != 0){
+				diff_map[ii] 	= totcnt_reddened_mod/totcnt_reddened;
+				//diff_map[ii] 	= totcnt_reddened;
+			}
+			else{
+				diff_map[ii]=-1.6375e+30;
+			}
 		}
 	}
 	FitsInOutFile fos("Objs/diffgalcnt.fits", FitsInOutFile::Fits_Create);
 	FitsManager::Write(fos, diff_map);
-    }  // End of try bloc
-    
-    
-    catch (PThrowable & exc) {  // catching SOPHYA exceptions
-        cerr << " mapngal.cc: Catched Exception (PThrowable)"
-        << (string)typeid(exc).name()
-        << "\n --> exc.Msg= " << exc.Msg() << endl;
-        rc = 99;
-    }
-    catch (std::exception & e) {  // catching standard C++ exceptions
-        cerr << " mapngal.cc: Catched std::exception "  << " - what()= "
-        << e.what() << endl;
-        rc = 98;
-    }
-    catch (...) {  // catching other exceptions
-        cerr << " mapngal.cc: some other exception (...) was caught ! "
-        << endl;
-        rc = 97;
-    }
-    cout << " ------------------------- End of mapngal.cc (Rc="<<rc<<") ------------------------ " << endl;
-    return rc;	
+	}  // End of try bloc
+	
+	
+	catch (PThrowable & exc) {  // catching SOPHYA exceptions
+		cerr << " mapngal.cc: Catched Exception (PThrowable)"
+		<< (string)typeid(exc).name()
+		<< "\n --> exc.Msg= " << exc.Msg() << endl;
+		rc = 99;
+	}
+	catch (std::exception & e) {  // catching standard C++ exceptions
+		cerr << " mapngal.cc: Catched std::exception "  << " - what()= "
+		<< e.what() << endl;
+		rc = 98;
+	}
+	catch (...) {  // catching other exceptions
+		cerr << " mapngal.cc: some other exception (...) was caught ! "
+		<< endl;
+		rc = 97;
+	}
+	cout << " ------------------------- End of mapngal.cc (Rc="<<rc<<") ------------------------ " << endl;
+	return rc;	
 }
 
