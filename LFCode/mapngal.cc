@@ -325,16 +325,17 @@ int main(int narg, char* arg[]) {
 	SLinInterp1D ngal_interpolated;
 	SLinInterp1D ngal_interpolated_mod;
 	ngal_interpolated.ReadXYFromFile("ngal_points.txt");
-	ngal_interpolated_mod.ReadXYFromFile("ngal_points_zucca.txt");
+	//ngal_interpolated_mod.ReadXYFromFile("ngal_points_zucca.txt");
 
 
 
 	//Loading the fit file
 	cout << "[6] Loading dust map..." << endl;
 
-	FitsInOutFile fis1("../Dustmaps/ps1.fits[1][col EBV]", FitsInOutFile::Fits_RO);
-	FitsInOutFile fis2("../Dustmaps/gaussian_ebv.fits[1][col I]", FitsInOutFile::Fits_RO);
-	double correction_factor_sfd = 1.0;
+	FitsInOutFile fis1("../Dustmaps/sfd.fits[1][col ebv]", FitsInOutFile::Fits_RO);
+	FitsInOutFile fis2("../Dustmaps/sfd.fits[1][col ebv]", FitsInOutFile::Fits_RO);
+	double correction_factor_sfd = 0.86;
+	double correction_factor_sfd_mod = 0.86;
 	SphereHEALPix<r_4> ebmv_map1;
 	SphereHEALPix<r_4> ebmv_map2;
 	SphereHEALPix<r_4> diff_map;
@@ -344,7 +345,7 @@ int main(int narg, char* arg[]) {
 	double totcnt_reddened;
 	double totcnt_reddened_mod;
 
-	diff_map.setNSide(ebmv_map1.SizeIndex(), true);
+	diff_map.setNSide(ebmv_map2.SizeIndex(), ebmv_map2.IfRING());
 	
 	cout << ebmv_map1.TypeOfMap() << endl;
 	cout << ebmv_map2.TypeOfMap() << endl;
@@ -354,25 +355,24 @@ int main(int narg, char* arg[]) {
 	
 	for(int ii = 0; ii<ebmv_map1.NbPixels(); ii++){
 		if (isnan(ebmv_map1[ii])) {cout << "nan" << endl;}
-		if (ebmv_map1[ii]<0 or ebmv_map2[ii]<0 or ebmv_map1[ii]>1000 or ebmv_map2[ii]>1000 or isnan(ebmv_map1[ii]) or isnan(ebmv_map2[ii])){
-			diff_map[ii]=-1.6375e+30;
+		if (ebmv_map1[ii]==1e-33 or ebmv_map2[ii]==1e-33 or ebmv_map1[ii]<0 or ebmv_map2[ii]<0 or isnan(ebmv_map1[ii]) or isnan(ebmv_map2[ii])){
+			diff_map[ii] = -1.6375e+30;
 		}
 		else{
 			totcnt_reddened 	= ngal_interpolated(ebmv_map1[ii]*correction_factor_sfd);
-			totcnt_reddened_mod = ngal_interpolated(ebmv_map2[ii]*correction_factor_sfd);
+			totcnt_reddened_mod = ngal_interpolated(ebmv_map2[ii]*correction_factor_sfd_mod);
 			if (totcnt_reddened != 0){
-				diff_map[ii] 	= totcnt_reddened_mod/totcnt_reddened;
-				//diff_map[ii] 	= totcnt_reddened;
+				//diff_map[ii] = totcnt_reddened_mod/totcnt_reddened;
+				diff_map[ii] = totcnt_reddened;
 			}
 			else{
-				diff_map[ii]=-1.6375e+30;
+				diff_map[ii] = -1.6375e+30;
 			}
 		}
 	}
 	FitsInOutFile fos("Objs/diffgalcnt.fits", FitsInOutFile::Fits_Create);
 	FitsManager::Write(fos, diff_map);
 	}  // End of try bloc
-	
 	
 	catch (PThrowable & exc) {  // catching SOPHYA exceptions
 		cerr << " mapngal.cc: Catched Exception (PThrowable)"
