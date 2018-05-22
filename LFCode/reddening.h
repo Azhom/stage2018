@@ -3,11 +3,13 @@
 
 #include <math.h>
 #include <iostream>
+#include <vector>
 
 // sophya
 #include "machdefs.h"
 #include "sopnamsp.h"
 #include "pexceptions.h"
+#include "cspline.h"
 
 class Reddening
 {

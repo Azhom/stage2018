@@ -6,7 +6,6 @@ Reddening::Reddening(double rv){
 
 double Reddening::compute_A_lambda(double lambda, double EBmV)
 {
-	double A_V;
 	double A_lambda;// In meters
 	double x, y;
 	double a, b;
@@ -61,7 +60,7 @@ double Reddening::fitzpatrick_A_lambda(double lambda, double ebmv){
 		double c1 = 2.030 - 3.007*c2;
 		double x0 = 4.596e-6, gamma=0.99e-6, c3=3.23, c4=0.41;
 		
-		double D = x*x / (pow(x*x-x0*x0) + x*x+gamma*gamma);
+		double D = x*x / (pow(x*x-x0*x0, 2) + x*x+gamma*gamma);
 		double F = 0.;
 		if(x >= 5.9){
 			F = 0.5392*pow(x-5.9, 2) + 0.05644*pow(x-5.9, 3);
@@ -71,9 +70,9 @@ double Reddening::fitzpatrick_A_lambda(double lambda, double ebmv){
 		A_lambda = k - rv_;
 	}
 	else{
-		vector<int> x_points = [0, 0.377, 0.820, 1.667, 1.828, 2.141, 2.433, 3.704, 3.846];
-		vector<int> y_points = [0, 0.265, 0.829, -0.426+1.0044*rv_, -0.05+1.0016*rv_, 0.701+1.0016*rv_, -1.208+1.0032*rv_-0.00033*rv_*rv_, 6.265, 6.591]
-		CSpline optical_IR(x_points.size(), x_points, y_points);
+		double x_points1[9] = {0., 0.377, 0.820, 1.667, 1.828, 2.141, 2.433, 3.704, 3.846};
+		double y_points1[9] = {0, 0.265, 0.829, -0.426+1.0044*rv_, -0.05+1.0016*rv_, 0.701+1.0016*rv_, -1.208+1.0032*rv_-0.00033*rv_*rv_, 6.265, 6.591};
+		CSpline optical_IR(8, x_points1, y_points1);
 		A_lambda = optical_IR.CSplineInt(x);
 	}
 	return A_lambda;
