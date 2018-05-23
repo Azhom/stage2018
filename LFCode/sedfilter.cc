@@ -121,7 +121,7 @@ double SED::addReddening(double lambda) const
         
     Reddening red;
     double A_lambda;
-    A_lambda = red.compute_A_lambda(lambda*(1+z_), EBmV_);
+    A_lambda = red.fitzpatrick_A_lambda(lambda*(1+z_), EBmV_);
     return  (sed_(lambda)*pow(10,-0.4*A_lambda));
 };
 
@@ -136,7 +136,7 @@ double SED::interpAddReddening(double lambda) const
         
     Reddening red;
     double A_lambda;
-    A_lambda = red.compute_A_lambda(lambda*(1+z_), EBmV_);
+    A_lambda = red.fitzpatrick_A_lambda(lambda*(1+z_), EBmV_);
 	
     double redPart = pow(10,-0.4*A_lambda);
 	double interpPart = interpSED(lambda);

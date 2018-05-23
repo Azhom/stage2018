@@ -15,7 +15,7 @@ class Reddening
 {
 public:
 	Reddening(double rv=3.1);
-	double compute_A_lambda(double lambda, double EBmV);
+	double cardelli_A_lambda(double lambda, double EBmV);
 	double fitzpatrick_A_lambda(double lambda, double ebmv);
 protected:
 	double rv_;
