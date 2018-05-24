@@ -306,7 +306,7 @@ int main(int narg, char* arg[]) {
 	//int ebmv_steps = 1000;
 	
 	//ofstream ngal_points;
-	//ngal_points.open("ngal_points_zucca.txt");
+	//ngal_points.open("ngal_points_f99.txt");
 	
 	//for(int ii=0; ii<ebmv_steps; ii++){
 		//ebmv = (ebmv_max-ebmv_min)/ebmv_steps*ii+ebmv_min;
@@ -321,10 +321,10 @@ int main(int narg, char* arg[]) {
 	//cout << "[[[[[[[[[[[]]]]]]]]]]" << endl;
 	//SLinInterp1D ngal_interpolated(ebmv_vector, ngal_vector);
 	//
-	
+
 	SLinInterp1D ngal_interpolated;
 	SLinInterp1D ngal_interpolated_mod;
-	ngal_interpolated.ReadXYFromFile("ngal_points.txt");
+	ngal_interpolated.ReadXYFromFile("ngal_points_f99.txt");
 	//ngal_interpolated_mod.ReadXYFromFile("ngal_points_zucca.txt");
 
 
@@ -332,8 +332,8 @@ int main(int narg, char* arg[]) {
 	//Loading the fit file
 	cout << "[6] Loading dust map..." << endl;
 
-	FitsInOutFile fis1("../Dustmaps/sfd.fits[1][col ebv]", FitsInOutFile::Fits_RO);
-	FitsInOutFile fis2("../Dustmaps/sfd.fits[1][col ebv]", FitsInOutFile::Fits_RO);
+	FitsInOutFile fis1("../Dustmaps/ps1.fits[1][col ebv]", FitsInOutFile::Fits_RO);
+	FitsInOutFile fis2("../Dustmaps/ps1.fits[1][col ebv]", FitsInOutFile::Fits_RO);
 	double correction_factor_sfd = 0.86;
 	double correction_factor_sfd_mod = 0.86;
 	SphereHEALPix<r_4> ebmv_map1;
@@ -393,4 +393,3 @@ int main(int narg, char* arg[]) {
 	cout << " ------------------------- End of mapngal.cc (Rc="<<rc<<") ------------------------ " << endl;
 	return rc;	
 }
-

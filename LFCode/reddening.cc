@@ -19,7 +19,7 @@ double Reddening::cardelli_A_lambda(double lambda, double EBmV)
 		b=-0.527 * pow(x, 1.61);
 	}
 	else if (x > 1.1 && x <= 3.3){
-		a = 1 + 0.17699*y - 0.50447*y*y - 0.02427*pow(y,3)+ 0.72085*pow(y,4) + 0.01979*pow(y,5) - 0.77530*pow(y,6) + 0.32999*pow(y,7);
+		a = 1 + 0.17699*y - 0.50447*y*y - 0.02427*pow(y,3) + 0.72085*pow(y,4) + 0.01979*pow(y,5) - 0.77530*pow(y,6) + 0.32999*pow(y,7);
 		b = 1.41338*y + 2.28305*y*y + 1.07233 *pow(y,3) - 5.38434*pow(y,4) - 0.62251*pow(y,5) + 5.30260*pow(y,6) - 2.09002*pow(y,7);
 	}
 	else if (x > 3.3 && x <= 8){
@@ -52,7 +52,7 @@ double Reddening::fitzpatrick_A_lambda(double lambda, double ebmv){
 	double A_lambda;
 	double x = 1/(lambda*1e6); //in um-1
 	
-	if (x>3.703){
+	if (x>=3.703){
 		//if lambda < 2700 e-6 m we use FM90 law
 		
 		double c2 = -0.824 + 4.717/rv_;
@@ -70,10 +70,14 @@ double Reddening::fitzpatrick_A_lambda(double lambda, double ebmv){
 	}
 	else{
 		double x_points1[9] = {0., 0.377, 0.820, 1.667, 1.828, 2.141, 2.433, 3.704, 3.846};
-		double y_points1[9] = {0., 0.265, 0.829, -0.426+1.0044*rv_, -0.05+1.0016*rv_, 0.701+1.0016*rv_, 1.208+1.0032*rv_-0.00033*rv_*rv_, 6.265, 6.591};
-		CSpline optical_IR(9, x_points1, y_points1, 0., 0.,0,false);
+		double y_points1[9] = {0., 0.265, 0.829, -0.426+1.0044*rv_, -0.05+1.0016*rv_, 0.701+1.0016*rv_, 1.208+1.0032*rv_-0.00033*rv_*rv_, this->fitzpatrick_A_lambda(2700e-10, ebmv)/ebmv, this->fitzpatrick_A_lambda(2600e-10, ebmv)/ebmv};
+		CSpline optical_IR(9, x_points1, y_points1, 0., 0., 3, false);
 		optical_IR.ComputeCSpline();
 		A_lambda = optical_IR.CSplineInt(x)*ebmv;
 	}
 	return A_lambda;
+}
+
+void Reddening::update_rv(double new_rv){
+	rv_ = new_rv;
 }

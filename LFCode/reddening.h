@@ -14,9 +14,14 @@
 class Reddening
 {
 public:
+	//Constructor
 	Reddening(double rv=3.1);
+	//Absoprtion in lambda wavelength using Cardelli, Clayton, Mathis 1989 extinction law
 	double cardelli_A_lambda(double lambda, double EBmV);
+	//Absoprtion in lambda wavelength using  Fitzpatrick 2007 extinction law
 	double fitzpatrick_A_lambda(double lambda, double ebmv);
+	//change value of R_V
+	void update_rv(double new_rv);
 protected:
 	double rv_;
 };
