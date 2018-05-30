@@ -33,6 +33,7 @@
 #include "ctimer.h"
 #include "randfmt.h"
 #include "randr48.h"
+#include "samba.h"
 
 #include "galcnt.h"
 
@@ -310,7 +311,7 @@ int main(int narg, char* arg[]) {
 	
 	//for(int ii=0; ii<ebmv_steps; ii++){
 		//ebmv = (ebmv_max-ebmv_min)/ebmv_steps*ii+ebmv_min;
-		//galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin,lambdamax, ebmv);
+		//galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin, lambdamax, ebmv);
 		//ngal_vector.push_back(galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt));
 		//ebmv_vector.push_back(ebmv);
 		//ngal_points << ebmv_vector[ii] << " " << ngal_vector[ii] << endl;
@@ -324,54 +325,88 @@ int main(int narg, char* arg[]) {
 
 	SLinInterp1D ngal_interpolated;
 	SLinInterp1D ngal_interpolated_mod;
-	ngal_interpolated.ReadXYFromFile("ngal_points_f99.txt");
+	ngal_interpolated.ReadXYFromFile("ngal_points.txt");
 	//ngal_interpolated_mod.ReadXYFromFile("ngal_points_zucca.txt");
 
 
 
 	//Loading the fit file
-	cout << "[6] Loading dust map..." << endl;
+	/* Load two maps and return the galcnt map of the first or the second, mind the correction factor*/
+	//cout << "[6] Loading dust map..." << endl;
 
-	FitsInOutFile fis1("../Dustmaps/ps1.fits[1][col ebv]", FitsInOutFile::Fits_RO);
+	//FitsInOutFile fis1("../Dustmaps/cl_ps1_086.fits[1][col I]", FitsInOutFile::Fits_RO);
+	//FitsInOutFile fis2("../Dustmaps/ps1.fits[1][col ebv]", FitsInOutFile::Fits_RO);
+	//double correction_factor_sfd = 1.0;
+	//double correction_factor_sfd_mod = 0.86;
+	//SphereHEALPix<r_4> ebmv_map1;
+	//SphereHEALPix<r_4> ebmv_map2;
+	//SphereHEALPix<r_4> diff_map;
+
+	//FitsManager::Read(fis1, ebmv_map1);
+	//FitsManager::Read(fis2, ebmv_map2);
+	//double totcnt_reddened;
+	//double totcnt_reddened_mod;
+
+	//diff_map.setNSide(ebmv_map2.SizeIndex(), ebmv_map2.IfRING());
+	
+	//cout << ebmv_map1.TypeOfMap() << endl;
+	//cout << ebmv_map2.TypeOfMap() << endl;
+	//cout << diff_map.TypeOfMap() << endl;
+	
+	//cout << "[7] Computing galaxy number map" << endl;
+	
+	//for(int ii = 0; ii<ebmv_map1.NbPixels(); ii++){
+		//if (isnan(ebmv_map1[ii])) {cout << "nan" << endl;}
+		//if (ebmv_map1[ii]==1e-33 or ebmv_map2[ii]==1e-33 or ebmv_map1[ii]<0 or ebmv_map2[ii]<0 or isnan(ebmv_map1[ii]) or isnan(ebmv_map2[ii])){
+			//diff_map[ii] = -1.6375e+30;
+		//}
+		//else{
+			//totcnt_reddened 	= ngal_interpolated(ebmv_map1[ii]*correction_factor_sfd);
+			//totcnt_reddened_mod = ngal_interpolated(ebmv_map2[ii]*correction_factor_sfd_mod);
+			//if (totcnt_reddened != 0){
+				////diff_map[ii] = totcnt_reddened_mod/totcnt_reddened;
+				//diff_map[ii] = totcnt_reddened;
+			//}
+			//else{
+				//diff_map[ii] = -1.6375e+30;
+			//}
+		//}
+	//}
+	//FitsInOutFile fos("Objs/diffgalcnt.fits", FitsInOutFile::Fits_Create);
+	//FitsManager::Write(fos, diff_map);
+
+	
+	FitsInOutFile fis1("../Dustmaps/sfd.fits[1][col TEMPERATURE]", FitsInOutFile::Fits_RO);
 	FitsInOutFile fis2("../Dustmaps/ps1.fits[1][col ebv]", FitsInOutFile::Fits_RO);
-	double correction_factor_sfd = 0.86;
-	double correction_factor_sfd_mod = 0.86;
-	SphereHEALPix<r_4> ebmv_map1;
-	SphereHEALPix<r_4> ebmv_map2;
-	SphereHEALPix<r_4> diff_map;
-
-	FitsManager::Read(fis1, ebmv_map1);
-	FitsManager::Read(fis2, ebmv_map2);
-	double totcnt_reddened;
-	double totcnt_reddened_mod;
-
-	diff_map.setNSide(ebmv_map2.SizeIndex(), ebmv_map2.IfRING());
+	SphereHEALPix<r_4> ebv1;
+	SphereHEALPix<r_4> ebv2;
+	FitsManager::Read(fis1, ebv1);
+	FitsManager::Read(fis2, ebv2);
+	SphereHEALPix<r_4> diff_ebv(512, ebv1.IfRING());
 	
-	cout << ebmv_map1.TypeOfMap() << endl;
-	cout << ebmv_map2.TypeOfMap() << endl;
-	cout << diff_map.TypeOfMap() << endl;
-	
-	cout << "[7] Computing galaxy number map" << endl;
-	
-	for(int ii = 0; ii<ebmv_map1.NbPixels(); ii++){
-		if (isnan(ebmv_map1[ii])) {cout << "nan" << endl;}
-		if (ebmv_map1[ii]==1e-33 or ebmv_map2[ii]==1e-33 or ebmv_map1[ii]<0 or ebmv_map2[ii]<0 or isnan(ebmv_map1[ii]) or isnan(ebmv_map2[ii])){
-			diff_map[ii] = -1.6375e+30;
+	for(int ii=0; ii<ebv1.NbPixels(); ii++){
+		if(ebv1[ii]<0 or ebv2[ii]<0 or ebv1[ii]==1e-33 or ebv2[ii]==1e-33){
+			diff_ebv[ii] = 0; //-1.6375e30;
 		}
 		else{
-			totcnt_reddened 	= ngal_interpolated(ebmv_map1[ii]*correction_factor_sfd);
-			totcnt_reddened_mod = ngal_interpolated(ebmv_map2[ii]*correction_factor_sfd_mod);
-			if (totcnt_reddened != 0){
-				//diff_map[ii] = totcnt_reddened_mod/totcnt_reddened;
-				diff_map[ii] = totcnt_reddened;
-			}
-			else{
-				diff_map[ii] = -1.6375e+30;
-			}
+			diff_ebv[ii] = ebv1[ii]-ebv2[ii];
 		}
 	}
-	FitsInOutFile fos("Objs/diffgalcnt.fits", FitsInOutFile::Fits_Create);
-	FitsManager::Write(fos, diff_map);
+	
+	int lmax = 3*512-1;
+	SphereHEALPix<r_4> err_ebv(512, true);
+	SphericalTransformServer<r_8> sts;
+	Alm<double> almc(lmax);
+	sts.DecomposeToAlm(err_ebv, almc, lmax, 0.);
+	SphereHEALPix<r_4> err_ebv_new(512, true);
+	SphereHEALPix<r_4> mod_ebv(512, true);
+	sts.GenerateFromAlm(err_ebv_new, 512, almc);
+	
+	for(int ii=0; ii<mod_ebv.NbPixels(); ii++){
+		mod_ebv[ii] = abs(ebv2[ii] - err_ebv_new/2);
+	}
+	
+	
 	}  // End of try bloc
 	
 	catch (PThrowable & exc) {  // catching SOPHYA exceptions
