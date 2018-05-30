@@ -382,30 +382,62 @@ int main(int narg, char* arg[]) {
 	SphereHEALPix<r_4> ebv2;
 	FitsManager::Read(fis1, ebv1);
 	FitsManager::Read(fis2, ebv2);
-	SphereHEALPix<r_4> diff_ebv(512, ebv1.IfRING());
 	
+	//Same NSIDE
+	int_4 nside1 = ebv1.SizeIndex();
+	int_4 nside2 = ebv2.SizeIndex();
+	if(nside1 > nside2){
+		ebv1.Resize(nside2);
+	}
+	else if(nside1 < nside2){
+		ebv2.Resize(nside1);
+	}
+	 cout << ebv1.TypeOfMap() << endl;
+	//Same Ordering
+	if(ebv1.TypeOfMap() != ebv2.TypeOfMap()){
+		SphereHEALPix<r_4> conv_ebv1(ebv1.SizeIndex(), ebv2.IfRING());
+		conv_ebv1 = ebv1;
+		//double value, phi, theta;
+		//for(int e=0; e < ebv1.NbPixels(); e++){
+			//ebv1.PixThetaPhi(e, *theta, *phi);
+			//conv_ebv1[conv_ebv1.PixIndexSph(theta, phi)] = ebv1[e];
+		//}
+	}
+	~ ebv1();
+	SphereHEALPix<r_4> ebv1(conv_ebv1);
+	~ conv_ebv1();
+	cout << ebv1.TypeOfMap() << endl;
+	
+	//Difference
+	SphereHEALPix<r_4> diff_ebv(ebv1.SizeIndex(), ebv1.IfRING());
+	vector<int> mask_indices;
 	for(int ii=0; ii<ebv1.NbPixels(); ii++){
 		if(ebv1[ii]<0 or ebv2[ii]<0 or ebv1[ii]==1e-33 or ebv2[ii]==1e-33){
 			diff_ebv[ii] = 0; //-1.6375e30;
+			mask_indices.push_back(ii);
 		}
 		else{
 			diff_ebv[ii] = ebv1[ii]-ebv2[ii];
 		}
 	}
+	vecor<TVector> cls;
 	
-	int lmax = 3*512-1;
-	SphereHEALPix<r_4> err_ebv(512, true);
+	int nside = ebv1.SizeIndex();
+	int lmax = 3*nside-1;
 	SphericalTransformServer<r_8> sts;
-	Alm<double> almc(lmax);
-	sts.DecomposeToAlm(err_ebv, almc, lmax, 0.);
-	SphereHEALPix<r_4> err_ebv_new(512, true);
-	SphereHEALPix<r_4> mod_ebv(512, true);
-	sts.GenerateFromAlm(err_ebv_new, 512, almc);
+	Alm<double> alm_start(lmax);
+	sts.DecomposeToAlm(diff_ebv, alm_start, lmax, 0.);
+	SphereHEALPix<r_4> err_ebv(nside, true);
+	SphereHEALPix<r_4> mod_ebv(nside, true);
+	sts.GenerateFromAlm(err_ebv, nside, alm_start);
 	
 	for(int ii=0; ii<mod_ebv.NbPixels(); ii++){
-		mod_ebv[ii] = abs(ebv2[ii] - err_ebv_new/2);
+		mod_ebv[ii] = abs(ebv2[ii] - err_ebv/2);
 	}
-	
+	for(int e=0; e<mask_indices.size(); e++){
+		mod_ebv[mask_indices[e]] = 0; //mask
+	}
+	cls.push_back(sts.DecomposeToCl(mod_ebv, lmax, 0.));
 	
 	}  // End of try bloc
 	
