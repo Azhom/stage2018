@@ -37,7 +37,7 @@ public:
   //  Explain sedABzero -
   //   z is the object redshift
   static double ComputeRestFrameMagnitudeLimit(Filter & filt_RF,Filter & filt_Obs, SED &sed, SED &sedABzero,
-                                               double lambdamin,double lambdamax, double dL, double maglimObs, double z, double ebmv=0.);
+                                               double lambdamin,double lambdamax, double dL, double maglimObs, double z, Reddening& red);
   
 protected:
   SED sedABzero_;

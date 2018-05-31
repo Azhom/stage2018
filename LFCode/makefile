@@ -14,7 +14,7 @@ MYOBJS = Objs/multitypzlf.o Objs/myschechter.o \
 
 MYINCS = myschechter.h multitypzlf.h kcorr.h galcnt.h  sedfilter.h  reddening.h sinterp.h 
 
-all :   mlf tngal tngal1 mapngal
+all :   mlf mapngal
 
 clean :
 	rm Objs/* *.ppf 
@@ -25,12 +25,6 @@ depend :
 
 mlf :   Objs/mlf	
 	@echo 'Makefile:    mlf made'
-
-tngal :   Objs/tngal	
-	@echo 'Makefile:     tngal made'
-
-tngal1 :   Objs/tngal1	
-	@echo 'Makefile:     tngal1 made'
 	
 mapngal : Objs/mapngal
 	@echo 'Makefile:	mapngal made'
@@ -42,19 +36,6 @@ Objs/mlf: Objs/mlf.o Objs/multitypzlf.o Objs/myschechter.o
 
 Objs/mlf.o: mlf.cc  multitypzlf.h  myschechter.h 
 	$(CXXCOMPILE) -I . -o Objs/mlf.o mlf.cc 
-#   tngal : computing galaxy number density count 
-Objs/tngal: Objs/tngal.o $(MYOBJS) 
-	$(CXXLINK) -o Objs/tngal Objs/tngal.o $(MYOBJS) $(SOPHYAEXTSLBLIST)
-
-Objs/tngal.o: tngal.cc  $(MYINCS)
-	$(CXXCOMPILE) -I . -o Objs/tngal.o tngal.cc
-
-#    first (initial) version of tngal 
-Objs/tngal1: Objs/tngal1.o $(MYOBJS) 
-	$(CXXLINK) -o Objs/tngal1 Objs/tngal1.o $(MYOBJS) $(SOPHYAEXTSLBLIST)
-
-Objs/tngal1.o: tngal1.cc  $(MYINCS)
-	$(CXXCOMPILE) -I . -o Objs/tngal1.o tngal1.cc 
 
 #	mapngal : computing map of galaxy number density from dust map
 Objs/mapngal: Objs/mapngal.o $(MYOBJS)

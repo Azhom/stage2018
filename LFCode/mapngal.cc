@@ -294,11 +294,11 @@ int main(int narg, char* arg[]) {
 
 
 	//Creating interpolated n_gal(E(B-V))
-	cout << "[5] Interpolating n_gal ...";
-	double Ellcnt, Spcnt, SBcnt;
-	string txtfilename = "ngal_points.txt";
+	//cout << "[5] Interpolating n_gal ...";
+	//double Ellcnt, Spcnt, SBcnt;
+	//string txtfilename = "ngal_points.txt";
 	
-	//
+	
 	//vector<double> ngal_vector;
 	//vector<double> ebmv_vector;
 	//double ebmv;
@@ -309,9 +309,11 @@ int main(int narg, char* arg[]) {
 	//ofstream ngal_points;
 	//ngal_points.open("ngal_points_f99.txt");
 	
+	//Reddening red;
 	//for(int ii=0; ii<ebmv_steps; ii++){
 		//ebmv = (ebmv_max-ebmv_min)/ebmv_steps*ii+ebmv_min;
-		//galcntc.doCompute(zmin, zmax, dz, maglim, magerr, lambdamin, lambdamax, ebmv);
+		//red.update_ebv(ebmv);
+		//galcntc.doCompute(red, zmin, zmax, dz, maglim, magerr, lambdamin, lambdamax);
 		//ngal_vector.push_back(galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt));
 		//ebmv_vector.push_back(ebmv);
 		//ngal_points << ebmv_vector[ii] << " " << ngal_vector[ii] << endl;
@@ -383,6 +385,9 @@ int main(int narg, char* arg[]) {
 	FitsManager::Read(fis1, febv1);
 	FitsManager::Read(fis2, febv2);
 	
+	febv1*=0.86; /*"""""""""""""""""""""""""""hey"""""""""""""""""""""""""""""""*/
+	febv2*=0.86;
+	
 	//Same NSIDE
 	int_4 nside1 = febv1.SizeIndex();
 	int_4 nside2 = febv2.SizeIndex();
@@ -398,6 +403,7 @@ int main(int narg, char* arg[]) {
 	SphereHEALPix<r_8> ebv2(febv2);
 	
 	//Difference
+	cout << "Computing ebv difference" << endl;
 	SphereHEALPix<r_8> diff_ebv(ebv1.SizeIndex(), ebv1.IfRING());
 	vector<int> mask_indices;
 	for(int ii=0; ii<ebv1.NbPixels(); ii++){
@@ -410,22 +416,41 @@ int main(int narg, char* arg[]) {
 		}
 	}
 	
+	cout << "Computing Cls" << endl;
 	int nside = ebv1.SizeIndex();
 	int lmax = 3*nside-1;
 	SphericalTransformServer<r_8> sts;
 	Alm<double> alm_start(lmax);
-	sts.DecomposeToAlm(diff_ebv, alm_start, lmax, 0.);
+	sts.DecomposeToAlm(diff_ebv, alm_start, lmax, 0.3420);
 	SphereHEALPix<r_8> err_ebv(nside, true);
 	SphereHEALPix<r_8> mod_ebv(nside, true);
 	sts.GenerateFromAlm(err_ebv, nside, alm_start);
 	
+	cout << "Computing mod_ebv" << endl;
 	for(int ii=0; ii<mod_ebv.NbPixels(); ii++){
 		mod_ebv[ii] = abs(ebv2[ii] - err_ebv[ii]/2);
 	}
-	for(int e=0; e<mask_indices.size(); e++){
-		mod_ebv[mask_indices[e]] = 0; //mask
+	
+	SphereHEALPix<r_8> ngal_map(nside);
+	cout << "Computing galmap" << endl;
+	for(int ii = 0; ii<mod_ebv.NbPixels(); ii++){
+		ngal_map[ii] = ngal_interpolated(mod_ebv[ii]);
 	}
-	cout << sts.DecomposeToCl(mod_ebv, lmax, 0.) << endl;
+	cout << "Masking" << endl;
+	for(int e=0; e<mask_indices.size(); e++){
+		ngal_map[mask_indices[e]] = 0; //mask
+	}
+	
+	cout << "Decomposing" << endl;
+	TVector<double> cls = sts.DecomposeToCl(ngal_map, lmax, 0.3420);
+	std::ofstream file;
+	file.open("output.txt");
+	for(int e=0; e<cls.NElts(); e++){
+		file << cls(e) << endl;
+	}
+	file.close();
+	
+	
 	
 	}  // End of try bloc
 	

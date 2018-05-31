@@ -2,9 +2,43 @@
 
 Reddening::Reddening(double rv){
 	rv_ = rv;
+	law_ = "f99";
+	ebv_ = 0;
 };
 
-double Reddening::cardelli_A_lambda(double lambda, double EBmV)
+double Reddening::A_lambda(double lambda, bool use_random){
+	double A_lambda;
+	if(law_ == "ccm"){
+		A_lambda = cardelli_A_lambda(lambda);
+	}
+	else if(law_ == "f99"){
+		A_lambda = fitzpatrick_A_lambda(lambda);
+	}
+	if(use_random){
+		return A_lambda + modifier_.CSplineInt(1/lambda*1e-6);
+	}
+	return A_lambda;
+};
+
+double Reddening::randomize(double sigma, int nb_points){
+	ThSDR48RandGen rng;
+	rng.AutoInit();
+	int nb_pts = 5;
+	double mod_x[nb_pts+1];
+	double mod_values[nb_pts+1];
+	double xmin=0., xmax=10., curr_x;
+	mod_x[0] = -1e-6;
+	mod_values[0] = 0.0;
+	for(int ii=1; ii<nb_pts+1; ii++){
+		curr_x = xmin + ii*(xmax-xmin)/nb_pts;
+		mod_x[ii] = curr_x;
+		mod_values[ii] = rng.Gaussian(0.5);
+	}
+	modifier_.SetNewTab(nb_pts+1, mod_x, mod_values, true);
+	modifier_.ComputeCSpline();
+};
+
+double Reddening::cardelli_A_lambda(double lambda) const
 {
 	double A_lambda;// In meters
 	double x, y;
@@ -43,11 +77,11 @@ double Reddening::cardelli_A_lambda(double lambda, double EBmV)
 	{
 		cout << "Error: x is not a number." << endl;
 	}
-	A_lambda = (a * rv_ + b) * EBmV;
+	A_lambda = (a * rv_ + b) * ebv_;
 	return A_lambda;
 };
 
-double Reddening::fitzpatrick_A_lambda(double lambda, double ebmv){
+double Reddening::fitzpatrick_A_lambda(double lambda) const{
 	
 	double A_lambda;
 	double x = 1/(lambda*1e6); //in um-1
@@ -66,18 +100,22 @@ double Reddening::fitzpatrick_A_lambda(double lambda, double ebmv){
 		}
 		
 		double k = c1 + c2*x + c3*D + c4*F;
-		A_lambda = (k+rv_)*ebmv;
+		A_lambda = (k+rv_)*ebv_;
 	}
 	else{
 		double x_points1[9] = {0., 0.377, 0.820, 1.667, 1.828, 2.141, 2.433, 3.704, 3.846};
-		double y_points1[9] = {0., 0.265, 0.829, -0.426+1.0044*rv_, -0.05+1.0016*rv_, 0.701+1.0016*rv_, 1.208+1.0032*rv_-0.00033*rv_*rv_, this->fitzpatrick_A_lambda(2700e-10, ebmv)/ebmv, this->fitzpatrick_A_lambda(2600e-10, ebmv)/ebmv};
+		double y_points1[9] = {0., 0.265, 0.829, -0.426+1.0044*rv_, -0.05+1.0016*rv_, 0.701+1.0016*rv_, 1.208+1.0032*rv_-0.00033*rv_*rv_, this->fitzpatrick_A_lambda(2700e-10)/ebv_, this->fitzpatrick_A_lambda(2600e-10)/ebv_};
 		CSpline optical_IR(9, x_points1, y_points1, 0., 0., 3, false);
 		optical_IR.ComputeCSpline();
-		A_lambda = optical_IR.CSplineInt(x)*ebmv;
+		A_lambda = optical_IR.CSplineInt(x)*ebv_;
 	}
 	return A_lambda;
 }
 
 void Reddening::update_rv(double new_rv){
 	rv_ = new_rv;
+}
+
+void Reddening::update_ebv(double new_ebv){
+	ebv_ = new_ebv;
 }

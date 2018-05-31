@@ -43,7 +43,7 @@ double KCorrector::computeKz(SED & sed, Filter & filtx, Filter &filty, double z)
 }
 
 
-double KCorrector::ComputeRestFrameMagnitudeLimit(Filter & filt_RF,Filter & filt_Obs, SED &sed, SED &sedABzero, double lambdamin,double lambdamax, double dL, double maglimObs, double z, double ebmv)
+double KCorrector::ComputeRestFrameMagnitudeLimit(Filter & filt_RF,Filter & filt_Obs, SED &sed, SED &sedABzero, double lambdamin,double lambdamax, double dL, double maglimObs, double z, Reddening &red)
 {
  // B stand here for rest-frame filter , and r for observer-frame filter
     // Multiplying SED by filters and integrating them
@@ -82,18 +82,13 @@ double KCorrector::ComputeRestFrameMagnitudeLimit(Filter & filt_RF,Filter & filt
     double magb = maglimObs - KrB ;
     double magBlim = magb - 5.*log10(dL) - 25.;// + 2.5*log10(FB/FBabs)
    
-    //Adding extinction sperately
-    if (ebmv != 0.){
-		//SEDzFilterProd integrand(sed, filt_Obs, z);
-		//double F = FilterIntegrator(integrand, lambdamin*1e-9, lambdamax*1e-9).Value();
-		
-		sed.doRedden(ebmv, z);
-		SEDzFilterProd integrand_red(sed, filt_Obs, z);
-		double FRed = FilterIntegrator(integrand_red, lambdamin*1e-9, lambdamax*1e-9).Value();
-		sed.stopRedden();
-		double delta_m = -2.5*log10(FRed/Fr); 
-		magBlim -= delta_m;
-    }
+    //Adding extinction sperately	
+	sed.doRedden(red, z);
+	SEDzFilterProd integrand_red(sed, filt_Obs, z);
+	double FRed = FilterIntegrator(integrand_red, lambdamin*1e-9, lambdamax*1e-9).Value();
+	sed.stopRedden();
+	double delta_m = -2.5*log10(FRed/Fr); 
+	magBlim -= delta_m;
     //DBG cout << magBlim << endl;
     return magBlim; 
 }

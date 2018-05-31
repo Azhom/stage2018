@@ -97,7 +97,7 @@ public:
     void doInterp(SED* sed2,double a=1.,double b=0.);
       
     /** Set up reddening of the SED */
-    void doRedden(double EBmV=0., double z=0.);
+    void doRedden(Reddening& red, double z=0.);
     void stopRedden();
     void print_redden();
      
@@ -140,8 +140,9 @@ protected:
     SED*        sed2_;          /**< 2nd SED class to interpolate between with*/
     SED*        sed2init_;      /**< a default setting of sed2                */
     double      a_,b_;          /**< how to interpolate between sed and sed2  */
-    double      EBmV_,RvCard_,z_;
+    double      RvCard_,z_;
     double      _test_;
+    Reddening	red_;
 };
 
 

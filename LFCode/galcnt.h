@@ -13,6 +13,7 @@
 #include "kcorr.h"
 #include "luc.h"
 #include "multitypzlf.h"
+#include "reddening.h"
 
 using namespace std;
 using namespace SOPHYA;
@@ -49,8 +50,8 @@ public:
   //  Default 50%  SB2_kin (4) + 50% SB3_kin (5) 
   void setStarBurstSEDFraction(std::vector<double> & sedfrac);
   
-  void doCompute(double zmin, double zmax, double dz, double mag_obs_lim, double mag_obs_err=0,
-		 double lambdamin=300., double lambdamax=1000., double ebmv = 0.);
+  void doCompute(Reddening& red, double zmin, double zmax, double dz, double mag_obs_lim, double mag_obs_err=0,
+		 double lambdamin=300., double lambdamax=1000.);
   
   inline size_t getNbRedshiftBins() const { return redshifts_.size(); }
   inline double getMinRedshift() const { return zmin_; }

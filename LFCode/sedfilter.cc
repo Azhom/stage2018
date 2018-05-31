@@ -46,7 +46,7 @@ SED& SED::Set(const SED& a)
     isInterp_=a.isInterp_;
     a_=a.a_;
     b_=a.b_;
-    EBmV_=a.EBmV_;
+    red_=a.red_;
     RvCard_=a.RvCard_;
     return *this;
 };
@@ -81,10 +81,10 @@ void SED::doInterp(SED* sed2,double a,double b)
 };
 
 // Setting up the reddening
-void SED::doRedden(double EBmV, double z)
+void SED::doRedden(Reddening &red, double z)
 {
 	z_=z;
-    EBmV_=EBmV;
+	red_=red;
 	isRedden_ = true;
 
 };
@@ -118,10 +118,9 @@ double SED::addReddening(double lambda) const
 {
     if (!isRedden_)
         throw ParmError("ERROR! Cannot redden spectrum");
-        
-    Reddening red;
+
     double A_lambda;
-    A_lambda = red.fitzpatrick_A_lambda(lambda*(1+z_), EBmV_);
+    A_lambda = red_.fitzpatrick_A_lambda(lambda*(1+z_));
     return  (sed_(lambda)*pow(10,-0.4*A_lambda));
 };
 
@@ -136,7 +135,7 @@ double SED::interpAddReddening(double lambda) const
         
     Reddening red;
     double A_lambda;
-    A_lambda = red.fitzpatrick_A_lambda(lambda*(1+z_), EBmV_);
+    A_lambda = red.fitzpatrick_A_lambda(lambda*(1+z_));
 	
     double redPart = pow(10,-0.4*A_lambda);
 	double interpPart = interpSED(lambda);
@@ -322,7 +321,7 @@ void ReadSedList::reddenSeds(int nStepRed,double redMax)
 		    // push new SED to end of array
 		    sedArray_.push_back(new SED(*(sedArray_[i])));
 		    int lastIndex=sedArray_.size()-1;
-		    sedArray_[lastIndex]->doRedden(EBmV);// Not properly implemented!
+		    //sedArray_[lastIndex]->red_.update_ebv(EBmV);// Not properly implemented!
 		    }
 		}
 		

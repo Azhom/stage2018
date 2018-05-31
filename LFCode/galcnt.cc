@@ -109,8 +109,8 @@ void  GalaxyCountComputer::setStarBurstSEDFraction(std::vector<double> & sedfrac
 }
 
 
-void GalaxyCountComputer::doCompute(double zmin, double zmax, double dz, double mag_obs_lim, double mag_obs_err, 
-				    double lambdamin, double lambdamax, double ebmv)
+void GalaxyCountComputer::doCompute(Reddening& red, double zmin, double zmax, double dz, double mag_obs_lim, double mag_obs_err, 
+				    double lambdamin, double lambdamax)
 {
   zmin_=zmin;   zmax_=zmax;   dz_=dz;
   mag_obs_limit_ = mag_obs_lim;  mag_obs_error_=mag_obs_err;
@@ -133,6 +133,7 @@ void GalaxyCountComputer::doCompute(double zmin, double zmax, double dz, double 
 
   KCorrector KC(sedABzero_, lambdaSEDmin_, lambdaSEDmax_);
 
+  su_.SetEmissionRedShift(zmin_);
   su_.SetEmissionRedShift(zmin_);
   double Xi1 = su_.LineOfSightComovDistanceMpc();
   double dL1 = su_.LuminosityDistanceMpc();
@@ -158,7 +159,7 @@ void GalaxyCountComputer::doCompute(double zmin, double zmax, double dz, double 
     std::vector<double> vmaglims(sedGals_.size());
     for(size_t i=0; i<sedGals_.size(); i++) {
       vmaglims[i]=KC.ComputeRestFrameMagnitudeLimit(filt_LF_,filt_Obs_,sedGals_[i],sedABzero_,
-						    lambdamin_,lambdamax_,dL,mag_obs_limit_,z, ebmv);
+						    lambdamin_,lambdamax_,dL,mag_obs_limit_,z, red);
       if (prtlev_>0) cout <<i<<" : "<<vmaglims[i]<<" ;";
     }
     if (prtlev_>0) cout << endl;
