@@ -407,7 +407,7 @@ int main(int narg, char* arg[]) {
 	SphereHEALPix<r_8> diff_ebv(ebv1.SizeIndex(), ebv1.IfRING());
 	vector<int> mask_indices;
 	for(int ii=0; ii<ebv1.NbPixels(); ii++){
-		if(ebv1[ii]<0 or ebv2[ii]<0 or ebv1[ii]==1e-33 or ebv2[ii]==1e-33){
+		if((ebv1[ii]<0.00001 and ebv1[ii]!=0) or (ebv2[ii]<0.00001 and ebv2[ii]!=0) or ebv1[ii]==1e-33 or ebv2[ii]==1e-33 or isnan(ebv1[ii]) or isnan(ebv2[ii])){
 			diff_ebv[ii] = 0; //-1.6375e30;
 			mask_indices.push_back(ii);
 		}
@@ -416,25 +416,32 @@ int main(int narg, char* arg[]) {
 		}
 	}
 	
-	cout << "Computing Cls" << endl;
+	double theta, phi;
+	for(int e=0; e<ebv1.NbPixels(); e++){
+		diff_ebv.PixThetaPhi(e, theta, phi);
+		if(theta>70*M_PI/180.0 and theta<110*M_PI/180.0){
+			diff_ebv[e] = 0;
+		}
+	}
+
 	int nside = ebv1.SizeIndex();
 	int lmax = 3*nside-1;
+	cout << "Computing Cls" << endl;
 	SphericalTransformServer<r_8> sts;
-	Alm<double> alm_start(lmax);
-	sts.DecomposeToAlm(diff_ebv, alm_start, lmax, 0.3420);
 	SphereHEALPix<r_8> err_ebv(nside, true);
 	SphereHEALPix<r_8> mod_ebv(nside, true);
-	sts.GenerateFromAlm(err_ebv, nside, alm_start);
+	TVector<double> err_cl = sts.DecomposeToCl(diff_ebv, lmax, 0.);
+	sts.GenerateFromCl(err_ebv, nside, err_cl, 0.);
 	
 	cout << "Computing mod_ebv" << endl;
 	for(int ii=0; ii<mod_ebv.NbPixels(); ii++){
-		mod_ebv[ii] = abs(ebv2[ii] - err_ebv[ii]/2);
+		mod_ebv[ii] = abs((ebv2[ii]+ebv1[ii])/2 - err_ebv[ii]/2);
 	}
 	
 	SphereHEALPix<r_8> ngal_map(nside);
 	cout << "Computing galmap" << endl;
 	for(int ii = 0; ii<mod_ebv.NbPixels(); ii++){
-		ngal_map[ii] = ngal_interpolated(mod_ebv[ii]);
+		ngal_map[ii] = ngal_interpolated(mod_ebv[ii]) / ngal_interpolated((ebv2[ii]+ebv1[ii])/2);
 	}
 	cout << "Masking" << endl;
 	for(int e=0; e<mask_indices.size(); e++){
@@ -442,15 +449,21 @@ int main(int narg, char* arg[]) {
 	}
 	
 	cout << "Decomposing" << endl;
-	TVector<double> cls = sts.DecomposeToCl(ngal_map, lmax, 0.3420);
-	std::ofstream file;
-	file.open("output.txt");
-	for(int e=0; e<cls.NElts(); e++){
-		file << cls(e) << endl;
+	for(int e=0; e<ebv1.NbPixels(); e++){
+		ngal_map.PixThetaPhi(e, theta, phi);
+		if(theta>70*M_PI/180.0 and theta<110*M_PI/180.0){
+			ngal_map[e] = 0;
+		}
 	}
-	file.close();
+	TVector<double> cls = sts.DecomposeToCl(ngal_map, lmax, 0.);
 	
 	
+	std::ofstream file1;
+	file1.open("Objs/output.txt");
+	for(int e=0; e<cls.NElts(); e++){
+		file1 << cls(e) << endl;
+	}
+	file1.close();
 	
 	}  // End of try bloc
 	
