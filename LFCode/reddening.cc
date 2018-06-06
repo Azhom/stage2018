@@ -6,7 +6,16 @@ Reddening::Reddening(double rv){
 	ebv_ = 0;
 };
 
-double Reddening::A_lambda(double lambda, bool use_random){
+Reddening::Reddening(const Reddening &red)
+{
+	modifier_ = red.modifier_;
+	rv_ = red.rv_;
+	law_ = red.law_;
+	ebv_ = red.ebv_;
+};
+
+double Reddening::A_lambda(double lambda, bool use_random)
+{
 	double A_lambda;
 	if(law_ == "ccm"){
 		A_lambda = cardelli_A_lambda(lambda);
@@ -23,6 +32,7 @@ double Reddening::A_lambda(double lambda, bool use_random){
 double Reddening::randomize(double sigma, int nb_points){
 	ThSDR48RandGen rng;
 	rng.AutoInit();
+	//rng.SetSeed(123456789);
 	int nb_pts = 5;
 	double mod_x[nb_pts+1];
 	double mod_values[nb_pts+1];
@@ -32,13 +42,15 @@ double Reddening::randomize(double sigma, int nb_points){
 	for(int ii=1; ii<nb_pts+1; ii++){
 		curr_x = xmin + ii*(xmax-xmin)/nb_pts;
 		mod_x[ii] = curr_x;
-		mod_values[ii] = rng.Gaussian(0.5);
+		mod_values[ii] = rng.Gaussian(sigma);
+		cout << mod_values[ii] << endl;
+		if(mod_values[ii]<0){mod_values[ii] = 0;}
 	}
 	modifier_.SetNewTab(nb_pts+1, mod_x, mod_values, true);
 	modifier_.ComputeCSpline();
 };
 
-double Reddening::cardelli_A_lambda(double lambda) const
+double Reddening::cardelli_A_lambda(double lambda)
 {
 	double A_lambda;// In meters
 	double x, y;
@@ -81,10 +93,14 @@ double Reddening::cardelli_A_lambda(double lambda) const
 	return A_lambda;
 };
 
-double Reddening::fitzpatrick_A_lambda(double lambda) const{
-	
+double Reddening::fitzpatrick_A_lambda(double lambda)
+{
 	double A_lambda;
 	double x = 1/(lambda*1e6); //in um-1
+	
+	if(ebv_==0.){
+		return 0.;
+	}
 	
 	if (x>=3.703){
 		//if lambda < 2700 e-6 m we use FM90 law
@@ -109,7 +125,7 @@ double Reddening::fitzpatrick_A_lambda(double lambda) const{
 		optical_IR.ComputeCSpline();
 		A_lambda = optical_IR.CSplineInt(x)*ebv_;
 	}
-	return A_lambda;
+	return A_lambda + modifier_.CSplineInt(1/lambda*1e-6);
 }
 
 void Reddening::update_rv(double new_rv){
@@ -119,3 +135,5 @@ void Reddening::update_rv(double new_rv){
 void Reddening::update_ebv(double new_ebv){
 	ebv_ = new_ebv;
 }
+
+

@@ -12,7 +12,7 @@ MYOBJS = Objs/multitypzlf.o Objs/myschechter.o \
          Objs/kcorr.o Objs/galcnt.o \
          Objs/sinterp.o Objs/reddening.o  Objs/sedfilter.o
 
-MYINCS = myschechter.h multitypzlf.h kcorr.h galcnt.h  sedfilter.h  reddening.h sinterp.h 
+MYINCS = myschechter.h multitypzlf.h kcorr.h galcnt.h  sedfilter.h  reddening.h sinterp.h
 
 all :   mlf mapngal
 

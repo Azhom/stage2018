@@ -120,7 +120,7 @@ double SED::addReddening(double lambda) const
         throw ParmError("ERROR! Cannot redden spectrum");
 
     double A_lambda;
-    A_lambda = red_.fitzpatrick_A_lambda(lambda*(1+z_));
+    A_lambda = const_cast<Reddening*>(&red_)->fitzpatrick_A_lambda(lambda*(1+z_));
     return  (sed_(lambda)*pow(10,-0.4*A_lambda));
 };
 

@@ -237,7 +237,7 @@ int main(int narg, char* arg[]) {
 	
 	cout << "* magnitude limit=" << maglim << ", magErr=delmag=" << magerr << endl;
 
-	 
+
 	cout << "[3] Reading filters ..."<<endl;
 	
 	// importing the filter shapes
@@ -294,41 +294,43 @@ int main(int narg, char* arg[]) {
 
 
 	//Creating interpolated n_gal(E(B-V))
-	//cout << "[5] Interpolating n_gal ...";
-	//double Ellcnt, Spcnt, SBcnt;
-	//string txtfilename = "ngal_points.txt";
+	cout << "[5] Interpolating n_gal ..." << endl;
+	cout.precision(10);
+	double Ellcnt, Spcnt, SBcnt;
+	string txtfilename = "ngal_points.txt";
 	
+	vector<double> ngal_vector;
+	vector<double> ebmv_vector;
+	double ebmv;
+	double ebmv_max = 7.35;
+	double ebmv_min = 0.;
+	int ebmv_steps = 100;
 	
-	//vector<double> ngal_vector;
-	//vector<double> ebmv_vector;
-	//double ebmv;
-	//double ebmv_max = 7.35;
-	//double ebmv_min = 0.;
-	//int ebmv_steps = 1000;
+	ofstream ngal_points;
+	ngal_points.open("ngal_points_f99modlow.txt");
+	ngal_points.precision(10);
 	
-	//ofstream ngal_points;
-	//ngal_points.open("ngal_points_f99.txt");
-	
-	//Reddening red;
-	//for(int ii=0; ii<ebmv_steps; ii++){
-		//ebmv = (ebmv_max-ebmv_min)/ebmv_steps*ii+ebmv_min;
-		//red.update_ebv(ebmv);
-		//galcntc.doCompute(red, zmin, zmax, dz, maglim, magerr, lambdamin, lambdamax);
-		//ngal_vector.push_back(galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt));
-		//ebmv_vector.push_back(ebmv);
-		//ngal_points << ebmv_vector[ii] << " " << ngal_vector[ii] << endl;
-		//cout << ebmv_vector[ii] << endl;
-	//}
+	Reddening red;
+	red.randomize(0.5, 5);
+	for(int ii=0; ii<=ebmv_steps; ii++){
+		ebmv = (ebmv_max-ebmv_min)/ebmv_steps*ii+ebmv_min;
+		red.update_ebv(ebmv);
+		galcntc.doCompute(red, zmin, zmax, dz, maglim, magerr, lambdamin, lambdamax);
+		ngal_vector.push_back(galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt));
+		ebmv_vector.push_back(ebmv);
+		ngal_points << ebmv_vector[ii] << " " << ngal_vector[ii] << endl;
+		cout << ebmv_vector[ii] << " " << ngal_vector[ii] << endl;
+	}
 	//ngal_points.close();
 	
-	//cout << "[[[[[[[[[[[]]]]]]]]]]" << endl;
-	//SLinInterp1D ngal_interpolated(ebmv_vector, ngal_vector);
+	cout << "[[[[[[[[[[[]]]]]]]]]]" << endl;
+	SLinInterp1D ngal_interpolated_mod(ebmv_vector, ngal_vector);
 	//
 
 	SLinInterp1D ngal_interpolated;
-	SLinInterp1D ngal_interpolated_mod;
-	ngal_interpolated.ReadXYFromFile("ngal_points.txt");
-	//ngal_interpolated_mod.ReadXYFromFile("ngal_points_zucca.txt");
+	//SLinInterp1D ngal_interpolated_mod;
+	ngal_interpolated.ReadXYFromFile("ngal_points_f99.txt");
+	//ngal_interpolated_mod.ReadXYFromFile("ngal_points_f99modlow.txt");
 
 
 
@@ -391,6 +393,8 @@ int main(int narg, char* arg[]) {
 	//Same NSIDE
 	int_4 nside1 = febv1.SizeIndex();
 	int_4 nside2 = febv2.SizeIndex();
+	//febv1.Resize(512);
+	//febv2.Resize(512);
 	if(nside1 > nside2){
 		febv1.Resize(nside2);
 	}
@@ -416,10 +420,11 @@ int main(int narg, char* arg[]) {
 		}
 	}
 	
+	double angle=20.;
 	double theta, phi;
 	for(int e=0; e<ebv1.NbPixels(); e++){
 		diff_ebv.PixThetaPhi(e, theta, phi);
-		if(theta>70*M_PI/180.0 and theta<110*M_PI/180.0){
+		if(theta>(90-angle)*M_PI/180.0 and theta<(90+angle)*M_PI/180.0){
 			diff_ebv[e] = 0;
 		}
 	}
@@ -441,7 +446,8 @@ int main(int narg, char* arg[]) {
 	SphereHEALPix<r_8> ngal_map(nside);
 	cout << "Computing galmap" << endl;
 	for(int ii = 0; ii<mod_ebv.NbPixels(); ii++){
-		ngal_map[ii] = ngal_interpolated(mod_ebv[ii]) / ngal_interpolated((ebv2[ii]+ebv1[ii])/2);
+		//ngal_map[ii] = ngal_interpolated(mod_ebv[ii]) / ngal_interpolated((ebv2[ii]+ebv1[ii])/2);
+		ngal_map[ii] = ngal_interpolated(mod_ebv[ii]) / ngal_interpolated_mod(mod_ebv[ii]);
 	}
 	cout << "Masking" << endl;
 	for(int e=0; e<mask_indices.size(); e++){
@@ -455,15 +461,15 @@ int main(int narg, char* arg[]) {
 			ngal_map[e] = 0;
 		}
 	}
+	//cout << "AH" << endl;
 	TVector<double> cls = sts.DecomposeToCl(ngal_map, lmax, 0.);
-	
 	
 	std::ofstream file1;
 	file1.open("Objs/output.txt");
 	for(int e=0; e<cls.NElts(); e++){
 		file1 << cls(e) << endl;
 	}
-	file1.close();
+	//file1.close();
 	
 	}  // End of try bloc
 	

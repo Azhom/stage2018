@@ -1,6 +1,6 @@
 #include "maps.h"
 
-TVector errcl(SphereHEALPix& diff_ebv, SphereHEALPix& ebv1, SphereHEALPix& ebv2, double angle_cut)
+TVector<T> errcl(SphereHEALPix<T> &diff_ebv, SphereHEALPix<T> &ebv1, SphereHEALPix<T> &ebv2, double angle_cut)
 {
 	double theta, phi;
 	for(int e=0; e<ebv1.NbPixels(); e++){
