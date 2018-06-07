@@ -3,6 +3,7 @@
 
 #include <math.h>
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
 
@@ -30,6 +31,7 @@ public:
 	//change value of R_V
 	void update_rv(double new_rv);
 	void update_ebv(double new_ebv);
+	void print_law();
 protected:
 	double rv_;
 	double ebv_;

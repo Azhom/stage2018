@@ -24,7 +24,7 @@ double Reddening::A_lambda(double lambda, bool use_random)
 		A_lambda = fitzpatrick_A_lambda(lambda);
 	}
 	if(use_random){
-		return A_lambda + modifier_.CSplineInt(1/lambda*1e-6);
+		return A_lambda + modifier_.CSplineInt(1/lambda*1e-6)*A_lambda;
 	}
 	return A_lambda;
 };
@@ -125,7 +125,7 @@ double Reddening::fitzpatrick_A_lambda(double lambda)
 		optical_IR.ComputeCSpline();
 		A_lambda = optical_IR.CSplineInt(x)*ebv_;
 	}
-	return A_lambda + modifier_.CSplineInt(1/lambda*1e-6);
+	return A_lambda;
 }
 
 void Reddening::update_rv(double new_rv){
@@ -136,4 +136,21 @@ void Reddening::update_ebv(double new_ebv){
 	ebv_ = new_ebv;
 }
 
-
+void Reddening::print_law(){
+	std::ofstream file;
+	file.open("Objs/extlaw.txt");
+	double x_min = 0.0;
+	double x_max = 8.45;
+	double dx = 0.02;
+	double a;
+	
+	for(double m = x_min; m<x_max; m+=dx){
+		a = fitzpatrick_A_lambda(1/m*1e-6);
+		file << m << " " <<  a;
+		for(int e=0; e<1; e++){
+			file << " " << a + modifier_.CSplineInt(m)*a << " " << modifier_.CSplineInt(m);
+		}
+		file << endl;
+	}
+	file.close();
+}

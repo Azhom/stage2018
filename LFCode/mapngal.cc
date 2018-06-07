@@ -225,7 +225,7 @@ int main(int narg, char* arg[]) {
 	cout << "[1] Creating SimpleUniverse su(Planck2015LambdaCDM) ..."<<endl;
 	SimpleUniverse su;   // Standard Planck LambdaCDM cosmology 
 	MultiType_Z_LF::set_def_H0(su.H0());
-	
+
 	cout << "[2] Creating MultiType_Z_LF multLF(inlfname, MagMin, MagMax, nbmagpts, useall) ..."<<endl;
 	MultiType_Z_LF multLF(inlfname, magMin, magMax, nbmagpts, fguseall);
 	cout << " ... Creating and AutoInit of Random Generator ..."<<endl;
@@ -233,13 +233,13 @@ int main(int narg, char* arg[]) {
 	rg.AutoInit(1);
 	multLF.setRandomGenerator(&rg);
 	cout << multLF;
-	
-	
+
+
 	cout << "* magnitude limit=" << maglim << ", magErr=delmag=" << magerr << endl;
 
 
 	cout << "[3] Reading filters ..."<<endl;
-	
+
 	// importing the filter shapes
 	// LF definition filters
 	string filterfile_iS = filtpathmgr.BuildFileName("iS_cfht.txt");  // i' (iS) filter of CFHT telescope (Ramos et al. 2011, LF)
@@ -304,14 +304,14 @@ int main(int narg, char* arg[]) {
 	double ebmv;
 	double ebmv_max = 7.35;
 	double ebmv_min = 0.;
-	int ebmv_steps = 100;
+	int ebmv_steps = 1000;
 	
 	ofstream ngal_points;
 	ngal_points.open("ngal_points_f99modlow.txt");
 	ngal_points.precision(10);
 	
 	Reddening red;
-	red.randomize(0.5, 5);
+	red.randomize(0., 5);
 	for(int ii=0; ii<=ebmv_steps; ii++){
 		ebmv = (ebmv_max-ebmv_min)/ebmv_steps*ii+ebmv_min;
 		red.update_ebv(ebmv);
@@ -320,9 +320,11 @@ int main(int narg, char* arg[]) {
 		ebmv_vector.push_back(ebmv);
 		ngal_points << ebmv_vector[ii] << " " << ngal_vector[ii] << endl;
 		cout << ebmv_vector[ii] << " " << ngal_vector[ii] << endl;
+		if(ngal_vector[ii]<10e-5){break;}
 	}
-	//ngal_points.close();
-	
+	ngal_points.close();
+	red.update_ebv(0.05);
+	red.print_law();
 	cout << "[[[[[[[[[[[]]]]]]]]]]" << endl;
 	SLinInterp1D ngal_interpolated_mod(ebmv_vector, ngal_vector);
 	//
@@ -380,6 +382,7 @@ int main(int narg, char* arg[]) {
 	//FitsManager::Write(fos, diff_map);
 
 	
+	cout << "Loading maps" << endl;
 	FitsInOutFile fis1("../Dustmaps/sfd.fits[1][col TEMPERATURE]", FitsInOutFile::Fits_RO);
 	FitsInOutFile fis2("../Dustmaps/ps1.fits[1][col ebv]", FitsInOutFile::Fits_RO);
 	SphereHEALPix<r_8> febv1;
@@ -388,11 +391,12 @@ int main(int narg, char* arg[]) {
 	FitsManager::Read(fis2, febv2);
 	
 	febv1*=0.86; /*"""""""""""""""""""""""""""hey"""""""""""""""""""""""""""""""*/
-	febv2*=0.86;
+	febv2*=1.0;
 	
 	//Same NSIDE
 	int_4 nside1 = febv1.SizeIndex();
 	int_4 nside2 = febv2.SizeIndex();
+	cout << "Resize" << endl;
 	//febv1.Resize(512);
 	//febv2.Resize(512);
 	if(nside1 > nside2){
@@ -402,6 +406,7 @@ int main(int narg, char* arg[]) {
 		febv2.Resize(nside1);
 	}
 	//Same Ordering
+	cout << "Ordering" << endl;
 	SphereHEALPix<r_8> ebv1(febv1.SizeIndex(), febv2.IfRING());
 	ebv1 = febv1;
 	SphereHEALPix<r_8> ebv2(febv2);
@@ -438,7 +443,7 @@ int main(int narg, char* arg[]) {
 	TVector<double> err_cl = sts.DecomposeToCl(diff_ebv, lmax, 0.);
 	sts.GenerateFromCl(err_ebv, nside, err_cl, 0.);
 	
-	cout << "Computing mod_ebv" << endl;
+	cout << "Computing random ebv map" << endl;
 	for(int ii=0; ii<mod_ebv.NbPixels(); ii++){
 		mod_ebv[ii] = abs((ebv2[ii]+ebv1[ii])/2 - err_ebv[ii]/2);
 	}
@@ -446,8 +451,8 @@ int main(int narg, char* arg[]) {
 	SphereHEALPix<r_8> ngal_map(nside);
 	cout << "Computing galmap" << endl;
 	for(int ii = 0; ii<mod_ebv.NbPixels(); ii++){
-		//ngal_map[ii] = ngal_interpolated(mod_ebv[ii]) / ngal_interpolated((ebv2[ii]+ebv1[ii])/2);
-		ngal_map[ii] = ngal_interpolated(mod_ebv[ii]) / ngal_interpolated_mod(mod_ebv[ii]);
+		ngal_map[ii] = ngal_interpolated(mod_ebv[ii]) / ngal_interpolated((ebv2[ii]+ebv1[ii])/2);
+		//ngal_map[ii] = ngal_interpolated(mod_ebv[ii]) / ngal_interpolated_mod(mod_ebv[ii]);
 	}
 	cout << "Masking" << endl;
 	for(int e=0; e<mask_indices.size(); e++){
