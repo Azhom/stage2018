@@ -24,8 +24,9 @@ double Reddening::A_lambda(double lambda, bool use_random)
 		A_lambda = fitzpatrick_A_lambda(lambda);
 	}
 	if(use_random){
-		return A_lambda + modifier_.CSplineInt(1/lambda*1e-6)*A_lambda;
+		A_lambda += modifier_.CSplineInt(1/lambda*1e-6)*A_lambda;
 	}
+	if (A_lambda<0){return 0;}
 	return A_lambda;
 };
 
@@ -44,7 +45,7 @@ double Reddening::randomize(double sigma, int nb_points){
 		mod_x[ii] = curr_x;
 		mod_values[ii] = rng.Gaussian(sigma);
 		cout << mod_values[ii] << endl;
-		if(mod_values[ii]<0){mod_values[ii] = 0;}
+		//if(mod_values[ii]<0){mod_values[ii] = 0;}
 	}
 	modifier_.SetNewTab(nb_pts+1, mod_x, mod_values, true);
 	modifier_.ComputeCSpline();
@@ -136,9 +137,11 @@ void Reddening::update_ebv(double new_ebv){
 	ebv_ = new_ebv;
 }
 
-void Reddening::print_law(){
-	std::ofstream file;
-	file.open("Objs/extlaw.txt");
+void Reddening::print_law(int suffix){
+	ofstream file;
+	stringstream ss;
+	ss<<"Objs/extlaw" <<suffix<<".txt";
+	file.open(ss.str().c_str());
 	double x_min = 0.0;
 	double x_max = 8.45;
 	double dx = 0.02;

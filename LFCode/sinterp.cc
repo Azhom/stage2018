@@ -135,28 +135,27 @@ void SInterp1D::DefinePoints(double xmin, double xmax, vector<double>& yreg)
 void SInterp1D::DefinePoints(vector<double> const& xs, vector<double> const& ys, 
                                            double xmin, double xmax, size_t npt)
 {
-
+	cout << "DBG" << endl;
     // check sizes
     if ((xs.size() != ys.size())||(xs.size()<2)) {
         string emsg = "SInterp1D::DefinePoints() Bad parameters ";
         emsg+="(xs.size() != ys.size())||(xs.size()<2) ";
         throw range_error(emsg);
         }
-        
+    cout << "DBG1" << endl;
     // check x is sorted
-    for(size_t k=1; k<xs.size(); k++) {
-	
-        if (xs[k-1]>=xs[k]) { 
-            string emsg =  "SInterp1D::DefinePoints() unsorted xs";
-            throw range_error(emsg);
-            }
-        }
-
-		
+    //for(size_t k=1; k<xs.size(); k++) {
+        //if (xs[k-1]>=xs[k]) { 
+            //string emsg =  "SInterp1D::DefinePoints() unsorted xs";
+            //throw range_error(emsg);
+            //}
+        //}
+	cout << "DBG2" << endl;
     xs_ = xs;
     ys_ = ys;
     ksmx_ = xs_.size()-1;
     npoints_ = npt; // npt could be equal to zero
+
 	
     // check xmin,xmax,npt make sense
     if (xmin>=xmax) { // use xs range to set xmin,xmax

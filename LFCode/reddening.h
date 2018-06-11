@@ -31,7 +31,7 @@ public:
 	//change value of R_V
 	void update_rv(double new_rv);
 	void update_ebv(double new_ebv);
-	void print_law();
+	void print_law(int suffix=1);
 protected:
 	double rv_;
 	double ebv_;

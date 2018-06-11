@@ -10,9 +10,10 @@ include $(SOPHYABASE)/include/sophyamake.inc
 
 MYOBJS = Objs/multitypzlf.o Objs/myschechter.o \
          Objs/kcorr.o Objs/galcnt.o \
-         Objs/sinterp.o Objs/reddening.o  Objs/sedfilter.o
+         Objs/sinterp.o Objs/reddening.o  Objs/sedfilter.o \
+         Objs/maps.o
 
-MYINCS = myschechter.h multitypzlf.h kcorr.h galcnt.h  sedfilter.h  reddening.h sinterp.h
+MYINCS = myschechter.h multitypzlf.h kcorr.h galcnt.h  sedfilter.h  reddening.h sinterp.h maps.h
 
 all :   mlf mapngal
 
@@ -43,7 +44,7 @@ Objs/mapngal: Objs/mapngal.o $(MYOBJS)
 	
 Objs/mapngal.o: mapngal.cc  $(MYINCS)
 	$(CXXCOMPILE) -I . -o Objs/mapngal.o mapngal.cc 
-
+		
 #   Multi-type, per redshift bin LF's 
 Objs/multitypzlf.o: multitypzlf.cc  multitypzlf.h  myschechter.h  
 	$(CXXCOMPILE) -I . -o Objs/multitypzlf.o multitypzlf.cc
@@ -68,3 +69,6 @@ Objs/reddening.o: reddening.cc  reddening.h
 
 Objs/sedfilter.o: sedfilter.cc  sedfilter.h 
 	$(CXXCOMPILE) -I . -o Objs/sedfilter.o sedfilter.cc
+
+Objs/maps.o: maps.cc  maps.h 
+	$(CXXCOMPILE) -I . -o Objs/maps.o maps.cc

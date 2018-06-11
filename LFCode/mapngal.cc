@@ -36,6 +36,7 @@
 #include "samba.h"
 
 #include "galcnt.h"
+//#include "maps.h"
 
 /*
 #include "multitypzlf.h"
@@ -46,7 +47,6 @@
 #include "luc.h"
 #include "slininterp.h"
 #include "integ.h"
-
 #include "fitsioserver.h"
 
 
@@ -54,7 +54,7 @@
 
 
 int main(int narg, char* arg[]) {
-	
+
 	cout << endl;
 	cout << " -------------------- mapngal.cc ( MultiType_Z_LF & GalaxyCountComputer ) ----------------------- " << endl;
 	cout << endl;
@@ -293,95 +293,15 @@ int main(int narg, char* arg[]) {
 	}
 
 
-	//Creating interpolated n_gal(E(B-V))
-	cout << "[5] Interpolating n_gal ..." << endl;
-	cout.precision(10);
-	double Ellcnt, Spcnt, SBcnt;
-	string txtfilename = "ngal_points.txt";
-	
-	vector<double> ngal_vector;
-	vector<double> ebmv_vector;
-	double ebmv;
-	double ebmv_max = 7.35;
-	double ebmv_min = 0.;
-	int ebmv_steps = 1000;
-	
-	ofstream ngal_points;
-	ngal_points.open("ngal_points_f99modlow.txt");
-	ngal_points.precision(10);
-	
-	Reddening red;
-	red.randomize(0., 5);
-	for(int ii=0; ii<=ebmv_steps; ii++){
-		ebmv = (ebmv_max-ebmv_min)/ebmv_steps*ii+ebmv_min;
-		red.update_ebv(ebmv);
-		galcntc.doCompute(red, zmin, zmax, dz, maglim, magerr, lambdamin, lambdamax);
-		ngal_vector.push_back(galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt));
-		ebmv_vector.push_back(ebmv);
-		ngal_points << ebmv_vector[ii] << " " << ngal_vector[ii] << endl;
-		cout << ebmv_vector[ii] << " " << ngal_vector[ii] << endl;
-		if(ngal_vector[ii]<10e-5){break;}
-	}
-	ngal_points.close();
-	red.update_ebv(0.05);
-	red.print_law();
-	cout << "[[[[[[[[[[[]]]]]]]]]]" << endl;
-	SLinInterp1D ngal_interpolated_mod(ebmv_vector, ngal_vector);
-	//
-
-	SLinInterp1D ngal_interpolated;
-	//SLinInterp1D ngal_interpolated_mod;
-	ngal_interpolated.ReadXYFromFile("ngal_points_f99.txt");
-	//ngal_interpolated_mod.ReadXYFromFile("ngal_points_f99modlow.txt");
 
 
 
-	//Loading the fit file
-	/* Load two maps and return the galcnt map of the first or the second, mind the correction factor*/
-	//cout << "[6] Loading dust map..." << endl;
 
-	//FitsInOutFile fis1("../Dustmaps/cl_ps1_086.fits[1][col I]", FitsInOutFile::Fits_RO);
-	//FitsInOutFile fis2("../Dustmaps/ps1.fits[1][col ebv]", FitsInOutFile::Fits_RO);
-	//double correction_factor_sfd = 1.0;
-	//double correction_factor_sfd_mod = 0.86;
-	//SphereHEALPix<r_4> ebmv_map1;
-	//SphereHEALPix<r_4> ebmv_map2;
-	//SphereHEALPix<r_4> diff_map;
 
-	//FitsManager::Read(fis1, ebmv_map1);
-	//FitsManager::Read(fis2, ebmv_map2);
-	//double totcnt_reddened;
-	//double totcnt_reddened_mod;
 
-	//diff_map.setNSide(ebmv_map2.SizeIndex(), ebmv_map2.IfRING());
-	
-	//cout << ebmv_map1.TypeOfMap() << endl;
-	//cout << ebmv_map2.TypeOfMap() << endl;
-	//cout << diff_map.TypeOfMap() << endl;
-	
-	//cout << "[7] Computing galaxy number map" << endl;
-	
-	//for(int ii = 0; ii<ebmv_map1.NbPixels(); ii++){
-		//if (isnan(ebmv_map1[ii])) {cout << "nan" << endl;}
-		//if (ebmv_map1[ii]==1e-33 or ebmv_map2[ii]==1e-33 or ebmv_map1[ii]<0 or ebmv_map2[ii]<0 or isnan(ebmv_map1[ii]) or isnan(ebmv_map2[ii])){
-			//diff_map[ii] = -1.6375e+30;
-		//}
-		//else{
-			//totcnt_reddened 	= ngal_interpolated(ebmv_map1[ii]*correction_factor_sfd);
-			//totcnt_reddened_mod = ngal_interpolated(ebmv_map2[ii]*correction_factor_sfd_mod);
-			//if (totcnt_reddened != 0){
-				////diff_map[ii] = totcnt_reddened_mod/totcnt_reddened;
-				//diff_map[ii] = totcnt_reddened;
-			//}
-			//else{
-				//diff_map[ii] = -1.6375e+30;
-			//}
-		//}
-	//}
-	//FitsInOutFile fos("Objs/diffgalcnt.fits", FitsInOutFile::Fits_Create);
-	//FitsManager::Write(fos, diff_map);
 
-	
+
+
 	cout << "Loading maps" << endl;
 	FitsInOutFile fis1("../Dustmaps/sfd.fits[1][col TEMPERATURE]", FitsInOutFile::Fits_RO);
 	FitsInOutFile fis2("../Dustmaps/ps1.fits[1][col ebv]", FitsInOutFile::Fits_RO);
@@ -391,7 +311,7 @@ int main(int narg, char* arg[]) {
 	FitsManager::Read(fis2, febv2);
 	
 	febv1*=0.86; /*"""""""""""""""""""""""""""hey"""""""""""""""""""""""""""""""*/
-	febv2*=1.0;
+	febv2*=0.86;
 	
 	//Same NSIDE
 	int_4 nside1 = febv1.SizeIndex();
@@ -410,7 +330,7 @@ int main(int narg, char* arg[]) {
 	SphereHEALPix<r_8> ebv1(febv1.SizeIndex(), febv2.IfRING());
 	ebv1 = febv1;
 	SphereHEALPix<r_8> ebv2(febv2);
-	
+
 	//Difference
 	cout << "Computing ebv difference" << endl;
 	SphereHEALPix<r_8> diff_ebv(ebv1.SizeIndex(), ebv1.IfRING());
@@ -424,7 +344,7 @@ int main(int narg, char* arg[]) {
 			diff_ebv[ii] = ebv1[ii]-ebv2[ii];
 		}
 	}
-	
+
 	double angle=20.;
 	double theta, phi;
 	for(int e=0; e<ebv1.NbPixels(); e++){
@@ -441,40 +361,107 @@ int main(int narg, char* arg[]) {
 	SphereHEALPix<r_8> err_ebv(nside, true);
 	SphereHEALPix<r_8> mod_ebv(nside, true);
 	TVector<double> err_cl = sts.DecomposeToCl(diff_ebv, lmax, 0.);
-	sts.GenerateFromCl(err_ebv, nside, err_cl, 0.);
-	
-	cout << "Computing random ebv map" << endl;
-	for(int ii=0; ii<mod_ebv.NbPixels(); ii++){
-		mod_ebv[ii] = abs((ebv2[ii]+ebv1[ii])/2 - err_ebv[ii]/2);
-	}
-	
-	SphereHEALPix<r_8> ngal_map(nside);
-	cout << "Computing galmap" << endl;
-	for(int ii = 0; ii<mod_ebv.NbPixels(); ii++){
-		ngal_map[ii] = ngal_interpolated(mod_ebv[ii]) / ngal_interpolated((ebv2[ii]+ebv1[ii])/2);
-		//ngal_map[ii] = ngal_interpolated(mod_ebv[ii]) / ngal_interpolated_mod(mod_ebv[ii]);
-	}
-	cout << "Masking" << endl;
-	for(int e=0; e<mask_indices.size(); e++){
-		ngal_map[mask_indices[e]] = 0; //mask
-	}
-	
-	cout << "Decomposing" << endl;
-	for(int e=0; e<ebv1.NbPixels(); e++){
-		ngal_map.PixThetaPhi(e, theta, phi);
-		if(theta>70*M_PI/180.0 and theta<110*M_PI/180.0){
-			ngal_map[e] = 0;
-		}
-	}
-	//cout << "AH" << endl;
-	TVector<double> cls = sts.DecomposeToCl(ngal_map, lmax, 0.);
-	
+	ThSDR48RandGen rng;
+
+
+	//Creating interpolated n_gal(E(B-V))
+	cout << "[5] Interpolating n_gal ..." << endl;
+	cout.precision(10);
+	double Ellcnt, Spcnt, SBcnt;
+	string txtfilename = "ngal_points.txt";
+	bool random_law=false;
+
+	vector<double> ngal_vector;
+	vector<double> ebmv_vector;
+	double ebmv;
+	double ebmv_max = 7.35;
+	double ebmv_min = 0.;
+	int ebmv_steps = 1000;
+	Reddening red;
+
+	ofstream ngal_points;
 	std::ofstream file1;
-	file1.open("Objs/output.txt");
-	for(int e=0; e<cls.NElts(); e++){
-		file1 << cls(e) << endl;
+	stringstream indextemp;
+	string aa="Objs/output";
+	string bb=".txt";
+	uint_2 seed[3];
+
+	SInterp1D ngal_interpolated;
+	SInterp1D ngal_interpolated_mod;
+	
+	ngal_interpolated.ReadXYFromFile("ngal_points_f99.txt");
+	//ngal_interpolated_mod.ReadXYFromFile("ngal_points_f99modlow.txt");
+
+	TVector<double> cls;
+
+	for(int f=0; f<10; f++){
+		cout << "ITERATION : " << f << endl;
+		//ngal_points.open("ngal_points_f99modlow.txt");
+		//ngal_points.precision(10);
+		if(random_law){
+			red.randomize(0.1, 5);
+			for(int ii=0; ii<=ebmv_steps; ii++){
+				ebmv = (ebmv_max-ebmv_min)/ebmv_steps*ii+ebmv_min;
+				red.update_ebv(ebmv);
+				galcntc.doCompute(red, zmin, zmax, dz, maglim, magerr, lambdamin, lambdamax);
+				ngal_vector.push_back(galcntc.getIntegratedGalDensity_Arcmin2(Ellcnt, Spcnt, SBcnt));
+				ebmv_vector.push_back(ebmv);
+				//ngal_points << ebmv_vector[ii] << " " << ngal_vector[ii] << endl;
+				//cout << ebmv_vector[ii] << " " << ngal_vector[ii] << endl;
+				if(ngal_vector[ii]<10e-5){break;}
+			}
+			red.update_ebv(0.05);
+			red.print_law(f);
+			cout << "[[[[[[[[[[[]]]]]]]]]]" << endl;
+			ngal_interpolated_mod.DefinePoints(ebmv_vector, ngal_vector);
+			//ngal_points.close();
+		}
+		
+		rng.AutoInit();
+		rng.GetSeed(seed);
+		cout << seed[0] << " " << seed[1] << " " << seed[2] << endl;
+		sts.SetRandGen(rng);
+		sts.GenerateFromCl(err_ebv, nside, err_cl, 0.5);
+		
+		cout << "Computing random ebv map" << endl;
+		for(int ii=0; ii<mod_ebv.NbPixels(); ii++){
+			mod_ebv[ii] = abs((ebv2[ii]+ebv1[ii])/2 - err_ebv[ii]/2);
+		}
+		
+		SphereHEALPix<r_8> ngal_map(nside);
+		cout << "Computing galmap" << endl;
+		for(int ii = 0; ii<mod_ebv.NbPixels(); ii++){
+			ngal_map[ii] = ngal_interpolated(mod_ebv[ii]) / ngal_interpolated((ebv2[ii]+ebv1[ii])/2);
+			//ngal_map[ii] = ngal_interpolated(mod_ebv[ii]) / ngal_interpolated_mod(mod_ebv[ii]);
+		}
+		cout << "Masking" << endl;
+		for(int e=0; e<mask_indices.size(); e++){
+			ngal_map[mask_indices[e]] = 0; //mask
+		}
+		
+		cout << "Decomposing" << endl;
+		for(int e=0; e<ebv1.NbPixels(); e++){
+			ngal_map.PixThetaPhi(e, theta, phi);
+			if(theta>70*M_PI/180.0 and theta<110*M_PI/180.0){
+				ngal_map[e] = 0;
+			}
+		}
+		cls = sts.DecomposeToCl(ngal_map, lmax, 0.);
+		
+		indextemp.str("");
+		indextemp<< "Objs/output"<<f<<".txt";
+		file1.open(indextemp.str().c_str());
+		for(int e=0; e<cls.NElts(); e++){
+			file1 << cls(e) << endl;
+		}
+		file1.close();
+		
+		//FitsInOutFile fos("Objs/ngalmap.fits", FitsInOutFile::Fits_Create);
+		//FitsManager::Write(fos, mod_ebv);
 	}
-	//file1.close();
+	
+
+	
 	
 	}  // End of try bloc
 	

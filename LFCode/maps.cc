@@ -1,11 +1,12 @@
 #include "maps.h"
 
-TVector<T> errcl(SphereHEALPix<T> &diff_ebv, SphereHEALPix<T> &ebv1, SphereHEALPix<T> &ebv2, double angle_cut)
+template <class T>
+TVector<T> errcl(SphereHEALPix<T> &diff_ebv, SphereHEALPix<T> &ebv1, SphereHEALPix<T> &ebv2, vector<int> &mask_indices, SLinInterp1D& ngal_interpolated, double angle_cut)
 {
 	double theta, phi;
 	for(int e=0; e<ebv1.NbPixels(); e++){
 		diff_ebv.PixThetaPhi(e, theta, phi);
-		if(theta>(90-angle)*M_PI/180.0 and theta<(90+angle)*M_PI/180.0){
+		if(theta>(90-angle_cut)*M_PI/180.0 and theta<(90+angle_cut)*M_PI/180.0){
 			diff_ebv[e] = 0;
 		}
 	}
@@ -43,5 +44,4 @@ TVector<T> errcl(SphereHEALPix<T> &diff_ebv, SphereHEALPix<T> &ebv1, SphereHEALP
 	}
 	TVector<double> cls = sts.DecomposeToCl(ngal_map, lmax, 0.);
 	return cls;
-}
-	
+};
