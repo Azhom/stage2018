@@ -369,14 +369,14 @@ int main(int narg, char* arg[]) {
 	cout.precision(10);
 	double Ellcnt, Spcnt, SBcnt;
 	string txtfilename = "ngal_points.txt";
-	bool random_law=false;
+	bool random_law=true;
 
 	vector<double> ngal_vector;
 	vector<double> ebmv_vector;
 	double ebmv;
 	double ebmv_max = 7.35;
 	double ebmv_min = 0.;
-	int ebmv_steps = 1000;
+	int ebmv_steps = 100;
 	Reddening red;
 
 	ofstream ngal_points;
@@ -394,12 +394,12 @@ int main(int narg, char* arg[]) {
 
 	TVector<double> cls;
 
-	for(int f=0; f<10; f++){
+	for(int f=0; f<600; f++){
 		cout << "ITERATION : " << f << endl;
 		//ngal_points.open("ngal_points_f99modlow.txt");
 		//ngal_points.precision(10);
 		if(random_law){
-			red.randomize(0.1, 5);
+			red.randomize(0.15, 5);
 			for(int ii=0; ii<=ebmv_steps; ii++){
 				ebmv = (ebmv_max-ebmv_min)/ebmv_steps*ii+ebmv_min;
 				red.update_ebv(ebmv);
@@ -414,6 +414,8 @@ int main(int narg, char* arg[]) {
 			red.print_law(f);
 			cout << "[[[[[[[[[[[]]]]]]]]]]" << endl;
 			ngal_interpolated_mod.DefinePoints(ebmv_vector, ngal_vector);
+			ebmv_vector.clear();
+			ngal_vector.clear();
 			//ngal_points.close();
 		}
 		
@@ -431,8 +433,8 @@ int main(int narg, char* arg[]) {
 		SphereHEALPix<r_8> ngal_map(nside);
 		cout << "Computing galmap" << endl;
 		for(int ii = 0; ii<mod_ebv.NbPixels(); ii++){
-			ngal_map[ii] = ngal_interpolated(mod_ebv[ii]) / ngal_interpolated((ebv2[ii]+ebv1[ii])/2);
-			//ngal_map[ii] = ngal_interpolated(mod_ebv[ii]) / ngal_interpolated_mod(mod_ebv[ii]);
+			//ngal_map[ii] = ngal_interpolated(mod_ebv[ii]) / ngal_interpolated((ebv2[ii]+ebv1[ii])/2);
+			ngal_map[ii] = ngal_interpolated((ebv2[ii]+ebv1[ii])/2) / ngal_interpolated_mod((ebv2[ii]+ebv1[ii])/2);
 		}
 		cout << "Masking" << endl;
 		for(int e=0; e<mask_indices.size(); e++){
@@ -442,7 +444,7 @@ int main(int narg, char* arg[]) {
 		cout << "Decomposing" << endl;
 		for(int e=0; e<ebv1.NbPixels(); e++){
 			ngal_map.PixThetaPhi(e, theta, phi);
-			if(theta>70*M_PI/180.0 and theta<110*M_PI/180.0){
+			if(theta>(90-angle)*M_PI/180.0 and theta<(angle+90)*M_PI/180.0){
 				ngal_map[e] = 0;
 			}
 		}
@@ -460,7 +462,7 @@ int main(int narg, char* arg[]) {
 		//FitsManager::Write(fos, mod_ebv);
 	}
 	
-
+	
 	
 	
 	}  // End of try bloc
