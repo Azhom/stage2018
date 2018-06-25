@@ -133,9 +133,8 @@ double SED::interpAddReddening(double lambda) const
     if (!isInterp_)
         throw ParmError("ERROR! Cannot interpolate spectrum");
         
-    Reddening red;
     double A_lambda;
-    A_lambda = red.A_lambda(lambda*(1+z_), true);
+    A_lambda = const_cast<Reddening*>(&red_)->A_lambda(lambda*(1+z_), true);
 	
     double redPart = pow(10,-0.4*A_lambda);
 	double interpPart = interpSED(lambda);

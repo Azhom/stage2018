@@ -341,11 +341,12 @@ int main(int narg, char* arg[]) {
 			mask_indices.push_back(ii);
 		}
 		else{
-			diff_ebv[ii] = ebv1[ii]-ebv2[ii];
+			//diff_ebv[ii] = ebv1[ii]-ebv2[ii];
+			diff_ebv[ii] = ebv2[ii];
 		}
 	}
 
-	double angle=20.;
+	double angle=30.;
 	double theta, phi;
 	for(int e=0; e<ebv1.NbPixels(); e++){
 		diff_ebv.PixThetaPhi(e, theta, phi);
@@ -368,7 +369,6 @@ int main(int narg, char* arg[]) {
 	cout << "[5] Interpolating n_gal ..." << endl;
 	cout.precision(10);
 	double Ellcnt, Spcnt, SBcnt;
-	string txtfilename = "ngal_points.txt";
 	bool random_law=true;
 
 	vector<double> ngal_vector;
@@ -376,7 +376,7 @@ int main(int narg, char* arg[]) {
 	double ebmv;
 	double ebmv_max = 7.35;
 	double ebmv_min = 0.;
-	int ebmv_steps = 100;
+	int ebmv_steps = 1000;
 	Reddening red;
 
 	ofstream ngal_points;
@@ -394,12 +394,12 @@ int main(int narg, char* arg[]) {
 
 	TVector<double> cls;
 
-	for(int f=0; f<600; f++){
+	for(int f=0; f<1; f++){
 		cout << "ITERATION : " << f << endl;
-		//ngal_points.open("ngal_points_f99modlow.txt");
+		//ngal_points.open("ngal_points_zucca.txt");
 		//ngal_points.precision(10);
 		if(random_law){
-			red.randomize(0.15, 5);
+			red.randomize(0.0, 5);
 			for(int ii=0; ii<=ebmv_steps; ii++){
 				ebmv = (ebmv_max-ebmv_min)/ebmv_steps*ii+ebmv_min;
 				red.update_ebv(ebmv);
@@ -427,14 +427,16 @@ int main(int narg, char* arg[]) {
 		
 		cout << "Computing random ebv map" << endl;
 		for(int ii=0; ii<mod_ebv.NbPixels(); ii++){
-			mod_ebv[ii] = abs((ebv2[ii]+ebv1[ii])/2 - err_ebv[ii]/2);
+			mod_ebv[ii] = abs(ebv1[ii] - err_ebv[ii]);
 		}
 		
 		SphereHEALPix<r_8> ngal_map(nside);
 		cout << "Computing galmap" << endl;
 		for(int ii = 0; ii<mod_ebv.NbPixels(); ii++){
 			//ngal_map[ii] = ngal_interpolated(mod_ebv[ii]) / ngal_interpolated((ebv2[ii]+ebv1[ii])/2);
-			ngal_map[ii] = ngal_interpolated((ebv2[ii]+ebv1[ii])/2) / ngal_interpolated_mod((ebv2[ii]+ebv1[ii])/2);
+			//ngal_map[ii] = ngal_interpolated(mod_ebv[ii]) / ngal_interpolated(ebv2[ii]);
+			//ngal_map[ii] = ngal_interpolated((ebv2[ii]+ebv1[ii])/2) / ngal_interpolated_mod((ebv2[ii]+ebv1[ii])/2);
+			ngal_map[ii] = ngal_interpolated(ebv2[ii]) / ngal_interpolated_mod(ebv2[ii]);
 		}
 		cout << "Masking" << endl;
 		for(int e=0; e<mask_indices.size(); e++){
@@ -458,12 +460,9 @@ int main(int narg, char* arg[]) {
 		}
 		file1.close();
 		
-		//FitsInOutFile fos("Objs/ngalmap.fits", FitsInOutFile::Fits_Create);
-		//FitsManager::Write(fos, mod_ebv);
+		FitsInOutFile fos("Objs/ngalmap.fits", FitsInOutFile::Fits_Create);
+		FitsManager::Write(fos, ngal_map);
 	}
-	
-	
-	
 	
 	}  // End of try bloc
 	
